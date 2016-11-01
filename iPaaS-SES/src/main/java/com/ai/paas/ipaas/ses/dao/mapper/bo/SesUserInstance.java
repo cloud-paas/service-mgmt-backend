@@ -25,6 +25,8 @@ public class SesUserInstance {
 
     private String serviceName;
 
+    private Integer sshPort;
+
     public Integer getId() {
         return id;
     }
@@ -111,5 +113,13 @@ public class SesUserInstance {
 
     public void setServiceName(String serviceName) {
         this.serviceName = serviceName == null ? null : serviceName.trim();
+    }
+
+    public Integer getSshPort() {
+        return sshPort;
+    }
+
+    public void setSshPort(Integer sshPort) {
+        this.sshPort = sshPort;
     }
 }

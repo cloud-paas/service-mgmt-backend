@@ -93,7 +93,7 @@ public class SesManageImpl implements ISesManage {
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			SesUserInstance sesUser = new SesUserInstance();
 			sesUser.setHostIp(sesHostInfo.getIp());
-			sesUser.setSesPort(Integer.valueOf(sesHostInfo.getPort()));
+			sesUser.setSshPort(Integer.valueOf(sesHostInfo.getPort()));
 			sesUser.setServiceId(serviceId);
 			sesUser.setServiceName(sesSrvApply.getServiceName());
 			sesUser.setSesPort(Integer.parseInt(sesHostInfo.getHttpPort()));

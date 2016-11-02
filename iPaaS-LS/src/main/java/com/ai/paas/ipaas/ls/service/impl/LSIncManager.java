@@ -22,7 +22,7 @@ import com.ai.paas.ipaas.ls.service.transfer.vo.StartLS;
 import com.ai.paas.ipaas.ls.service.transfer.vo.StartLSResult;
 import com.ai.paas.ipaas.ls.service.transfer.vo.StopLS;
 import com.ai.paas.ipaas.ls.service.transfer.vo.StopLSResult;
-import com.ai.paas.ipaas.ls.service.util.GsonSingleton;
+import com.ai.paas.ipaas.ls.service.util.GsonSingletonLS;
 
 /** 
  * @author  作者 “WTF” E-mail: 1031248990@qq.com
@@ -37,7 +37,7 @@ public class LSIncManager implements ILSIncManager {
 	private static transient final Logger LOG = LoggerFactory.getLogger(LSIncManager.class);
 
 	@Autowired
-	GsonSingleton g;
+	GsonSingletonLS g;
 
 	@Autowired
 	ICCSComponentManageSv iCCSComponentManageSv;

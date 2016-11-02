@@ -12,7 +12,7 @@ import com.google.gson.Gson;
  * @since  
  */
 @Service
-public class GsonSingleton {
+public class GsonSingletonLS {
 	private Gson g;
 	public Gson getGson(){
 		if(null == g){

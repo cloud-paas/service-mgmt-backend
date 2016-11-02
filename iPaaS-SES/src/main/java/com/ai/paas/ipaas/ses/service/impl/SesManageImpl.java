@@ -93,6 +93,7 @@ public class SesManageImpl implements ISesManage {
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			SesUserInstance sesUser = new SesUserInstance();
 			sesUser.setHostIp(sesHostInfo.getIp());
+			sesUser.setSshPort(Integer.valueOf(sesHostInfo.getPort()));
 			sesUser.setServiceId(serviceId);
 			sesUser.setServiceName(sesSrvApply.getServiceName());
 			sesUser.setSesPort(Integer.parseInt(sesHostInfo.getHttpPort()));
@@ -143,40 +144,32 @@ public class SesManageImpl implements ISesManage {
 		// 1.先将需要执行镜像命令的机器配置文件上传上去。
 		InputStream in = null;
 		try {
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
 			String[] cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt, AidUtil.getAid());
 			
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ses_run.yml");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ses_run.yml");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
 			AgentUtil.uploadFile("ses/ses_run.yml", cnt, AidUtil.getAid());
 			
 			// 还得上传文件
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ansible_run_ses.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ansible_run_ses.sh");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/ansible_run_ses.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/ansible_run_ses.sh", cnt, AidUtil.getAid());
 			
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ses_exist.yml");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ses_exist.yml");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
 			AgentUtil.uploadFile("ses/ses_exist.yml", cnt, AidUtil.getAid());
 			
 			// 还得上传文件
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ansible_exist_ses.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ansible_exist_ses.sh");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/ansible_exist_ses.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/ansible_exist_ses.sh", cnt, AidUtil.getAid());
 			
 			AgentUtil.executeCommand("chmod +x " + basePath
 					+ "ses/init_ansible_ssh_hosts.sh && chmod +x " + basePath
@@ -205,18 +198,20 @@ public class SesManageImpl implements ISesManage {
 		String sshUser = getSesSSHUser();
 		String sshUserPwd = getSesSSHUserPwd();
 		IpaasImageResource sesImage = getSesImage();
+		
 		// 2.启动ses集群
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			String ip = sesHostInfo.getIp();
+			String sshPort = sesHostInfo.getPort();
 			// 生成每个主机列表
 			String mkSshHosts = ParamUtil.replace(
 					"ses/init_ansible_ssh_hosts.sh {0} {1} {2}", new String[] {
-							basePath + "ses", ip.replace(".", ""), ip });
+							basePath + "ses", ip.replace(".", ""), ip+":"+sshPort });
 			LOGGER.info("---------mkSshHosts {}----------" + mkSshHosts);
 			try {
 				// 生成主机文件
-				AgentUtil.executeCommand(basePath + mkSshHosts,
-						AidUtil.getAid());
+				AgentUtil.executeCommand(basePath + mkSshHosts, AidUtil.getAid());
+				
 				// 先确定是否已经存在，如果已经有了镜像在运行，就不启动了
 				// 开始执行
 				String existImage = ParamUtil.replace(
@@ -228,10 +223,12 @@ public class SesManageImpl implements ISesManage {
 
 				String result = AgentUtil.executeCommandWithReturn(basePath
 						+ existImage, AidUtil.getAid());
+				
 				if (result.indexOf(userId + "-" + serviceId + "-"
 						+ sesHostInfo.getHttpPort()) >= 0) {
 					continue;
 				}
+				
 				// 开始执行
 				String runImage = ParamUtil
 						.replace(
@@ -267,29 +264,26 @@ public class SesManageImpl implements ISesManage {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		String sshUser = getSesSSHUser();
 		String sshUserPwd = getSesSSHUserPwd();
+		
 		// 上传文件
 		// 1.先将需要执行镜像命令的机器配置文件上传上去。
 		InputStream in = null;
 		try {
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
 			String[] cnt = AgentUtil.readFileLines(in);
-
 			in.close();
-			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt,
-					AidUtil.getAid());
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ses_stop.yml");
+			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt, AidUtil.getAid());
+			
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ses_stop.yml");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
 			AgentUtil.uploadFile("ses/ses_stop.yml", cnt, AidUtil.getAid());
+			
 			// 还得上传文件
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ansible_stop_ses.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ansible_stop_ses.sh");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/ansible_stop_ses.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/ansible_stop_ses.sh", cnt, AidUtil.getAid());
 
 			AgentUtil.executeCommand("chmod +x " + basePath
 					+ "ses/init_ansible_ssh_hosts.sh && chmod +x " + basePath
@@ -305,26 +299,27 @@ public class SesManageImpl implements ISesManage {
 					LOGGER.error("", e);
 				}
 		}
+		
 		// 2.停止ses集群
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			String ip = sesHostInfo.getIp();
+			String sshPort = sesHostInfo.getPort();
 			// 生成每个主机列表
 			String mkSshHosts = ParamUtil.replace(
 					"ses/init_ansible_ssh_hosts.sh {0} {1} {2}", new String[] {
-							basePath + "ses", ip.replace(".", ""), ip });
+							basePath + "ses", ip.replace(".", ""), ip+":"+sshPort });
 			LOGGER.info("---------mkSshHosts {}----------" + mkSshHosts);
+			
 			try {
 				// 生成主机文件
-				AgentUtil.executeCommand(basePath + mkSshHosts,
-						AidUtil.getAid());
+				AgentUtil.executeCommand(basePath + mkSshHosts, AidUtil.getAid());
 				// 开始执行
 				String stopSes = ParamUtil.replace(
 						"ses/ansible_stop_ses.sh {0} {1} {2} "
 								+ "{3} {4} {5} {6} {7} {8}", new String[] {
 								basePath + "ses", ip.replace(".", ""), sshUser,
-								sshUserPwd, ip, sshUser,
-
-								userId, serviceId, sesHostInfo.getHttpPort() });
+								sshUserPwd, ip, sshUser, userId, serviceId, 
+								sesHostInfo.getHttpPort() });
 
 				String result = AgentUtil.executeCommandWithReturn(basePath
 						+ stopSes, AidUtil.getAid());
@@ -345,25 +340,21 @@ public class SesManageImpl implements ISesManage {
 		// 1.先将需要执行镜像命令的机器配置文件上传上去。
 		InputStream in = null;
 		try {
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
 			String[] cnt = AgentUtil.readFileLines(in);
-
 			in.close();
-			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt,
-					AidUtil.getAid());
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ses_start.yml");
+			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt, AidUtil.getAid());
+			
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ses_start.yml");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
 			AgentUtil.uploadFile("ses/ses_start.yml", cnt, AidUtil.getAid());
+			
 			// 还得上传文件
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ansible_start_ses.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ansible_start_ses.sh");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/ansible_start_ses.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/ansible_start_ses.sh", cnt, AidUtil.getAid());
 
 			AgentUtil.executeCommand("chmod +x " + basePath
 					+ "ses/init_ansible_ssh_hosts.sh && chmod +x " + basePath
@@ -379,13 +370,15 @@ public class SesManageImpl implements ISesManage {
 					LOGGER.error("", e);
 				}
 		}
+		
 		// 2.停止ses集群
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			String ip = sesHostInfo.getIp();
+			String sshPort = sesHostInfo.getPort();
 			// 生成每个主机列表
 			String mkSshHosts = ParamUtil.replace(
 					"ses/init_ansible_ssh_hosts.sh {0} {1} {2}", new String[] {
-							basePath + "ses", ip.replace(".", ""), ip });
+							basePath + "ses", ip.replace(".", ""), ip+":"+sshPort });
 			LOGGER.info("---------mkSshHosts {}----------" + mkSshHosts);
 			try {
 				// 生成主机文件
@@ -396,12 +389,10 @@ public class SesManageImpl implements ISesManage {
 						"ses/ansible_start_ses.sh {0} {1} {2} "
 								+ "{3} {4} {5} {6} {7} {8}", new String[] {
 								basePath + "ses", ip.replace(".", ""), sshUser,
-								sshUserPwd, ip, sshUser,
+								sshUserPwd, ip, sshUser, userId, serviceId, 
+								sesHostInfo.getHttpPort() });
 
-								userId, serviceId, sesHostInfo.getHttpPort() });
-
-				String result = AgentUtil.executeCommandWithReturn(basePath
-						+ stopSes, AidUtil.getAid());
+				String result = AgentUtil.executeCommandWithReturn(basePath + stopSes, AidUtil.getAid());
 				processResult(result);
 			} catch (Exception ex) {
 				// 发生错误，回滚
@@ -419,25 +410,20 @@ public class SesManageImpl implements ISesManage {
 		// 1.先将需要执行镜像命令的机器配置文件上传上去。
 		InputStream in = null;
 		try {
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/init_ansible_ssh_hosts.sh");
 			String[] cnt = AgentUtil.readFileLines(in);
-
 			in.close();
-			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt,
-					AidUtil.getAid());
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ses_delete.yml");
+			AgentUtil.uploadFile("ses/init_ansible_ssh_hosts.sh", cnt, AidUtil.getAid());
+			
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ses_delete.yml");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
 			AgentUtil.uploadFile("ses/ses_delete.yml", cnt, AidUtil.getAid());
-			// 还得上传文件
-			in = SesManageImpl.class
-					.getResourceAsStream("/playbook/ses/ansible_delete_ses.sh");
+			
+			in = SesManageImpl.class.getResourceAsStream("/playbook/ses/ansible_delete_ses.sh");
 			cnt = AgentUtil.readFileLines(in);
 			in.close();
-			AgentUtil.uploadFile("ses/ansible_delete_ses.sh", cnt,
-					AidUtil.getAid());
+			AgentUtil.uploadFile("ses/ansible_delete_ses.sh", cnt, AidUtil.getAid());
 
 			AgentUtil.executeCommand("chmod +x " + basePath
 					+ "ses/init_ansible_ssh_hosts.sh && chmod +x " + basePath
@@ -453,29 +439,29 @@ public class SesManageImpl implements ISesManage {
 					LOGGER.error("", e);
 				}
 		}
+		
 		// 2.停止ses集群
 		for (SesHostInfo sesHostInfo : sesHosts) {
 			String ip = sesHostInfo.getIp();
+			String sshPort = sesHostInfo.getPort();
 			// 生成每个主机列表
 			String mkSshHosts = ParamUtil.replace(
 					"ses/init_ansible_ssh_hosts.sh {0} {1} {2}", new String[] {
-							basePath + "ses", ip.replace(".", ""), ip });
+							basePath + "ses", ip.replace(".", ""), ip+":"+sshPort });
 			LOGGER.info("---------mkSshHosts {}----------" + mkSshHosts);
+			
 			try {
 				// 生成主机文件
-				AgentUtil.executeCommand(basePath + mkSshHosts,
-						AidUtil.getAid());
+				AgentUtil.executeCommand(basePath + mkSshHosts, AidUtil.getAid());
 				// 开始执行
 				String stopSes = ParamUtil.replace(
 						"ses/ansible_delete_ses.sh {0} {1} {2} "
 								+ "{3} {4} {5} {6} {7} {8}", new String[] {
 								basePath + "ses", ip.replace(".", ""), sshUser,
-								sshUserPwd, ip, sshUser,
+								sshUserPwd, ip, sshUser, userId, serviceId, 
+								sesHostInfo.getHttpPort() });
 
-								userId, serviceId, sesHostInfo.getHttpPort() });
-
-				String result = AgentUtil.executeCommandWithReturn(basePath
-						+ stopSes, AidUtil.getAid());
+				String result = AgentUtil.executeCommandWithReturn(basePath + stopSes, AidUtil.getAid());
 				processResult(result);
 			} catch (Exception ex) {
 				// 发生错误，回滚
@@ -679,12 +665,9 @@ public class SesManageImpl implements ISesManage {
 	}
 
 	/**
-	 * 
-	 * 根据集群节点数查询可用节点信息. 返回结果为每一个端口号对应一个SesHostInfo
-	 * 
-	 * @author jianhua.ma
+	 * 根据集群节点数查询可用节点信息. 
+	 * 返回结果为每一个端口号对应一个SesHostInfo
 	 */
-
 	private List<SesHostInfo> qryAvlSesHosts(int orgId, Integer nodeNum, Integer esMem)
 			throws PaasException {
 		try {
@@ -703,6 +686,7 @@ public class SesManageImpl implements ISesManage {
 							continue;
 						}
 						String host_ip = res.getHostIp();
+						String host_ssh_port = res.getSshPort()+"";
 						int port_min = res.getPortMin();
 						int port_max = res.getPortMax();
 						if (port_min >= port_max) {
@@ -711,6 +695,7 @@ public class SesManageImpl implements ISesManage {
 						}
 						SesHostInfo host = new SesHostInfo();
 						host.setIp(host_ip);
+						host.setPort(host_ssh_port);    /** set the value of ssh_port **/
 						host.setMemUsed(host.getMemUsed() + esMem);
 						host.setHttpPort(String.valueOf(port_min));
 						host.setTcpPort(String.valueOf(port_min + 1));
@@ -873,6 +858,7 @@ public class SesManageImpl implements ISesManage {
 		for (SesUserInstance instance : instances) {
 			SesHostInfo sesHost = new SesHostInfo();
 			sesHost.setIp(instance.getHostIp());
+			sesHost.setPort(instance.getSshPort()+"");
 			sesHost.setTcpPort("" + instance.getTcpPort());
 			sesHost.setHttpPort("" + instance.getSesPort());
 			sesHosts.add(sesHost);
@@ -893,6 +879,7 @@ public class SesManageImpl implements ISesManage {
 		for (SesUserInstance ins : instances) {
 			SesHostInfo sesHost = new SesHostInfo();
 			sesHost.setIp(ins.getHostIp());
+			sesHost.setPort(ins.getSshPort()+"");
 			sesHost.setTcpPort("" + ins.getTcpPort());
 			sesHost.setHttpPort("" + ins.getSesPort());
 			sesHosts.add(sesHost);
@@ -920,9 +907,10 @@ public class SesManageImpl implements ISesManage {
 			SesResourcePool host = quryHostByIp(ip);
 			host.setMemUsed(host.getMemUsed() - instance.getMemUse());
 			ServiceUtil.getMapper(SesResourcePoolMapper.class)
-					.updateByPrimaryKeySelective(host);
+				.updateByPrimaryKeySelective(host);
 			SesHostInfo sesHost = new SesHostInfo();
 			sesHost.setIp(instance.getHostIp());
+			sesHost.setPort(instance.getSshPort()+"");
 			sesHost.setTcpPort("" + instance.getTcpPort());
 			sesHost.setHttpPort("" + instance.getSesPort());
 			sesHosts.add(sesHost);

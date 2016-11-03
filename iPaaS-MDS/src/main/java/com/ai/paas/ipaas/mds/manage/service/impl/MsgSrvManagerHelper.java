@@ -79,14 +79,17 @@ public class MsgSrvManagerHelper implements IMsgSrvManagerHelper {
 			// 准备发送和消费的配置信息
 			/** added orgId column in 2016-10 **/
 			int orgId = orgnizeUserHelper.getOrgnizeInfo(msgSrvApply.getUserId()).getOrgId();
+			
 			List<MdsKafkaLoad> clusterLoads = ServiceUtil.getMapper(
-					IMdsUserTopicCustomMapper.class).getClusterLoad();
+					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getUserId());
+			
 			MdsResourcePoolCriteria clusterExample = new MdsResourcePoolCriteria();
 			clusterExample.createCriteria().andClusterStateEqualTo(
 					MDSConstant.KAFKA_CLUSTER_STATE_ENABLE).andOrgIdEqualTo(orgId);
 			List<MdsResourcePool> clusters = ServiceUtil.getMapper(
 					MdsResourcePoolMapper.class)
 					.selectByExample(clusterExample);
+			
 			// 这里还可能是空的
 			if (null == clusterLoads || clusterLoads.size() <= 0) {
 				//

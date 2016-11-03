@@ -23,5 +23,8 @@
 		<logger name="com.ai.paas.ipaas.idps" level="trace" additivity="false">
             <appender-ref ref="RollingFile"/>
         </logger>
+        <logger name="org.apache.zookeeper" level="WARN" additivity="false">
+            <appender-ref ref="RollingFile"/>
+        </logger>
 	</Loggers>
 </Configuration>

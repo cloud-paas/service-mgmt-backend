@@ -26,7 +26,7 @@
         <logger name="org.spring" level="DEBUG" additivity="false">
             <appender-ref ref="RollingFile"/>
         </logger>
-        <logger name="org.apache.zookeeper" level="WARN" additivity="false">
+        <logger name="org.apache.zookeeper" level="warn" additivity="false">
             <appender-ref ref="RollingFile"/>
         </logger>
     </loggers>

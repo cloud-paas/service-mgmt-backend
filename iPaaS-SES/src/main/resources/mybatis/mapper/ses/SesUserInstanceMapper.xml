@@ -1,38 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ai.paas.ipaas.ses.dao.interfaces.SesUserInstanceMapper" >
-  <resultMap id="BaseResultMap" type="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
-    <result column="host_ip" property="hostIp" jdbcType="VARCHAR" />
-    <result column="ses_port" property="sesPort" jdbcType="INTEGER" />
-    <result column="tcp_port" property="tcpPort" jdbcType="INTEGER" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="mem_use" property="memUse" jdbcType="INTEGER" />
-    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="service_id" property="serviceId" jdbcType="VARCHAR" />
-    <result column="service_name" property="serviceName" jdbcType="VARCHAR" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.paas.ipaas.ses.dao.interfaces.SesUserInstanceMapper">
+  <resultMap id="BaseResultMap" type="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="host_ip" jdbcType="VARCHAR" property="hostIp" />
+    <result column="ses_port" jdbcType="INTEGER" property="sesPort" />
+    <result column="tcp_port" jdbcType="INTEGER" property="tcpPort" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="mem_use" jdbcType="INTEGER" property="memUse" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="ssh_port" jdbcType="INTEGER" property="sshPort" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -43,25 +44,25 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
                   and ${criterion.condition}
                 </when>
-                <when test="criterion.singleValue" >
+                <when test="criterion.singleValue">
                   and ${criterion.condition} #{criterion.value}
                 </when>
-                <when test="criterion.betweenValue" >
+                <when test="criterion.betweenValue">
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
-                <when test="criterion.listValue" >
+                <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -72,174 +73,185 @@
       </foreach>
     </where>
   </sql>
-  <sql id="Base_Column_List" >
+  <sql id="Base_Column_List">
     id, user_id, host_ip, ses_port, tcp_port, status, mem_use, begin_time, end_time, 
-    service_id, service_name
+    service_id, service_name, ssh_port
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria" >
+  <select id="selectByExample" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria" resultMap="BaseResultMap">
     select
-    <if test="distinct" >
+    <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
     from ses_user_instance
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
-    <if test="limitStart != null and limitStart>=0" >
+    <if test="limitStart != null and limitStart&gt;=0">
       limit #{limitStart} , #{limitEnd}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="Integer" >
+  <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from ses_user_instance
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="Integer">
     delete from ses_user_instance
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria" >
+  <delete id="deleteByExample" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria">
     delete from ses_user_instance
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance" >
+  <insert id="insert" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance">
     insert into ses_user_instance (id, user_id, host_ip, 
       ses_port, tcp_port, status, 
       mem_use, begin_time, end_time, 
-      service_id, service_name)
+      service_id, service_name, ssh_port
+      )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{hostIp,jdbcType=VARCHAR}, 
       #{sesPort,jdbcType=INTEGER}, #{tcpPort,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{memUse,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{serviceId,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR})
+      #{serviceId,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{sshPort,jdbcType=INTEGER}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance" >
+  <insert id="insertSelective" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance">
     insert into ses_user_instance
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         id,
       </if>
-      <if test="userId != null" >
+      <if test="userId != null">
         user_id,
       </if>
-      <if test="hostIp != null" >
+      <if test="hostIp != null">
         host_ip,
       </if>
-      <if test="sesPort != null" >
+      <if test="sesPort != null">
         ses_port,
       </if>
-      <if test="tcpPort != null" >
+      <if test="tcpPort != null">
         tcp_port,
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status,
       </if>
-      <if test="memUse != null" >
+      <if test="memUse != null">
         mem_use,
       </if>
-      <if test="beginTime != null" >
+      <if test="beginTime != null">
         begin_time,
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         end_time,
       </if>
-      <if test="serviceId != null" >
+      <if test="serviceId != null">
         service_id,
       </if>
-      <if test="serviceName != null" >
+      <if test="serviceName != null">
         service_name,
       </if>
+      <if test="sshPort != null">
+        ssh_port,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="userId != null" >
+      <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="hostIp != null" >
+      <if test="hostIp != null">
         #{hostIp,jdbcType=VARCHAR},
       </if>
-      <if test="sesPort != null" >
+      <if test="sesPort != null">
         #{sesPort,jdbcType=INTEGER},
       </if>
-      <if test="tcpPort != null" >
+      <if test="tcpPort != null">
         #{tcpPort,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="memUse != null" >
+      <if test="memUse != null">
         #{memUse,jdbcType=INTEGER},
       </if>
-      <if test="beginTime != null" >
+      <if test="beginTime != null">
         #{beginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="serviceId != null" >
+      <if test="serviceId != null">
         #{serviceId,jdbcType=VARCHAR},
       </if>
-      <if test="serviceName != null" >
+      <if test="serviceName != null">
         #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="sshPort != null">
+        #{sshPort,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria" resultType="java.lang.Integer" >
+  <select id="countByExample" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria" resultType="java.lang.Integer">
     select count(*) from ses_user_instance
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <update id="updateByExampleSelective" parameterType="map">
     update ses_user_instance
-    <set >
-      <if test="record.id != null" >
+    <set>
+      <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.userId != null" >
+      <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
-      <if test="record.hostIp != null" >
+      <if test="record.hostIp != null">
         host_ip = #{record.hostIp,jdbcType=VARCHAR},
       </if>
-      <if test="record.sesPort != null" >
+      <if test="record.sesPort != null">
         ses_port = #{record.sesPort,jdbcType=INTEGER},
       </if>
-      <if test="record.tcpPort != null" >
+      <if test="record.tcpPort != null">
         tcp_port = #{record.tcpPort,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null" >
+      <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.memUse != null" >
+      <if test="record.memUse != null">
         mem_use = #{record.memUse,jdbcType=INTEGER},
       </if>
-      <if test="record.beginTime != null" >
+      <if test="record.beginTime != null">
         begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.endTime != null" >
+      <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.serviceId != null" >
+      <if test="record.serviceId != null">
         service_id = #{record.serviceId,jdbcType=VARCHAR},
       </if>
-      <if test="record.serviceName != null" >
+      <if test="record.serviceName != null">
         service_name = #{record.serviceName,jdbcType=VARCHAR},
       </if>
+      <if test="record.sshPort != null">
+        ssh_port = #{record.sshPort,jdbcType=INTEGER},
+      </if>
     </set>
-    <if test="_parameter != null" >
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map" >
+  <update id="updateByExample" parameterType="map">
     update ses_user_instance
     set id = #{record.id,jdbcType=INTEGER},
       user_id = #{record.userId,jdbcType=VARCHAR},
@@ -251,48 +263,52 @@
       begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
       service_id = #{record.serviceId,jdbcType=VARCHAR},
-      service_name = #{record.serviceName,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
+      service_name = #{record.serviceName,jdbcType=VARCHAR},
+      ssh_port = #{record.sshPort,jdbcType=INTEGER}
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance">
     update ses_user_instance
-    <set >
-      <if test="userId != null" >
+    <set>
+      <if test="userId != null">
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
-      <if test="hostIp != null" >
+      <if test="hostIp != null">
         host_ip = #{hostIp,jdbcType=VARCHAR},
       </if>
-      <if test="sesPort != null" >
+      <if test="sesPort != null">
         ses_port = #{sesPort,jdbcType=INTEGER},
       </if>
-      <if test="tcpPort != null" >
+      <if test="tcpPort != null">
         tcp_port = #{tcpPort,jdbcType=INTEGER},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="memUse != null" >
+      <if test="memUse != null">
         mem_use = #{memUse,jdbcType=INTEGER},
       </if>
-      <if test="beginTime != null" >
+      <if test="beginTime != null">
         begin_time = #{beginTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
+      <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="serviceId != null" >
+      <if test="serviceId != null">
         service_id = #{serviceId,jdbcType=VARCHAR},
       </if>
-      <if test="serviceName != null" >
+      <if test="serviceName != null">
         service_name = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="sshPort != null">
+        ssh_port = #{sshPort,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance" >
+  <update id="updateByPrimaryKey" parameterType="com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance">
     update ses_user_instance
     set user_id = #{userId,jdbcType=VARCHAR},
       host_ip = #{hostIp,jdbcType=VARCHAR},
@@ -303,7 +319,8 @@
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       service_id = #{serviceId,jdbcType=VARCHAR},
-      service_name = #{serviceName,jdbcType=VARCHAR}
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      ssh_port = #{sshPort,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

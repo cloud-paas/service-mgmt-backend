@@ -22,7 +22,6 @@ public interface IRDSInstanceManager extends ISrvManager{
 	/**
 	 * 服务申请
 	 * 相关操作：通过审核的账号可以创建相应的MySQL服务器
-	 * 相关表instancebase,instanceipport,instancestatus,instancebaseconfig,instancespaceinfo
 	 * @param createApply
 	 *            :申请内容为json格式
 	 * @return
@@ -38,7 +37,6 @@ public interface IRDSInstanceManager extends ISrvManager{
 	/**
 	 * 注销服务，资源回收
 	 * 相关操作：取消账号相关所有服务
-	 * 相关表instancebase,instanceipport,instancestatus,instancebaseconfig,instancespaceinfo
 	 * @param cancelApply
 	 * @return
 	 */
@@ -56,7 +54,6 @@ public interface IRDSInstanceManager extends ISrvManager{
 	
 	/**
 	 * 启动storm拓扑
-	 * 相关表instancestatus
 	 * @param start
 	 * @return
 	 */
@@ -66,7 +63,6 @@ public interface IRDSInstanceManager extends ISrvManager{
 
 	/**
 	 * 停止storm拓扑
-	 * 相关表instancestatus
 	 * @param stop
 	 * @return
 	 */
@@ -76,7 +72,6 @@ public interface IRDSInstanceManager extends ISrvManager{
 	
 	/**
 	 * 重启服务
-	 * 相关表instancestatus
 	 * @param restart
 	 * @return
 	 */

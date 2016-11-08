@@ -1,6 +1,5 @@
 package com.ai.paas.ipaas.rds.dao.mapper.bo;
 
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -1193,6 +1192,126 @@ public class RdsResourcePoolCriteria {
 
         public Criteria andUsedNetBandwidthNotBetween(Integer value1, Integer value2) {
             addCriterion("used_net_bandwidth not between", value1, value2, "usedNetBandwidth");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIsNull() {
+            addCriterion("org_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIsNotNull() {
+            addCriterion("org_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdEqualTo(Integer value) {
+            addCriterion("org_id =", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotEqualTo(Integer value) {
+            addCriterion("org_id <>", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdGreaterThan(Integer value) {
+            addCriterion("org_id >", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("org_id >=", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdLessThan(Integer value) {
+            addCriterion("org_id <", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdLessThanOrEqualTo(Integer value) {
+            addCriterion("org_id <=", value, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdIn(List<Integer> values) {
+            addCriterion("org_id in", values, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotIn(List<Integer> values) {
+            addCriterion("org_id not in", values, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdBetween(Integer value1, Integer value2) {
+            addCriterion("org_id between", value1, value2, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("org_id not between", value1, value2, "orgId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortIsNull() {
+            addCriterion("ssh_port is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortIsNotNull() {
+            addCriterion("ssh_port is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortEqualTo(Integer value) {
+            addCriterion("ssh_port =", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortNotEqualTo(Integer value) {
+            addCriterion("ssh_port <>", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortGreaterThan(Integer value) {
+            addCriterion("ssh_port >", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortGreaterThanOrEqualTo(Integer value) {
+            addCriterion("ssh_port >=", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortLessThan(Integer value) {
+            addCriterion("ssh_port <", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortLessThanOrEqualTo(Integer value) {
+            addCriterion("ssh_port <=", value, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortIn(List<Integer> values) {
+            addCriterion("ssh_port in", values, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortNotIn(List<Integer> values) {
+            addCriterion("ssh_port not in", values, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortBetween(Integer value1, Integer value2) {
+            addCriterion("ssh_port between", value1, value2, "sshPort");
+            return (Criteria) this;
+        }
+
+        public Criteria andSshPortNotBetween(Integer value1, Integer value2) {
+            addCriterion("ssh_port not between", value1, value2, "sshPort");
             return (Criteria) this;
         }
 

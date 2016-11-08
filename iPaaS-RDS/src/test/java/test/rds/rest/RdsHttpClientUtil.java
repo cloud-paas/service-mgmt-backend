@@ -24,8 +24,8 @@ public class RdsHttpClientUtil {
 			throws IOException, URISyntaxException {
 		
 		HttpClient client = new DefaultHttpClient();
-		client.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 120000);  
-		client.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 120000);  
+		client.getParams().setIntParameter(CoreConnectionPNames.SO_TIMEOUT, 600000);  
+		client.getParams().setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 600000);  
 		HttpPost post = new HttpPost(url);
 		LOGGER.debug("*************************"+data+"*************************");
 		StringEntity entity = new StringEntity(data, "utf-8");// 解决中文乱码问题

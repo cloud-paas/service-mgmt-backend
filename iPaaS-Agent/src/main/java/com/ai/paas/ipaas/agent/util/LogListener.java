@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * 基于注解的定时器 
  * @author sunhz 
  */  
-@Component
+@Component  
 @EnableScheduling
 public class LogListener {
 	private static final Logger logger = LogManager.getLogger(LogListener.class.getName());

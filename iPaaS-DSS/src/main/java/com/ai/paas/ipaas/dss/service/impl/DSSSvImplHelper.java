@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.dubbo.ext.vo.BaseInfo;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ServiceUtil;
 import com.ai.paas.ipaas.ccs.constants.ConfigCenterDubboConstants.PathType;
@@ -78,9 +77,6 @@ public class DSSSvImplHelper {
 	@Autowired
 	protected ICCSComponentManageSv iCCSComponentManageSv;
 
-	@Autowired
-	protected IOrgnizeUserHelper orgnizeUserHelper;
-
 	protected static final String DSS_COMMON_ZK_CONF = "/DSS/COMMON";
 	protected static final String DSS_BASE_ZK_CONF = "/DSS/";
 	protected static final String SUCCESS = "000000";
@@ -111,7 +107,7 @@ public class DSSSvImplHelper {
 	protected Object[] createDBUserCollection(ApplyDSSParam applyObj)
 			throws Exception {
 		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(applyObj.getUserId()).getOrgId();
+		int orgId = applyObj.getOrgId();
 		List<DssResourcePool> dssResPoolList = getBestDssResource(orgId);
 		int leftSize = dssResPoolList.get(0).getLeftSize() - Integer.parseInt(applyObj.getCapacity());
 		int groupId = dssResPoolList.get(0).getGroupId();

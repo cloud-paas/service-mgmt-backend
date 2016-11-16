@@ -36,7 +36,6 @@ import com.ai.paas.ipaas.base.dao.mapper.bo.IpaasSysConfigCriteria;
 import com.ai.paas.ipaas.ccs.constants.ConfigCenterDubboConstants.PathType;
 import com.ai.paas.ipaas.ccs.service.ICCSComponentManageSv;
 import com.ai.paas.ipaas.ccs.service.dto.CCSComponentOperationParam;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.rpc.api.vo.ApplyInfo;
 import com.ai.paas.ipaas.ses.dao.interfaces.SesResourcePoolMapper;
 import com.ai.paas.ipaas.ses.dao.interfaces.SesUserInstanceMapper;
@@ -69,13 +68,10 @@ public class SesManageImpl implements ISesManage {
 	@Autowired
 	private ISesUserWeb userWebSV;
 
-	@Autowired
-	private IOrgnizeUserHelper orgnizeUserHelper;
-	
 	@Override
 	public void createSesService(SesSrvApply sesSrvApply) throws PaasException {
 		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(sesSrvApply.getUserId()).getOrgId();
+		int orgId = sesSrvApply.getOrgId();
 		
 		// 1.准备数据，包括从资源里面获取ses集群,实现获取算法
 		List<SesHostInfo> sesHosts = qryAvlSesHosts(
@@ -127,7 +123,7 @@ public class SesManageImpl implements ISesManage {
 		String userId = sesSrvApply.getUserId();
 		String serviceId = sesSrvApply.getServiceId();
 		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(sesSrvApply.getUserId()).getOrgId();
+		int orgId = sesSrvApply.getOrgId();
 		
 		// 获取可用的web端
 		SesWebPool webPool = userWebSV.getAvlWeb(orgId, userId, serviceId);

@@ -35,6 +35,8 @@ public class SesSrvApply extends ApplyInfo{
 	 */
 	private String serviceName;
 	
+	private Integer orgId;
+	
 	public Integer getClusterNum() {
 		return clusterNum;
 	}
@@ -76,6 +78,12 @@ public class SesSrvApply extends ApplyInfo{
 	 */
 	public void setSesMem(Integer sesMem) {
 		this.sesMem = sesMem;
+	}
+	public Integer getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(Integer orgId) {
+		this.orgId = orgId;
 	}
 
 }

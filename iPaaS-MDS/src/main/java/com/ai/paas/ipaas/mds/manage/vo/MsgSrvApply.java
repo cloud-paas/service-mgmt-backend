@@ -17,6 +17,15 @@ public class MsgSrvApply extends ApplyInfo {
 	private long offset;
 	private String message;
 	private String subscribeName;
+	private int orgId;
+
+	public int getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(int orgId) {
+		this.orgId = orgId;
+	}
 
 	public String getTopicEnName() {
 		return topicEnName;

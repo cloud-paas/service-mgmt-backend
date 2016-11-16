@@ -12,6 +12,8 @@ public class CreateServiceInfo {
     private String serviceId;
 
     private int timeOut;
+    
+    private int orgId;
 
     public String getUserId() {
         return userId;
@@ -49,6 +51,7 @@ public class CreateServiceInfo {
     public String toString() {
         return "CreateServiceInfo{" +
                 "userId='" + userId + '\'' +
+                "orgId='" + orgId + '\'' +
                 ", applyType='" + applyType + '\'' +
                 ", serviceId='" + serviceId + '\'' +
                 ", timeOut=" + timeOut +
@@ -63,4 +66,12 @@ public class CreateServiceInfo {
             throw new IllegalArgumentException(ResourceUtil.getMessage(BundleKeyConstants.TIMEOUT_NOT_NULL));
         }
     }
+
+	public int getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(int orgId) {
+		this.orgId = orgId;
+	}
 }

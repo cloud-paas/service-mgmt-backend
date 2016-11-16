@@ -33,8 +33,6 @@ import com.ai.paas.ipaas.ccs.service.dto.CreateServiceInfo;
 import com.ai.paas.ipaas.ccs.service.util.ConfigCenterUtil;
 import com.ai.paas.ipaas.ccs.service.util.ZookeeperClientUtil;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
-import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfo;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.util.Assert;
 import com.ai.paas.ipaas.util.CiperUtil;
 import com.ai.paas.ipaas.util.ResourceUtil;
@@ -44,9 +42,6 @@ import com.ai.paas.ipaas.util.UUIDTool;
 @Transactional(rollbackFor = Exception.class)
 public class ConfigCenterServiceManageSvImpl implements IConfigCenterServiceManageSv {
 	private Logger logger = Logger.getLogger(ConfigCenterServiceManageSvImpl.class);
-	
-	@Autowired
-	IOrgnizeUserHelper orgnizeUserHelper;
 	
 	@Override
 	public ConfigInfo createUserNode(String userId) throws PaasException {
@@ -110,8 +105,7 @@ public class ConfigCenterServiceManageSvImpl implements IConfigCenterServiceMana
 				ResourceUtil.getMessage(BundleKeyConstants.USER_CONFIG_NOT_FOUND, createServiceInfo.getUserId()));
 		
 		/** according to userid get orgid, for selecting ccs resource. (2016-10) **/
-		OrgnizeUserInfo orgnizeInfo = orgnizeUserHelper.getOrgnizeInfo(createServiceInfo.getUserId());
-		int orgId = orgnizeInfo.getOrgId();
+		int orgId = createServiceInfo.getOrgId();
 		CcsResourcePool pool = selectRandomZkMachine(orgId, createServiceInfo.getUserId(),
 				ConfigCenterDubboConstants.ZKTypeCode.CUSTOM);
 		String passwd = String.valueOf(UUIDTool.genShortId());

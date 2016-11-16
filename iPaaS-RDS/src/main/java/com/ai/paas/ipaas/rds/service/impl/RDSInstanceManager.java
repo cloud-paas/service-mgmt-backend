@@ -31,7 +31,6 @@ import com.ai.paas.ipaas.base.dao.mapper.bo.IpaasImageResourceCriteria;
 import com.ai.paas.ipaas.ccs.constants.ConfigCenterDubboConstants.PathType;
 import com.ai.paas.ipaas.ccs.service.ICCSComponentManageSv;
 import com.ai.paas.ipaas.ccs.service.dto.CCSComponentOperationParam;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.rds.dao.interfaces.RdsIncBaseMapper;
 import com.ai.paas.ipaas.rds.dao.interfaces.RdsResourcePoolMapper;
 import com.ai.paas.ipaas.rds.dao.mapper.bo.RdsIncBase;
@@ -39,7 +38,6 @@ import com.ai.paas.ipaas.rds.dao.mapper.bo.RdsIncBaseCriteria;
 import com.ai.paas.ipaas.rds.dao.mapper.bo.RdsResourcePool;
 import com.ai.paas.ipaas.rds.dao.mapper.bo.RdsResourcePoolCriteria;
 import com.ai.paas.ipaas.rds.dao.wo.InstanceGroup;
-import com.ai.paas.ipaas.rds.manage.rest.interfaces.IRDSInstanceManager;
 import com.ai.paas.ipaas.rds.service.constant.AnsibleConstant;
 import com.ai.paas.ipaas.rds.service.constant.InstanceType;
 import com.ai.paas.ipaas.rds.service.constant.RDSCommonConstant;
@@ -53,7 +51,6 @@ import com.ai.paas.ipaas.rds.service.transfer.vo.CreateRDS;
 import com.ai.paas.ipaas.rds.service.transfer.vo.CreateRDSResult;
 import com.ai.paas.ipaas.rds.service.transfer.vo.CreateSRDS;
 import com.ai.paas.ipaas.rds.service.transfer.vo.GetIncInfo;
-import com.ai.paas.ipaas.rds.service.transfer.vo.GetInstanceInfoRDS;
 import com.ai.paas.ipaas.rds.service.transfer.vo.InstanceBaseSimple;
 import com.ai.paas.ipaas.rds.service.transfer.vo.MedthodDescribe;
 import com.ai.paas.ipaas.rds.service.transfer.vo.ModifyRDS;
@@ -70,7 +67,6 @@ import com.ai.paas.ipaas.rds.service.transfer.vo.SwitchMaster;
 import com.ai.paas.ipaas.rds.service.transfer.vo.SwitchMasterResult;
 //import com.ai.paas.ipaas.rds.service.util.EntityToWhere;
 import com.ai.paas.ipaas.rds.service.util.GsonSingleton;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 /**
@@ -97,9 +93,6 @@ public class RDSInstanceManager  {
 
 	@Autowired
 	ICCSComponentManageSv iCCSComponentManageSv;
-	
-	@Autowired
-	private IOrgnizeUserHelper orgnizeUserHelper;
 
 	/**
 	 * 注销实例
@@ -1303,41 +1296,34 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 	 */
 	private List<RdsResourcePool> getMasterUsableResource(RdsIncBase inc, List<RdsResourcePool> resourceList) {
 		List<RdsResourcePool> canUseRes = new LinkedList<RdsResourcePool>();
-		try {
-			int orgId = orgnizeUserHelper.getOrgnizeInfo(inc.getUserId()).getOrgId();
-		
-			for (RdsResourcePool rp : resourceList) {
-				int canUseExtMemSize = rp.getTotalmemory() - rp.getUsedmemory();
-				Type cputype = new TypeToken<List<CPU>>(){}.getType();
-				int canUseIntMemSize = rp.getTotIntStorage() - rp.getUsedIntStorage();
-				int canUseBandWidthSizee = rp.getNetBandwidth() - rp.getUsedNetBandwidth();
-	//			boolean existIdleCpu = false;
-				int countUseableCpu = 0;
-				int cpuNeedNum = Integer.valueOf(inc.getCpuInfo());
-				List<CPU> cpus = g.getGson().fromJson(rp.getCpu(), cputype);
-				for(CPU cpu: cpus){
-					if(cpu.usable = true)
-						countUseableCpu++;
-				}
-				
-				if ((RDSCommonConstant.RES_STATUS_USABLE == rp.getStatus()) 
-						&& (RDSCommonConstant.RES_CYCLE_USABLE == rp.getCycle())
-						&& (canUseExtMemSize > inc.getDbStoreage())
-						&& ((rp.getCurrentport() + 1) < rp.getMaxport())
-						&& canUseIntMemSize > inc.getIntStorage()
-						&& canUseBandWidthSizee > inc.getNetBandwidth()
-						&& rp.getOrgId() == orgId
-	//					&& countUseableCpu >= cpuNeedNum
-						) {
-					canUseRes.add(rp);
-				}
+		int orgId = inc.getOrgId();
+		for (RdsResourcePool rp : resourceList) {
+			int canUseExtMemSize = rp.getTotalmemory() - rp.getUsedmemory();
+			Type cputype = new TypeToken<List<CPU>>(){}.getType();
+			int canUseIntMemSize = rp.getTotIntStorage() - rp.getUsedIntStorage();
+			int canUseBandWidthSizee = rp.getNetBandwidth() - rp.getUsedNetBandwidth();
+//			boolean existIdleCpu = false;
+			int countUseableCpu = 0;
+			int cpuNeedNum = Integer.valueOf(inc.getCpuInfo());
+			List<CPU> cpus = g.getGson().fromJson(rp.getCpu(), cputype);
+			for(CPU cpu: cpus){
+				if(cpu.usable = true)
+					countUseableCpu++;
 			}
-			return canUseRes;
-		} catch (PaasException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
+			if ((RDSCommonConstant.RES_STATUS_USABLE == rp.getStatus()) 
+					&& (RDSCommonConstant.RES_CYCLE_USABLE == rp.getCycle())
+					&& (canUseExtMemSize > inc.getDbStoreage())
+					&& ((rp.getCurrentport() + 1) < rp.getMaxport())
+					&& canUseIntMemSize > inc.getIntStorage()
+					&& canUseBandWidthSizee > inc.getNetBandwidth()
+					&& rp.getOrgId() == orgId
+//					&& countUseableCpu >= cpuNeedNum
+					) {
+				canUseRes.add(rp);
+			}
 		}
-		return null;
+		return canUseRes;
 	}
 
 

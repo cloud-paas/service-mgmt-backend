@@ -9,6 +9,8 @@ public class RdsIncBase implements Cloneable {
     private Integer id;
 
     private String userId;
+    
+    private int orgId;
 
     private String serviceId;
 
@@ -188,7 +190,7 @@ public class RdsIncBase implements Cloneable {
 			String mysqlDataHome, String mysqlVolumnPath, String whiteList, String rootName, String rootPassword,
 			String containerName, String dbServerId, Integer dbStoreage, Integer dbUsedStorage, Integer intStorage,
 			Integer maxConnectNum, Integer masterid, String cpuInfo, Integer netBandwidth, String sqlAudit,
-			String syncStrategy, Timestamp createTime, Timestamp updateTime) {
+			String syncStrategy, Timestamp createTime, Timestamp updateTime, int orgId) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -225,6 +227,7 @@ public class RdsIncBase implements Cloneable {
 		this.syncStrategy = syncStrategy;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
+		this.orgId = orgId;
 	}
 
 	/**
@@ -516,4 +519,12 @@ public class RdsIncBase implements Cloneable {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
+
+	public int getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(int orgId) {
+		this.orgId = orgId;
+	}
 }

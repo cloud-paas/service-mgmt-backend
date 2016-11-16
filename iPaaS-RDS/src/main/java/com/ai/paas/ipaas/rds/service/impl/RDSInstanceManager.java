@@ -417,6 +417,7 @@ public class RDSInstanceManager  {
 					incBaseMapper.updateByPrimaryKey(batMasterInstance);
 					
 					// 将拓扑结构保存至注册中心（zk）
+					batMasterInstance.setOrgId(createObject.instanceBase.getOrgId());
 					save2ZK(batMasterInstance);
 				} catch (IOException | PaasException e) {
 					e.printStackTrace();

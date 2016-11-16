@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ServiceUtil;
 import com.ai.paas.ipaas.agent.util.AgentUtil;
@@ -50,9 +49,6 @@ public class McsManageImpl implements IMcsSv {
 	
 	@Autowired 
 	private ICCSComponentManageSv iCCSComponentManageSv;
-	
-	@Autowired
-	private IOrgnizeUserHelper orgnizeUserHelper;
 
 	//protected static boolean excuteFlag = true;
 	
@@ -98,6 +94,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openSingleMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
+		int orgId = Integer.valueOf(orgIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -105,7 +103,6 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize, 1);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer cachePort = mcsResourcePool.getCachePort();
@@ -166,6 +163,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openClusterMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
+		int orgId = Integer.valueOf(orgIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -191,7 +190,6 @@ public class McsManageImpl implements IMcsSv {
 		logger.info("-----创建 mcs_host.cfg 成功！");
 		
 		/** 从MCS资源池中选取资源  **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		List<McsProcessInfo> cacheInfoList = selectMcsResCluster(orgId, userId, serviceId, clusterCacheSize, McsConstants.CLUSTER_CACHE_NUM);
 		logger.info("-----已获取开通redis集群所需资源主机["+cacheInfoList.size() +"]台。");
 		
@@ -285,6 +283,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openReplicationMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
+		int orgId = Integer.valueOf(orgIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -292,7 +292,6 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize * 2, 2);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer sshPort = mcsResourcePool.getSshPort();
@@ -352,6 +351,8 @@ public class McsManageImpl implements IMcsSv {
 	
 	private String openSentinelMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
+		int orgId = Integer.valueOf(orgIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -359,7 +360,6 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize * 2, 3);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer sshPort = mcsResourcePool.getSshPort();

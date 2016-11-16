@@ -73,7 +73,7 @@ public class MsgSrvManagerHelper implements IMsgSrvManagerHelper {
 			// 如果没有使用过cluster，则找一个用户最少的cluster出来,如果有多个cluster，则选择第一个
 			// 准备发送和消费的配置信息
 			/** added orgId column in 2016-10 **/
-			logger.info(String.valueOf(msgSrvApply.getOrgId()));
+			logger.info("msgSrvApply.getOrgId() is :"+ String.valueOf(msgSrvApply.getOrgId()));
 			
 			List<MdsKafkaLoad> clusterLoads = ServiceUtil.getMapper(
 					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getUserId(),

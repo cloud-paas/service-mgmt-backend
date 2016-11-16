@@ -465,6 +465,7 @@ public class RDSInstanceManager  {
 						incBaseMapper.updateByPrimaryKey(ib);
 						
 						// 将拓扑结构保存至注册中心（zk）
+						ib.setOrgId(createObject.instanceBase.getOrgId());
 						save2ZK(ib);
 					} catch (IOException | PaasException e) {
 						e.printStackTrace();
@@ -481,6 +482,7 @@ public class RDSInstanceManager  {
 		}
 
 		// 将拓扑结构保存至注册中心（zk）
+		savedRdsIncBase.setOrgId(createObject.instanceBase.getOrgId());
 		save2ZK(savedRdsIncBase);
 		
 		createResult.isInstanceConfig = isRightConfig;

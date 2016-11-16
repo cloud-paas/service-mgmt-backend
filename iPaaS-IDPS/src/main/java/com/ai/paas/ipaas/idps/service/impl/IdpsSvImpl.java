@@ -28,7 +28,6 @@ import com.ai.paas.ipaas.base.dao.mapper.bo.IpaasSysConfigCriteria;
 import com.ai.paas.ipaas.ccs.constants.ConfigCenterDubboConstants.PathType;
 import com.ai.paas.ipaas.ccs.service.ICCSComponentManageSv;
 import com.ai.paas.ipaas.ccs.service.dto.CCSComponentOperationParam;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.idps.dao.interfaces.IdpsBalanceResourcePoolMapper;
 import com.ai.paas.ipaas.idps.dao.interfaces.IdpsInstanceBandDssMapper;
 import com.ai.paas.ipaas.idps.dao.interfaces.IdpsResourcePoolMapper;
@@ -57,9 +56,6 @@ public class IdpsSvImpl implements IIdpsSv {
 	@Autowired
 	private ICCSComponentManageSv iCCSComponentManageSv;
 	
-	@Autowired
-	private IOrgnizeUserHelper orgnizeUserHelper;
-	
 	@Override
 	public String open(String param,String isUpgrade) throws Exception {
 		LOG.debug("----open idps ---param {}-----", param);
@@ -78,9 +74,12 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
+		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
+		final int orgId = Integer.valueOf(orgIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
+		
 
 		// 判断用户的这个图片服务是否已经开通
 		if (existsService(userId, serviceId) && "no".equals(isUpgrade)) {
@@ -95,10 +94,10 @@ public class IdpsSvImpl implements IIdpsSv {
 
 		if (nodeNum == 1) {
 			openOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd,isUpgrade);
+					dssServicePwd,isUpgrade, orgId);
 		} else {
 			openMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd,isUpgrade);
+					dssServiceId, dssServicePwd,isUpgrade, orgId);
 		}
 		
 		if("no".equals(isUpgrade)){
@@ -155,10 +154,8 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void openMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd,String isUpgrade) throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
-		
+			String dssServicePwd,String isUpgrade, int orgId) throws Exception {
+
 		// 选择nodeNum个 图片服务器selectIdpsResources
 		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
 		
@@ -202,9 +199,7 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void stopMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd) throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
+			String dssServicePwd, int orgId) throws Exception {
 		
 		// 选择nodeNum个 图片服务器selectIdpsResources
 		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
@@ -225,9 +220,7 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void deleteMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd) throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
+			String dssServicePwd, int orgId) throws Exception {
 		
 		// 选择nodeNum个 图片服务器selectIdpsResources
 		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
@@ -248,9 +241,8 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void startMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd) throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
+			String dssServicePwd, int orgId) throws Exception {
+
 		// 选择nodeNum个 图片服务器selectIdpsResources
 		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
 		// 选择2个 负载均衡
@@ -659,9 +651,8 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void openOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd,String isUpgrade) throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
+			String dssPId, String dssServiceId, String dssServicePwd,
+			String isUpgrade, int orgId) throws Exception {
 		
 		// 选择资源
 		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
@@ -718,10 +709,8 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void startOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd)
+			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
 			throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		// 选择资源
 		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
@@ -752,10 +741,9 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void stopOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd)
+			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
 			throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
+
 		// 选择资源
 		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
@@ -786,10 +774,8 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void deleteOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd)
+			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
 			throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
 		// 选择资源
 		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
@@ -1255,6 +1241,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
+		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
+		final int orgId = Integer.valueOf(orgIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1263,10 +1251,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		final String dssPId = map.get(IdpsConstants.DSS_P_ID);
 		if (nodeNum == 1) {
 			stopOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd);
+					dssServicePwd, orgId);
 		} else {
 			stopMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd);
+					dssServiceId, dssServicePwd, orgId);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}
@@ -1280,6 +1268,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
+		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
+		final int orgId = Integer.valueOf(orgIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1292,10 +1282,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		}
 		if (nodeNum == 1) {
 			deleteOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd);
+					dssServicePwd, orgId);
 		} else {
 			deleteMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd);
+					dssServiceId, dssServicePwd, orgId);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}
@@ -1309,6 +1299,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
+		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
+		final int orgId = Integer.valueOf(orgIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1317,10 +1309,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		final String dssPId = map.get(IdpsConstants.DSS_P_ID);
 		if (nodeNum == 1) {
 			startOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd);
+					dssServicePwd, orgId);
 		} else {
 			startMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd);
+					dssServiceId, dssServicePwd, orgId);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}

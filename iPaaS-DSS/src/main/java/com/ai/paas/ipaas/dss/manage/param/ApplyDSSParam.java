@@ -16,7 +16,6 @@ public class ApplyDSSParam extends ApplyInfo implements Serializable {
 	private String capacity;
 	private String singleFileSize;
 	private String serviceName;
-	private int orgId;
 
 	public String getServiceName() {
 		return serviceName;
@@ -40,14 +39,6 @@ public class ApplyDSSParam extends ApplyInfo implements Serializable {
 
 	public void setSingleFileSize(String singleFileSize) {
 		this.singleFileSize = singleFileSize;
-	}
-
-	public int getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(int orgId) {
-		this.orgId = orgId;
 	}
 
 }

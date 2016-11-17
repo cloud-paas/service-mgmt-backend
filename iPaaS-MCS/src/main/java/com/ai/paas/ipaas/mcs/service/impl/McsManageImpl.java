@@ -94,8 +94,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openSingleMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
-		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
-		int orgId = Integer.valueOf(orgIdStr);
+		String tenantIdStr = paraMap.get(McsConstants.TENANT_ID);
+		int orgId = Integer.valueOf(tenantIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -163,8 +163,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openClusterMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
-		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
-		int orgId = Integer.valueOf(orgIdStr);
+		String tenantIdStr = paraMap.get(McsConstants.TENANT_ID);
+		int orgId = Integer.valueOf(tenantIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -283,8 +283,8 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openReplicationMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
-		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
-		int orgId = Integer.valueOf(orgIdStr);
+		String tenantIdStr = paraMap.get(McsConstants.TENANT_ID);
+		int orgId = Integer.valueOf(tenantIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -351,8 +351,8 @@ public class McsManageImpl implements IMcsSv {
 	
 	private String openSentinelMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
-		String orgIdStr = paraMap.get(McsConstants.ORG_ID);
-		int orgId = Integer.valueOf(orgIdStr);
+		String tenantIdStr = paraMap.get(McsConstants.TENANT_ID);
+		int orgId = Integer.valueOf(tenantIdStr);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);

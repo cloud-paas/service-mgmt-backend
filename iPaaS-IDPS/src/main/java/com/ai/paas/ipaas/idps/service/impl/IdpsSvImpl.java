@@ -74,8 +74,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
-		final int orgId = Integer.valueOf(orgIdStr);
+		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
+		final int orgId = Integer.valueOf(tenantIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1241,8 +1241,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
-		final int orgId = Integer.valueOf(orgIdStr);
+		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
+		final int orgId = Integer.valueOf(tenantIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1268,8 +1268,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
-		final int orgId = Integer.valueOf(orgIdStr);
+		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
+		final int orgId = Integer.valueOf(tenantIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1299,8 +1299,8 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String orgIdStr = map.get(IdpsConstants.ORG_ID);
-		final int orgId = Integer.valueOf(orgIdStr);
+		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
+		final int orgId = Integer.valueOf(tenantIdStr);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);

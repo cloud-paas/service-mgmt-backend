@@ -284,6 +284,7 @@ public class RDSInstanceManager  {
 			createResult.setStatus(ResponseResultMark.ERROR_LESS_IMP_PARAM);
 			return g.getGson().toJson(createResult);
 		}
+		LOG.info(createObject.instanceBase.getTenantId());
 		createObject.instanceBase.setBakId("");
 		createObject.instanceBase.setSlaverId("");
 //		if(createObject.instanceBase.getImgId() <= 0){ // 需要前台传入

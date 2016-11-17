@@ -105,7 +105,7 @@ public class ConfigCenterServiceManageSvImpl implements IConfigCenterServiceMana
 				ResourceUtil.getMessage(BundleKeyConstants.USER_CONFIG_NOT_FOUND, createServiceInfo.getUserId()));
 		
 		/** according to userid get orgid, for selecting ccs resource. (2016-10) **/
-		int orgId = createServiceInfo.getOrgId();
+		int orgId = Integer.valueOf(createServiceInfo.getTenantId());
 		CcsResourcePool pool = selectRandomZkMachine(orgId, createServiceInfo.getUserId(),
 				ConfigCenterDubboConstants.ZKTypeCode.CUSTOM);
 		String passwd = String.valueOf(UUIDTool.genShortId());

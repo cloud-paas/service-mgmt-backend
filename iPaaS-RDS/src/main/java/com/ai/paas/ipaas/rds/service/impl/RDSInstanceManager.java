@@ -417,7 +417,7 @@ public class RDSInstanceManager  {
 					incBaseMapper.updateByPrimaryKey(batMasterInstance);
 					
 					// 将拓扑结构保存至注册中心（zk）
-					batMasterInstance.setOrgId(createObject.instanceBase.getOrgId());
+					batMasterInstance.setTenantId(createObject.instanceBase.getTenantId());
 					save2ZK(batMasterInstance);
 				} catch (IOException | PaasException e) {
 					e.printStackTrace();
@@ -465,7 +465,7 @@ public class RDSInstanceManager  {
 						incBaseMapper.updateByPrimaryKey(ib);
 						
 						// 将拓扑结构保存至注册中心（zk）
-						ib.setOrgId(createObject.instanceBase.getOrgId());
+						ib.setTenantId(createObject.instanceBase.getTenantId());
 						save2ZK(ib);
 					} catch (IOException | PaasException e) {
 						e.printStackTrace();
@@ -482,7 +482,7 @@ public class RDSInstanceManager  {
 		}
 
 		// 将拓扑结构保存至注册中心（zk）
-		savedRdsIncBase.setOrgId(createObject.instanceBase.getOrgId());
+		savedRdsIncBase.setTenantId(createObject.instanceBase.getTenantId());
 		save2ZK(savedRdsIncBase);
 		
 		createResult.isInstanceConfig = isRightConfig;
@@ -1299,7 +1299,7 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 	 */
 	private List<RdsResourcePool> getMasterUsableResource(RdsIncBase inc, List<RdsResourcePool> resourceList) {
 		List<RdsResourcePool> canUseRes = new LinkedList<RdsResourcePool>();
-		int orgId = inc.getOrgId();
+		int tenantId = Integer.valueOf(inc.getTenantId());
 		for (RdsResourcePool rp : resourceList) {
 			int canUseExtMemSize = rp.getTotalmemory() - rp.getUsedmemory();
 			Type cputype = new TypeToken<List<CPU>>(){}.getType();
@@ -1320,7 +1320,7 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 					&& ((rp.getCurrentport() + 1) < rp.getMaxport())
 					&& canUseIntMemSize > inc.getIntStorage()
 					&& canUseBandWidthSizee > inc.getNetBandwidth()
-					&& rp.getOrgId() == orgId
+					&& rp.getOrgId() == tenantId
 //					&& countUseableCpu >= cpuNeedNum
 					) {
 				canUseRes.add(rp);

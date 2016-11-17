@@ -1,10 +1,12 @@
 package com.ai.paas.ipaas.ccs.service.dto;
 
 import com.ai.paas.ipaas.ccs.constants.BundleKeyConstants;
+import com.ai.paas.ipaas.rpc.api.vo.ApplyInfo;
 import com.ai.paas.ipaas.util.Assert;
 import com.ai.paas.ipaas.util.ResourceUtil;
 
-public class CreateServiceInfo {
+@SuppressWarnings("serial")
+public class CreateServiceInfo extends ApplyInfo {
     private String userId;
 
     private String applyType;
@@ -12,8 +14,7 @@ public class CreateServiceInfo {
     private String serviceId;
 
     private int timeOut;
-    
-    private int orgId;
+  
 
     public String getUserId() {
         return userId;
@@ -51,7 +52,7 @@ public class CreateServiceInfo {
     public String toString() {
         return "CreateServiceInfo{" +
                 "userId='" + userId + '\'' +
-                "orgId='" + orgId + '\'' +
+                "tenantId='" + getTenantId() + '\'' +
                 ", applyType='" + applyType + '\'' +
                 ", serviceId='" + serviceId + '\'' +
                 ", timeOut=" + timeOut +
@@ -67,11 +68,4 @@ public class CreateServiceInfo {
         }
     }
 
-	public int getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(int orgId) {
-		this.orgId = orgId;
-	}
 }

@@ -107,7 +107,7 @@ public class DSSSvImplHelper {
 	protected Object[] createDBUserCollection(ApplyDSSParam applyObj)
 			throws Exception {
 		/** added orgId column in 2016-10 **/
-		int orgId = applyObj.getOrgId();
+		int orgId = Integer.valueOf(applyObj.getTenantId());
 		List<DssResourcePool> dssResPoolList = getBestDssResource(orgId);
 		int leftSize = dssResPoolList.get(0).getLeftSize() - Integer.parseInt(applyObj.getCapacity());
 		int groupId = dssResPoolList.get(0).getGroupId();

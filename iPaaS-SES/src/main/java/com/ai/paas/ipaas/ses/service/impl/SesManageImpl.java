@@ -71,7 +71,7 @@ public class SesManageImpl implements ISesManage {
 	@Override
 	public void createSesService(SesSrvApply sesSrvApply) throws PaasException {
 		/** added orgId column in 2016-10 **/
-		int orgId = sesSrvApply.getOrgId();
+		int orgId = Integer.valueOf(sesSrvApply.getTenantId());
 		
 		// 1.准备数据，包括从资源里面获取ses集群,实现获取算法
 		List<SesHostInfo> sesHosts = qryAvlSesHosts(
@@ -123,7 +123,7 @@ public class SesManageImpl implements ISesManage {
 		String userId = sesSrvApply.getUserId();
 		String serviceId = sesSrvApply.getServiceId();
 		/** added orgId column in 2016-10 **/
-		int orgId = sesSrvApply.getOrgId();
+		int orgId = Integer.valueOf(sesSrvApply.getTenantId());
 		
 		// 获取可用的web端
 		SesWebPool webPool = userWebSV.getAvlWeb(orgId, userId, serviceId);

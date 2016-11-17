@@ -7,38 +7,8 @@ import com.ai.paas.ipaas.util.ResourceUtil;
 
 @SuppressWarnings("serial")
 public class CreateServiceInfo extends ApplyInfo {
-    private String userId;
-
-    private String applyType;
-
-    private String serviceId;
 
     private int timeOut;
-  
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getApplyType() {
-        return applyType;
-    }
-
-    public void setApplyType(String applyType) {
-        this.applyType = applyType;
-    }
-
-    public String getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
-    }
 
     public int getTimeOut() {
         return timeOut;
@@ -51,18 +21,18 @@ public class CreateServiceInfo extends ApplyInfo {
     @Override
     public String toString() {
         return "CreateServiceInfo{" +
-                "userId='" + userId + '\'' +
+                "userId='" + getUserId() + '\'' +
                 "tenantId='" + getTenantId() + '\'' +
-                ", applyType='" + applyType + '\'' +
-                ", serviceId='" + serviceId + '\'' +
+                ", applyType='" + getApplyType() + '\'' +
+                ", serviceId='" + getServiceId() + '\'' +
                 ", timeOut=" + timeOut +
                 '}';
     }
 
     public void validate() {
-        Assert.notNull(userId, ResourceUtil.getMessage(BundleKeyConstants.USER_ID_NOT_NULL));
-        Assert.notNull(applyType, ResourceUtil.getMessage(BundleKeyConstants.APPLY_TYPE_NOT_NULL));
-        Assert.notNull(serviceId, ResourceUtil.getMessage(BundleKeyConstants.SERVICE_ID_NOT_NULL));
+        Assert.notNull(getUserId(), ResourceUtil.getMessage(BundleKeyConstants.USER_ID_NOT_NULL));
+        Assert.notNull(getTenantId(), ResourceUtil.getMessage(BundleKeyConstants.APPLY_TYPE_NOT_NULL));
+        Assert.notNull(getServiceId(), ResourceUtil.getMessage(BundleKeyConstants.SERVICE_ID_NOT_NULL));
         if (timeOut == 0){
             throw new IllegalArgumentException(ResourceUtil.getMessage(BundleKeyConstants.TIMEOUT_NOT_NULL));
         }

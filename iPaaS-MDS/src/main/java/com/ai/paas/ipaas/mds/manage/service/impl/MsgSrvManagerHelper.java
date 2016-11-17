@@ -76,8 +76,7 @@ public class MsgSrvManagerHelper implements IMsgSrvManagerHelper {
 			logger.info("msgSrvApply.getOrgId() is :"+ String.valueOf(msgSrvApply.getOrgId()));
 			
 			List<MdsKafkaLoad> clusterLoads = ServiceUtil.getMapper(
-					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getUserId(),
-							msgSrvApply.getOrgId());
+					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getOrgId());
 			
 			MdsResourcePoolCriteria clusterExample = new MdsResourcePoolCriteria();
 			clusterExample.createCriteria().andClusterStateEqualTo(

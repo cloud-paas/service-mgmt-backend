@@ -15,8 +15,7 @@ public interface IMdsUserTopicCustomMapper {
 			" WHERE a.STATE = 1 and b.cluster_state = 1 " +
 			"   AND b.org_id = #{orgId} " + 
 			"   AND b.cluster_id = a.MDS_CLUSTER_ID " +
-			"   AND c.user_id = #{userId} " +
 			" GROUP BY a.MDS_CLUSTER_ID")
-	List<MdsKafkaLoad> getClusterLoad(String userId, int orgId);
+	List<MdsKafkaLoad> getClusterLoad(int orgId);
 
 }

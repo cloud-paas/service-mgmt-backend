@@ -2066,7 +2066,6 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 	private void save2ZK(RdsIncBase instanceRDS) {
 		CCSComponentOperationParam op = new CCSComponentOperationParam();
 		System.out.println("save2ZK");
-		LOG.info("save2ZK :"+instanceRDS.getServiceId());
 		op.setUserId(instanceRDS.getUserId());
 		op.setPath(RDSCommonConstant.RDS_ZK_PATH + instanceRDS.getServiceId());
 		op.setPathType(PathType.READONLY);

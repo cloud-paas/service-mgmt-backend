@@ -31,7 +31,7 @@ public class CreateServiceInfo extends ApplyInfo {
 
     public void validate() {
         Assert.notNull(getUserId(), ResourceUtil.getMessage(BundleKeyConstants.USER_ID_NOT_NULL));
-        Assert.notNull(getTenantId(), ResourceUtil.getMessage(BundleKeyConstants.APPLY_TYPE_NOT_NULL));
+        Assert.notNull(getApplyType(), ResourceUtil.getMessage(BundleKeyConstants.APPLY_TYPE_NOT_NULL));
         Assert.notNull(getServiceId(), ResourceUtil.getMessage(BundleKeyConstants.SERVICE_ID_NOT_NULL));
         if (timeOut == 0){
             throw new IllegalArgumentException(ResourceUtil.getMessage(BundleKeyConstants.TIMEOUT_NOT_NULL));

@@ -74,8 +74,7 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
-		final int orgId = Integer.valueOf(tenantIdStr);
+		final String orgCode = map.get(IdpsConstants.ORG_CODE);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -94,10 +93,10 @@ public class IdpsSvImpl implements IIdpsSv {
 
 		if (nodeNum == 1) {
 			openOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd,isUpgrade, orgId);
+					dssServicePwd,isUpgrade, orgCode);
 		} else {
 			openMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd,isUpgrade, orgId);
+					dssServiceId, dssServicePwd,isUpgrade, orgCode);
 		}
 		
 		if("no".equals(isUpgrade)){
@@ -154,13 +153,13 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void openMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd,String isUpgrade, int orgId) throws Exception {
+			String dssServicePwd,String isUpgrade, String orgCode) throws Exception {
 
 		// 选择nodeNum个 图片服务器selectIdpsResources
-		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
+		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgCode, nodeNum);
 		
 		// 选择2个 负载均衡
-		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgId, IdpsConstants.IDPS_BALANCE_NUM);
+		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgCode, IdpsConstants.IDPS_BALANCE_NUM);
 
 		// 处理服务端 docker 命令 拉gm、图片服务器war,nginx镜像，启动docker化的实例
 		handleServer4Many(irps, balances, userId, serviceId, dssPId,
@@ -199,12 +198,12 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void stopMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd, int orgId) throws Exception {
+			String dssServicePwd, String orgCode) throws Exception {
 		
 		// 选择nodeNum个 图片服务器selectIdpsResources
-		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
+		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgCode, nodeNum);
 		// 选择2个 负载均衡
-		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgId, IdpsConstants.IDPS_BALANCE_NUM);
+		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgCode, IdpsConstants.IDPS_BALANCE_NUM);
 		// 处理服务端 docker 命令 拉gm、图片服务器war,nginx镜像，启动docker化的实例
 		stopServer4Many(irps, balances, userId, serviceId, dssPId,
 				dssServiceId, dssServicePwd);
@@ -220,12 +219,12 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void deleteMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd, int orgId) throws Exception {
+			String dssServicePwd, String orgCode) throws Exception {
 		
 		// 选择nodeNum个 图片服务器selectIdpsResources
-		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
+		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgCode, nodeNum);
 		// 选择2个 负载均衡
-		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgId, IdpsConstants.IDPS_BALANCE_NUM);
+		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgCode, IdpsConstants.IDPS_BALANCE_NUM);
 		// 处理服务端 docker 命令 拉gm、图片服务器war,nginx镜像，启动docker化的实例
 		deleteServer4Many(irps, balances, userId, serviceId, dssPId,
 				dssServiceId, dssServicePwd);
@@ -241,12 +240,12 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void startMany(String userId, String serviceId, int nodeNum,
 			String serviceName, String dssPId, String dssServiceId,
-			String dssServicePwd, int orgId) throws Exception {
+			String dssServicePwd, String orgCode) throws Exception {
 
 		// 选择nodeNum个 图片服务器selectIdpsResources
-		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgId, nodeNum);
+		List<IdpsResourcePool> irps = selectIdpsResources4Many(orgCode, nodeNum);
 		// 选择2个 负载均衡
-		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgId, IdpsConstants.IDPS_BALANCE_NUM);
+		List<IdpsBalanceResourcePool> balances = selectIdpsBalance(orgCode, IdpsConstants.IDPS_BALANCE_NUM);
 		// 处理服务端 docker 命令 拉gm、图片服务器war,nginx镜像，启动docker化的实例
 		startServer4Many(irps, balances, userId, serviceId, dssPId,
 				dssServiceId, dssServicePwd);
@@ -562,11 +561,11 @@ public class IdpsSvImpl implements IIdpsSv {
 		}
 	}
 		
-	/** added orgId in 2016-10 **/
-	private List<IdpsBalanceResourcePool> selectIdpsBalance(int orgId, int num) throws Exception {
+	/** added orgCode in 2016-10 **/
+	private List<IdpsBalanceResourcePool> selectIdpsBalance(String orgCode, int num) throws Exception {
 		IdpsBalanceResourcePoolMapper rpm = ServiceUtil.getMapper(IdpsBalanceResourcePoolMapper.class);
 		IdpsBalanceResourcePoolCriteria rpmc = new IdpsBalanceResourcePoolCriteria();
-		rpmc.createCriteria().andStatusEqualTo(IdpsConstants.VALIDATE_STATUS).andOrgIdEqualTo(orgId);
+		rpmc.createCriteria().andStatusEqualTo(IdpsConstants.VALIDATE_STATUS).andOrgCodeEqualTo(orgCode);
 		rpmc.setLimitStart(0);
 		rpmc.setLimitEnd(num);
 		List<IdpsBalanceResourcePool> firstRes = rpm.selectByExample(rpmc);
@@ -578,9 +577,9 @@ public class IdpsSvImpl implements IIdpsSv {
 		return firstRes;
 	}
 
-	private List<IdpsResourcePool> selectIdpsResources4Many(int orgId, int nodeNum)
+	private List<IdpsResourcePool> selectIdpsResources4Many(String orgCode, int nodeNum)
 			throws Exception {
-		List<IdpsResourcePool> irp = selectIdpsResources(orgId, nodeNum);
+		List<IdpsResourcePool> irp = selectIdpsResources(orgCode, nodeNum);
 		int hostNum = irp.size();
 		int i = 0;
 		int k = hostNum;
@@ -652,10 +651,10 @@ public class IdpsSvImpl implements IIdpsSv {
 	 */
 	private void openOne(String userId, String serviceId, String serviceName,
 			String dssPId, String dssServiceId, String dssServicePwd,
-			String isUpgrade, int orgId) throws Exception {
+			String isUpgrade, String orgCode) throws Exception {
 		
 		// 选择资源
-		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
+		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgCode, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
 		// 如果该主机端口已经用完，从idps_user_instance选择该主机最小的已经失效的端口号
 		if (idpsResourcePool != null && idpsResourcePool.getCycle() == 1) {
@@ -709,10 +708,10 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void startOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
+			String dssPId, String dssServiceId, String dssServicePwd, String orgCode)
 			throws Exception {
 		// 选择资源
-		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
+		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgCode, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
 		// 如果该主机端口已经用完，从idps_user_instance选择该主机最小的已经失效的端口号
 		if (idpsResourcePool != null && idpsResourcePool.getCycle() == 1) {
@@ -741,11 +740,11 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void stopOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
+			String dssPId, String dssServiceId, String dssServicePwd, String orgCode)
 			throws Exception {
 
 		// 选择资源
-		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
+		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgCode, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
 		// 如果该主机端口已经用完，从idps_user_instance选择该主机最小的已经失效的端口号
 		if (idpsResourcePool != null && idpsResourcePool.getCycle() == 1) {
@@ -774,10 +773,10 @@ public class IdpsSvImpl implements IIdpsSv {
 	 * @throws Exception
 	 */
 	private void deleteOne(String userId, String serviceId, String serviceName,
-			String dssPId, String dssServiceId, String dssServicePwd, int orgId)
+			String dssPId, String dssServiceId, String dssServicePwd, String orgCode)
 			throws Exception {
 		// 选择资源
-		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgId, 1);
+		List<IdpsResourcePool> idpsResources = selectIdpsResources(orgCode, 1);
 		IdpsResourcePool idpsResourcePool = idpsResources.get(0);
 		// 如果该主机端口已经用完，从idps_user_instance选择该主机最小的已经失效的端口号
 		if (idpsResourcePool != null && idpsResourcePool.getCycle() == 1) {
@@ -1203,11 +1202,11 @@ public class IdpsSvImpl implements IIdpsSv {
 		return list;
 	}
 
-	/** added orgId in 2016-10 **/
-	private List<IdpsResourcePool> selectIdpsResources(int orgId, int num) throws PaasException {
+	/** added orgCode in 2016-10 **/
+	private List<IdpsResourcePool> selectIdpsResources(String orgCode, int num) throws PaasException {
 		IdpsResourcePoolMapper rpm = ServiceUtil.getMapper(IdpsResourcePoolMapper.class);
 		IdpsResourcePoolCriteria rpmc = new IdpsResourcePoolCriteria();
-		rpmc.createCriteria().andStatusEqualTo(IdpsConstants.VALIDATE_STATUS).andOrgIdEqualTo(orgId);
+		rpmc.createCriteria().andStatusEqualTo(IdpsConstants.VALIDATE_STATUS).andOrgCodeEqualTo(orgCode);
 		rpmc.setLimitStart(0);
 		rpmc.setLimitEnd(num);
 		List<IdpsResourcePool> firstRes = rpm.selectByExample(rpmc);
@@ -1241,8 +1240,7 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
-		final int orgId = Integer.valueOf(tenantIdStr);
+		final String orgCode = map.get(IdpsConstants.ORG_CODE);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1251,10 +1249,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		final String dssPId = map.get(IdpsConstants.DSS_P_ID);
 		if (nodeNum == 1) {
 			stopOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd, orgId);
+					dssServicePwd, orgCode);
 		} else {
 			stopMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd, orgId);
+					dssServiceId, dssServicePwd, orgCode);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}
@@ -1268,8 +1266,7 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
-		final int orgId = Integer.valueOf(tenantIdStr);
+		final String orgCode = map.get(IdpsConstants.ORG_CODE);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1282,10 +1279,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		}
 		if (nodeNum == 1) {
 			deleteOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd, orgId);
+					dssServicePwd, orgCode);
 		} else {
 			deleteMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd, orgId);
+					dssServiceId, dssServicePwd, orgCode);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}
@@ -1299,8 +1296,7 @@ public class IdpsSvImpl implements IIdpsSv {
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
-		final String tenantIdStr = map.get(IdpsConstants.TENANT_ID);
-		final int orgId = Integer.valueOf(tenantIdStr);
+		final String orgCode = map.get(IdpsConstants.ORG_CODE);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);
@@ -1309,10 +1305,10 @@ public class IdpsSvImpl implements IIdpsSv {
 		final String dssPId = map.get(IdpsConstants.DSS_P_ID);
 		if (nodeNum == 1) {
 			startOne(userId, serviceId, serviceName, dssPId, dssServiceId,
-					dssServicePwd, orgId);
+					dssServicePwd, orgCode);
 		} else {
 			startMany(userId, serviceId, nodeNum, serviceName, dssPId,
-					dssServiceId, dssServicePwd, orgId);
+					dssServiceId, dssServicePwd, orgCode);
 		}
 		return IdpsConstants.SUCCESS_FLAG;
 	}

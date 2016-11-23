@@ -284,7 +284,7 @@ public class RDSInstanceManager  {
 			createResult.setStatus(ResponseResultMark.ERROR_LESS_IMP_PARAM);
 			return g.getGson().toJson(createResult);
 		}
-		LOG.info(createObject.instanceBase.getTenantId());
+		LOG.info(createObject.instanceBase.getOrgCode());
 		createObject.instanceBase.setBakId("");
 		createObject.instanceBase.setSlaverId("");
 //		if(createObject.instanceBase.getImgId() <= 0){ // 需要前台传入
@@ -418,7 +418,7 @@ public class RDSInstanceManager  {
 					incBaseMapper.updateByPrimaryKey(batMasterInstance);
 					
 					// 将拓扑结构保存至注册中心（zk）
-					batMasterInstance.setTenantId(createObject.instanceBase.getTenantId());
+					batMasterInstance.setOrgCode(createObject.instanceBase.getOrgCode());
 					save2ZK(batMasterInstance);
 				} catch (IOException | PaasException e) {
 					e.printStackTrace();
@@ -466,7 +466,7 @@ public class RDSInstanceManager  {
 						incBaseMapper.updateByPrimaryKey(ib);
 						
 						// 将拓扑结构保存至注册中心（zk）
-						ib.setTenantId(createObject.instanceBase.getTenantId());
+						ib.setOrgCode(createObject.instanceBase.getOrgCode());
 						save2ZK(ib);
 					} catch (IOException | PaasException e) {
 						e.printStackTrace();
@@ -483,7 +483,7 @@ public class RDSInstanceManager  {
 		}
 
 		// 将拓扑结构保存至注册中心（zk）
-		savedRdsIncBase.setTenantId(createObject.instanceBase.getTenantId());
+		savedRdsIncBase.setOrgCode(createObject.instanceBase.getOrgCode());
 		save2ZK(savedRdsIncBase);
 		
 		createResult.isInstanceConfig = isRightConfig;
@@ -1300,7 +1300,7 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 	 */
 	private List<RdsResourcePool> getMasterUsableResource(RdsIncBase inc, List<RdsResourcePool> resourceList) {
 		List<RdsResourcePool> canUseRes = new LinkedList<RdsResourcePool>();
-		int tenantId = Integer.valueOf(inc.getTenantId());
+		String orgCode = inc.getOrgCode();
 		for (RdsResourcePool rp : resourceList) {
 			int canUseExtMemSize = rp.getTotalmemory() - rp.getUsedmemory();
 			Type cputype = new TypeToken<List<CPU>>(){}.getType();
@@ -1321,7 +1321,7 @@ private RDSResourcePlan getResourcePlan(RdsIncBase inc, RdsResourcePool decidedR
 					&& ((rp.getCurrentport() + 1) < rp.getMaxport())
 					&& canUseIntMemSize > inc.getIntStorage()
 					&& canUseBandWidthSizee > inc.getNetBandwidth()
-					&& rp.getOrgId() == tenantId
+					&& rp.getOrgCode() == orgCode
 //					&& countUseableCpu >= cpuNeedNum
 					) {
 				canUseRes.add(rp);

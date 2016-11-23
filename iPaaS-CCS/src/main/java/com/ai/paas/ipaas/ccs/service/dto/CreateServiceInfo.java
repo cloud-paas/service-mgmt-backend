@@ -22,7 +22,7 @@ public class CreateServiceInfo extends ApplyInfo {
     public String toString() {
         return "CreateServiceInfo{" +
                 "userId='" + getUserId() + '\'' +
-                "tenantId='" + getTenantId() + '\'' +
+                "orgCode='" + getOrgCode() + '\'' +
                 ", applyType='" + getApplyType() + '\'' +
                 ", serviceId='" + getServiceId() + '\'' +
                 ", timeOut=" + timeOut +

@@ -7,7 +7,7 @@ public class DssMcsInfo {
 
     private Integer status;
 
-    private Integer orgId;
+    private String orgCode;
 
     public Integer getId() {
         return id;
@@ -33,11 +33,11 @@ public class DssMcsInfo {
         this.status = status;
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 }

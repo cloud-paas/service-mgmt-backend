@@ -664,63 +664,143 @@ public class MdsResourcePoolCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIsNull() {
-            addCriterion("org_id is null");
+        public Criteria andHostUserNameIsNull() {
+            addCriterion("host_user_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIsNotNull() {
-            addCriterion("org_id is not null");
+        public Criteria andHostUserNameIsNotNull() {
+            addCriterion("host_user_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdEqualTo(Integer value) {
-            addCriterion("org_id =", value, "orgId");
+        public Criteria andHostUserNameEqualTo(String value) {
+            addCriterion("host_user_name =", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotEqualTo(Integer value) {
-            addCriterion("org_id <>", value, "orgId");
+        public Criteria andHostUserNameNotEqualTo(String value) {
+            addCriterion("host_user_name <>", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdGreaterThan(Integer value) {
-            addCriterion("org_id >", value, "orgId");
+        public Criteria andHostUserNameGreaterThan(String value) {
+            addCriterion("host_user_name >", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("org_id >=", value, "orgId");
+        public Criteria andHostUserNameGreaterThanOrEqualTo(String value) {
+            addCriterion("host_user_name >=", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLessThan(Integer value) {
-            addCriterion("org_id <", value, "orgId");
+        public Criteria andHostUserNameLessThan(String value) {
+            addCriterion("host_user_name <", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdLessThanOrEqualTo(Integer value) {
-            addCriterion("org_id <=", value, "orgId");
+        public Criteria andHostUserNameLessThanOrEqualTo(String value) {
+            addCriterion("host_user_name <=", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdIn(List<Integer> values) {
-            addCriterion("org_id in", values, "orgId");
+        public Criteria andHostUserNameLike(String value) {
+            addCriterion("host_user_name like", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotIn(List<Integer> values) {
-            addCriterion("org_id not in", values, "orgId");
+        public Criteria andHostUserNameNotLike(String value) {
+            addCriterion("host_user_name not like", value, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdBetween(Integer value1, Integer value2) {
-            addCriterion("org_id between", value1, value2, "orgId");
+        public Criteria andHostUserNameIn(List<String> values) {
+            addCriterion("host_user_name in", values, "hostUserName");
             return (Criteria) this;
         }
 
-        public Criteria andOrgIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("org_id not between", value1, value2, "orgId");
+        public Criteria andHostUserNameNotIn(List<String> values) {
+            addCriterion("host_user_name not in", values, "hostUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostUserNameBetween(String value1, String value2) {
+            addCriterion("host_user_name between", value1, value2, "hostUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostUserNameNotBetween(String value1, String value2) {
+            addCriterion("host_user_name not between", value1, value2, "hostUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIsNull() {
+            addCriterion("org_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIsNotNull() {
+            addCriterion("org_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeEqualTo(String value) {
+            addCriterion("org_code =", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotEqualTo(String value) {
+            addCriterion("org_code <>", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThan(String value) {
+            addCriterion("org_code >", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("org_code >=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThan(String value) {
+            addCriterion("org_code <", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLessThanOrEqualTo(String value) {
+            addCriterion("org_code <=", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeLike(String value) {
+            addCriterion("org_code like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotLike(String value) {
+            addCriterion("org_code not like", value, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeIn(List<String> values) {
+            addCriterion("org_code in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotIn(List<String> values) {
+            addCriterion("org_code not in", values, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeBetween(String value1, String value2) {
+            addCriterion("org_code between", value1, value2, "orgCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgCodeNotBetween(String value1, String value2) {
+            addCriterion("org_code not between", value1, value2, "orgCode");
             return (Criteria) this;
         }
     }

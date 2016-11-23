@@ -15,7 +15,7 @@ public class IdpsConstants {
 	public static final String SERVICE_NAME = "serviceName";
 	public static final String NODE_NUM = "nodeNum";
 	public static final String APPLY_TYPE = "applyType";
-	public static final String TENANT_ID = "tenantId";
+	public static final String ORG_CODE = "orgCode";
 	
 	
 	/**获取镜像厂库、名称时使用到的一级、二级业务CODE*/

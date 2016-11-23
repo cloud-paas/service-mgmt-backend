@@ -106,9 +106,9 @@ public class DSSSvImplHelper {
 	 */
 	protected Object[] createDBUserCollection(ApplyDSSParam applyObj)
 			throws Exception {
-		/** added orgId column in 2016-10 **/
-		int orgId = Integer.valueOf(applyObj.getTenantId());
-		List<DssResourcePool> dssResPoolList = getBestDssResource(orgId);
+		/** added orgCode column in 2016-10 **/
+		String orgCode = applyObj.getOrgCode();
+		List<DssResourcePool> dssResPoolList = getBestDssResource(orgCode);
 		int leftSize = dssResPoolList.get(0).getLeftSize() - Integer.parseInt(applyObj.getCapacity());
 		int groupId = dssResPoolList.get(0).getGroupId();
 		if (leftSize < 0) {
@@ -122,7 +122,7 @@ public class DSSSvImplHelper {
 			DSSCommonConf dssCommConf = new DSSCommonConf();
 			dssCommConf.setHosts(hostStr);
 			dssCommConf.setPassword(CiperUtil.encrypt(PWD_KEY, pwd));
-			DssMcsInfo dssMcsInfo = getMcsResource(orgId);
+			DssMcsInfo dssMcsInfo = getMcsResource(orgCode);
 			if (!dssUserInstanceExist(applyObj.getUserId(), applyObj.getServiceId())) {
 				DssUserInstance dssInstance = new DssUserInstance();
 				dssInstance.setCollectionName(applyObj.getServiceId());
@@ -669,16 +669,16 @@ public class DSSSvImplHelper {
 	 * 获得最空闲的资源
 	 * @return List<DssResourcePool>
 	 */
-	private List<DssResourcePool> getBestDssResource(int orgId) {
+	private List<DssResourcePool> getBestDssResource(String orgCode) {
 		DssResourcePoolMapper dpm = ServiceUtil.getMapper(DssResourcePoolMapper.class);
 		DssResourcePoolCriteria dpmc = new DssResourcePoolCriteria();
 		DssResourcePoolCriteria dpmcs = new DssResourcePoolCriteria();
-		dpmcs.createCriteria().andStatusEqualTo(1).andOrgIdEqualTo(orgId);
+		dpmcs.createCriteria().andStatusEqualTo(1).andOrgCodeEqualTo(orgCode);
 		dpmcs.setOrderByClause("ifnull(left_size,0) desc");
 		dpmcs.setLimitStart(0);
 		dpmcs.setLimitEnd(1);
 		int gid = dpm.selectByExample(dpmcs).get(0).getGroupId();
-		dpmc.createCriteria().andGroupIdEqualTo(gid).andOrgIdEqualTo(orgId);
+		dpmc.createCriteria().andGroupIdEqualTo(gid).andOrgCodeEqualTo(orgCode);
 		return dpm.selectByExample(dpmc);
 	}
 
@@ -709,10 +709,10 @@ public class DSSSvImplHelper {
 	 * 获得最空闲的资源
 	 * @return DssMcsInfo
 	 */
-	private DssMcsInfo getMcsResource(int orgId) {
+	private DssMcsInfo getMcsResource(String orgCode) {
 		DssMcsInfoMapper dmm = ServiceUtil.getMapper(DssMcsInfoMapper.class);
 		DssMcsInfoCriteria dmmc = new DssMcsInfoCriteria();
-		dmmc.createCriteria().andStatusEqualTo(1).andOrgIdEqualTo(orgId);
+		dmmc.createCriteria().andStatusEqualTo(1).andOrgCodeEqualTo(orgCode);
 		dmmc.setOrderByClause("rand()");
 		dmmc.setLimitStart(0);
 		dmmc.setLimitEnd(1);

@@ -36,7 +36,7 @@ public class McsConstants {
   public static final String PWD_KEY = "BaryTukyTukyBary";
 
   public static final String USER_ID = "userId";
-  public static final String TENANT_ID = "tenantId";
+  public static final String ORG_CODE = "orgCode";
   public static final String SERVICE_ID = "serviceId";
   public static final String SERVICE_NAME = "serviceName";
   public static final String APPLY_TYPE = "applyType";

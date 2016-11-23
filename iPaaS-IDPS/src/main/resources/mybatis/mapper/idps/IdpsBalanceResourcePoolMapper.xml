@@ -11,7 +11,7 @@
     <result column="cycle" jdbcType="INTEGER" property="cycle" />
     <result column="ssh_user" jdbcType="VARCHAR" property="sshUser" />
     <result column="ssh_password" jdbcType="VARCHAR" property="sshPassword" />
-    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="org_code" jdbcType="INTEGER" property="orgCode" />
     <result column="ssh_port" jdbcType="INTEGER" property="sshPort" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, idps_balance_host_ip, status, idps_balance_port, min_port, max_port, cycle, ssh_user, 
-    ssh_password, org_id, ssh_port
+    ssh_password, org_code, ssh_port
   </sql>
   <select id="selectByExample" parameterType="com.ai.paas.ipaas.idps.dao.mapper.bo.IdpsBalanceResourcePoolCriteria" resultMap="BaseResultMap">
     select
@@ -113,11 +113,11 @@
     insert into idps_balance_resource_pool (id, idps_balance_host_ip, status, 
       idps_balance_port, min_port, max_port, 
       cycle, ssh_user, ssh_password, 
-      org_id, ssh_port)
+      org_code, ssh_port)
     values (#{id,jdbcType=INTEGER}, #{idpsBalanceHostIp,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{idpsBalancePort,jdbcType=INTEGER}, #{minPort,jdbcType=INTEGER}, #{maxPort,jdbcType=INTEGER}, 
       #{cycle,jdbcType=INTEGER}, #{sshUser,jdbcType=VARCHAR}, #{sshPassword,jdbcType=VARCHAR}, 
-      #{orgId,jdbcType=INTEGER}, #{sshPort,jdbcType=INTEGER})
+      #{orgCode,jdbcType=VARCHAR}, #{sshPort,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.ai.paas.ipaas.idps.dao.mapper.bo.IdpsBalanceResourcePool">
     insert into idps_balance_resource_pool
@@ -149,8 +149,8 @@
       <if test="sshPassword != null">
         ssh_password,
       </if>
-      <if test="orgId != null">
-        org_id,
+      <if test="orgCode != null">
+        org_code,
       </if>
       <if test="sshPort != null">
         ssh_port,
@@ -184,8 +184,8 @@
       <if test="sshPassword != null">
         #{sshPassword,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        #{orgId,jdbcType=INTEGER},
+      <if test="orgCode != null">
+        #{orgCode,jdbcType=VARCHAR},
       </if>
       <if test="sshPort != null">
         #{sshPort,jdbcType=INTEGER},
@@ -228,8 +228,8 @@
       <if test="record.sshPassword != null">
         ssh_password = #{record.sshPassword,jdbcType=VARCHAR},
       </if>
-      <if test="record.orgId != null">
-        org_id = #{record.orgId,jdbcType=INTEGER},
+      <if test="record.orgCode != null">
+        org_code = #{record.orgCode,jdbcType=VARCHAR},
       </if>
       <if test="record.sshPort != null">
         ssh_port = #{record.sshPort,jdbcType=INTEGER},
@@ -250,7 +250,7 @@
       cycle = #{record.cycle,jdbcType=INTEGER},
       ssh_user = #{record.sshUser,jdbcType=VARCHAR},
       ssh_password = #{record.sshPassword,jdbcType=VARCHAR},
-      org_id = #{record.orgId,jdbcType=INTEGER},
+      org_code = #{record.orgCode,jdbcType=VARCHAR},
       ssh_port = #{record.sshPort,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,8 +283,8 @@
       <if test="sshPassword != null">
         ssh_password = #{sshPassword,jdbcType=VARCHAR},
       </if>
-      <if test="orgId != null">
-        org_id = #{orgId,jdbcType=INTEGER},
+      <if test="orgCode != null">
+        org_code = #{orgCode,jdbcType=VARCHAR},
       </if>
       <if test="sshPort != null">
         ssh_port = #{sshPort,jdbcType=INTEGER},
@@ -302,7 +302,7 @@
       cycle = #{cycle,jdbcType=INTEGER},
       ssh_user = #{sshUser,jdbcType=VARCHAR},
       ssh_password = #{sshPassword,jdbcType=VARCHAR},
-      org_id = #{orgId,jdbcType=INTEGER},
+      org_code = #{orgCode,jdbcType=VARCHAR},
       ssh_port = #{sshPort,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>

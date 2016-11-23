@@ -27,7 +27,7 @@ public class McsResourcePool {
 
     private String hostUserName;
 
-    private Integer orgId;
+    private String orgCode;
 
     private Integer sshPort;
 
@@ -135,12 +135,12 @@ public class McsResourcePool {
         this.hostUserName = hostUserName == null ? null : hostUserName.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 
     public Integer getSshPort() {

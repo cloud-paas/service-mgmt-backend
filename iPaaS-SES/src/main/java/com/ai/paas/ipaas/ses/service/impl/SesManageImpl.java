@@ -69,19 +69,17 @@ public class SesManageImpl implements ISesManage {
 	private ISesUserWeb userWebSV;
 
 	@Override
-	public void createSesService(SesSrvApply sesSrvApply) throws PaasException {
-		/** added orgId column in 2016-10 **/
-		int orgId = Integer.valueOf(sesSrvApply.getTenantId());
-		
+	public void createSesService(SesSrvApply sesSrvApply) throws PaasException {	
+		String orgCode = sesSrvApply.getOrgCode();
 		// 1.准备数据，包括从资源里面获取ses集群,实现获取算法
 		List<SesHostInfo> sesHosts = qryAvlSesHosts(
-				orgId, sesSrvApply.getClusterNum(), sesSrvApply.getSesMem());
+				orgCode, sesSrvApply.getClusterNum(), sesSrvApply.getSesMem());
 		String userId = sesSrvApply.getUserId();
 		String serviceId = sesSrvApply.getServiceId();
 		String clusterAddr = getClusterAddress(sesHosts);
 		
 		// 获取可用的web端
-		SesWebPool webPool = userWebSV.getAvlWeb(orgId, userId, serviceId);
+		SesWebPool webPool = userWebSV.getAvlWeb(orgCode, userId, serviceId);
 		processSESServers(userId, serviceId, sesHosts, clusterAddr, webPool);
 		
 		// 更新ses_user_instance
@@ -122,11 +120,11 @@ public class SesManageImpl implements ISesManage {
 	public String getSesServiceAdress(SesSrvApply sesSrvApply) throws PaasException{
 		String userId = sesSrvApply.getUserId();
 		String serviceId = sesSrvApply.getServiceId();
-		/** added orgId column in 2016-10 **/
-		int orgId = Integer.valueOf(sesSrvApply.getTenantId());
+		/** added orgCode column in 2016-10 **/
+		String orgCode = sesSrvApply.getOrgCode();
 		
 		// 获取可用的web端
-		SesWebPool webPool = userWebSV.getAvlWeb(orgId, userId, serviceId);
+		SesWebPool webPool = userWebSV.getAvlWeb(orgCode, userId, serviceId);
 		String sesAdress = webPool.getWebUrl();
 		return sesAdress;
 	}
@@ -636,13 +634,13 @@ public class SesManageImpl implements ISesManage {
 	 * @param nodeNum
 	 * @return
 	 */
-	private List<SesResourcePool> getBestHostsRes(int orgId, int nodeNum) {
+	private List<SesResourcePool> getBestHostsRes(String orgCode, int nodeNum) {
 		SesResourcePoolCriteria sesRsrcPoolExample = new SesResourcePoolCriteria();
 		sesRsrcPoolExample.setLimitStart(0);
 		sesRsrcPoolExample.setLimitEnd(nodeNum);
 		sesRsrcPoolExample.setOrderByClause("(ifnull(mem_total, 0) - ifnull(mem_used, 0)) desc");
 		sesRsrcPoolExample.createCriteria().andStatusEqualTo(SesConstants.SES_RESOURCE_AVIL)
-			.andOrgIdEqualTo(orgId);
+			.andOrgCodeEqualTo(orgCode);
 		List<SesResourcePool> pool = ServiceUtil.getMapper(
 				SesResourcePoolMapper.class).selectByExample(sesRsrcPoolExample);
 		return pool;
@@ -664,10 +662,10 @@ public class SesManageImpl implements ISesManage {
 	 * 根据集群节点数查询可用节点信息. 
 	 * 返回结果为每一个端口号对应一个SesHostInfo
 	 */
-	private List<SesHostInfo> qryAvlSesHosts(int orgId, Integer nodeNum, Integer esMem)
+	private List<SesHostInfo> qryAvlSesHosts(String orgCode, Integer nodeNum, Integer esMem)
 			throws PaasException {
 		try {
-			List<SesResourcePool> pool = getBestHostsRes(orgId, nodeNum);
+			List<SesResourcePool> pool = getBestHostsRes(orgCode, nodeNum);
 			List<SesHostInfo> result = new ArrayList<SesHostInfo>();
 
 			int count = 0;

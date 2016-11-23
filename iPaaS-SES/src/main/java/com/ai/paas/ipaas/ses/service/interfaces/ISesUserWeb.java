@@ -12,7 +12,7 @@ public interface ISesUserWeb {
 	 * @param serviceId
 	 * @return
 	 */
-	public SesWebPool getAvlWeb(int orgId, String userId, String serviceId);
+	public SesWebPool getAvlWeb(String orgCode, String userId, String serviceId);
 
 	/**
 	 * 保存用户所使用的Web端

@@ -17,7 +17,7 @@ public class SesResourcePool {
 
     private String dataPath;
 
-    private Integer orgId;
+    private String orgCode;
 
     private Integer sshPort;
 
@@ -85,12 +85,12 @@ public class SesResourcePool {
         this.dataPath = dataPath == null ? null : dataPath.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 
     public Integer getSshPort() {

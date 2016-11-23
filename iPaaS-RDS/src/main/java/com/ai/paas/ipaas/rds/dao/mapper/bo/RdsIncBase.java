@@ -10,7 +10,7 @@ public class RdsIncBase implements Cloneable {
 
     private String userId;
     
-    private String tenantId;
+    private String orgCode;
 
     private String serviceId;
 
@@ -92,7 +92,7 @@ public class RdsIncBase implements Cloneable {
 				+ dbStoreage + ", dbUsedStorage=" + dbUsedStorage + ", intStorage=" + intStorage + ", maxConnectNum="
 				+ maxConnectNum + ", masterid=" + masterid + ", cpuInfo=" + cpuInfo + ", netBandwidth=" + netBandwidth
 				+ ", sqlAudit=" + sqlAudit + ", syncStrategy=" + syncStrategy + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + ", tenantId=" + tenantId + "]";
+				+ ", updateTime=" + updateTime + ", orgCode=" + orgCode + "]";
 	}
 
 	public RdsIncBase(String userId, String serviceId, String depId, Integer imgId, Integer resId, String bakId,
@@ -101,7 +101,7 @@ public class RdsIncBase implements Cloneable {
 			String mysqlVolumnPath, String whiteList, String rootName, String rootPassword, String containerName,
 			String dbServerId, Integer dbStoreage, Integer dbUsedStorage, Integer intStorage, Integer maxConnectNum,
 			Integer masterid, String cpuInfo, Integer netBandwidth, String sqlAudit, String syncStrategy,
-			Timestamp createTime, Timestamp updateTime, String tenantId) {
+			Timestamp createTime, Timestamp updateTime, String orgCode) {
 		super();
 		this.userId = userId;
 		this.serviceId = serviceId;
@@ -137,7 +137,7 @@ public class RdsIncBase implements Cloneable {
 		this.syncStrategy = syncStrategy;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
-		this.tenantId = tenantId;
+		this.orgCode = orgCode;
 	}
 
 	public RdsIncBase(String userId, String serviceId, String depId, Integer imgId, Integer resId, String bakId,
@@ -145,7 +145,7 @@ public class RdsIncBase implements Cloneable {
 			String incLocation, Integer incStatus, String incDescribe, String mysqlHome, String mysqlDataHome,
 			String mysqlVolumnPath, String whiteList, String rootName, String rootPassword, String containerName,
 			String dbServerId, Integer dbStoreage, Integer dbUsedStorage, Integer intStorage, Integer maxConnectNum,
-			Integer masterid, String cpuInfo, Integer netBandwidth, String sqlAudit, String syncStrategy, String tenantId) {
+			Integer masterid, String cpuInfo, Integer netBandwidth, String sqlAudit, String syncStrategy, String orgCode) {
 		super();
 		this.userId = userId;
 		this.serviceId = serviceId;
@@ -179,7 +179,7 @@ public class RdsIncBase implements Cloneable {
 		this.netBandwidth = netBandwidth;
 		this.sqlAudit = sqlAudit;
 		this.syncStrategy = syncStrategy;
-		this.tenantId = tenantId;
+		this.orgCode = orgCode;
 	}
 
 	public RdsIncBase() {
@@ -192,7 +192,7 @@ public class RdsIncBase implements Cloneable {
 			String mysqlDataHome, String mysqlVolumnPath, String whiteList, String rootName, String rootPassword,
 			String containerName, String dbServerId, Integer dbStoreage, Integer dbUsedStorage, Integer intStorage,
 			Integer maxConnectNum, Integer masterid, String cpuInfo, Integer netBandwidth, String sqlAudit,
-			String syncStrategy, Timestamp createTime, Timestamp updateTime, String tenantId) {
+			String syncStrategy, Timestamp createTime, Timestamp updateTime, String orgCode) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -229,7 +229,7 @@ public class RdsIncBase implements Cloneable {
 		this.syncStrategy = syncStrategy;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
-		this.tenantId = tenantId;
+		this.orgCode = orgCode;
 	}
 
 	/**
@@ -522,12 +522,12 @@ public class RdsIncBase implements Cloneable {
         this.updateTime = updateTime;
     }
 
-	public String getTenantId() {
-		return tenantId;
+	public String getOrgCode() {
+		return orgCode;
 	}
 
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
 	}
 
 }

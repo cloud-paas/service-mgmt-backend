@@ -104,9 +104,9 @@ public class ConfigCenterServiceManageSvImpl implements IConfigCenterServiceMana
 		Assert.notNull(ccsUserConfig,
 				ResourceUtil.getMessage(BundleKeyConstants.USER_CONFIG_NOT_FOUND, createServiceInfo.getUserId()));
 		
-		/** according to userid get orgid, for selecting ccs resource. (2016-10) **/
-		int orgId = Integer.valueOf(createServiceInfo.getTenantId());
-		CcsResourcePool pool = selectRandomZkMachine(orgId, createServiceInfo.getUserId(),
+		/** according to userid get orgCode, for selecting ccs resource. (2016-10) **/
+		String orgCode = createServiceInfo.getOrgCode();
+		CcsResourcePool pool = selectRandomZkMachine(orgCode, createServiceInfo.getUserId(),
 				ConfigCenterDubboConstants.ZKTypeCode.CUSTOM);
 		String passwd = String.valueOf(UUIDTool.genShortId());
 
@@ -285,16 +285,16 @@ public class ConfigCenterServiceManageSvImpl implements IConfigCenterServiceMana
 	/**
 	 * 随机选择zookpeer地址
 	 * 
-	 * @param orgId
+	 * @param orgCode
 	 * @param userId
 	 * @param type
 	 * @return
 	 */
-	private CcsResourcePool selectRandomZkMachine(int orgId, String userId,
+	private CcsResourcePool selectRandomZkMachine(String orgCode, String userId,
 			ConfigCenterDubboConstants.ZKTypeCode type) {
 		CcsResourcePoolMapper mapper = ServiceUtil.getMapper(CcsResourcePoolMapper.class);
 		CcsResourcePoolCriteria ccsResourcePoolCriteria = new CcsResourcePoolCriteria();
-		ccsResourcePoolCriteria.createCriteria().andZkTypeCodeEqualTo(type.getFlag()).andOrgIdEqualTo(orgId);
+		ccsResourcePoolCriteria.createCriteria().andZkTypeCodeEqualTo(type.getFlag()).andOrgCodeEqualTo(orgCode);
 		List<CcsResourcePool> pools = mapper.selectByExample(ccsResourcePoolCriteria);
 		int result1 = (userId.hashCode() % pools.size());
 		return pools.get(result1);

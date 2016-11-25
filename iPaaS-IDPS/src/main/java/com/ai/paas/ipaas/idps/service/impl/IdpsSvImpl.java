@@ -68,13 +68,15 @@ public class IdpsSvImpl implements IIdpsSv {
 		}
 		
 		String applyType = map.get(IdpsConstants.APPLY_TYPE);
-		if (!IdpsConstants.APPLY_TYPE_C.equals(applyType))
+		if (!IdpsConstants.APPLY_TYPE_C.equals(applyType)) {
 			throw new PaasException("图片服务开通，服务类型不对！");
+		}
 		
 		// 获取服务号配置参数
 		final String serviceId = map.get(IdpsConstants.SERVICE_ID);
 		final String userId = map.get(IdpsConstants.USER_ID);
 		final String orgCode = map.get(IdpsConstants.ORG_CODE);
+        LOG.info("idps orgCode : "+orgCode);
 		final String serviceName = map.get(IdpsConstants.SERVICE_NAME);
 		final String nodeNumStr = map.get(IdpsConstants.NODE_NUM);
 		final int nodeNum = Integer.valueOf(nodeNumStr);

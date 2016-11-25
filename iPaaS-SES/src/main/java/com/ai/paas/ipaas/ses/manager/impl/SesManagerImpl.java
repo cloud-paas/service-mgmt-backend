@@ -37,6 +37,7 @@ public class SesManagerImpl implements ISearchEngineServiceManager {
 
 		Gson gson = new Gson();
 
+		LOGGER.info("createApply :"+createApply);
 		SesSrvApply sesApplyParam = gson.fromJson(createApply,
 				SesSrvApply.class);
 		SesAndWebPoolSrvApplyResult result = new SesAndWebPoolSrvApplyResult();

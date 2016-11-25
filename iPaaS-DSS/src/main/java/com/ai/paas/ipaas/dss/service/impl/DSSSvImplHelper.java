@@ -108,6 +108,8 @@ public class DSSSvImplHelper {
 			throws Exception {
 		/** added orgCode column in 2016-10 **/
 		String orgCode = applyObj.getOrgCode();
+		log.info("applyObj.getOrgCode(): "+applyObj.getOrgCode());
+		
 		List<DssResourcePool> dssResPoolList = getBestDssResource(orgCode);
 		int leftSize = dssResPoolList.get(0).getLeftSize() - Integer.parseInt(applyObj.getCapacity());
 		int groupId = dssResPoolList.get(0).getGroupId();

@@ -46,7 +46,7 @@ public class SesManagerImpl implements ISearchEngineServiceManager {
 		result.setApplyType(sesApplyParam.getApplyType());
 		
 		try {
-			LOGGER.info("create ses service begin..........");
+			LOGGER.info("create ses service begin.........."+sesApplyParam.getOrgCode());
 			sesSrv.createSesService(sesApplyParam);
 			String sesAdress = sesSrv.getSesServiceAdress(sesApplyParam);
 			result.setResultCode(SesConstants.SUCCESS_CODE);

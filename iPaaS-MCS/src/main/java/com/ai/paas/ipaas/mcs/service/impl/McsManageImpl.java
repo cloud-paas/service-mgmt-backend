@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ServiceUtil;
 import com.ai.paas.ipaas.agent.util.AgentUtil;
@@ -50,9 +49,6 @@ public class McsManageImpl implements IMcsSv {
 	
 	@Autowired 
 	private ICCSComponentManageSv iCCSComponentManageSv;
-	
-	@Autowired
-	private IOrgnizeUserHelper orgnizeUserHelper;
 
 	//protected static boolean excuteFlag = true;
 	
@@ -98,6 +94,7 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openSingleMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgCode = paraMap.get(McsConstants.ORG_CODE);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -105,8 +102,7 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
-		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize, 1);
+		McsResourcePool mcsResourcePool = selectMcsResSingle(orgCode, cacheSize, 1);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer cachePort = mcsResourcePool.getCachePort();
 		Integer sshPort = mcsResourcePool.getSshPort();
@@ -166,6 +162,7 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openClusterMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgCode = paraMap.get(McsConstants.ORG_CODE);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -191,8 +188,7 @@ public class McsManageImpl implements IMcsSv {
 		logger.info("-----创建 mcs_host.cfg 成功！");
 		
 		/** 从MCS资源池中选取资源  **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
-		List<McsProcessInfo> cacheInfoList = selectMcsResCluster(orgId, userId, serviceId, clusterCacheSize, McsConstants.CLUSTER_CACHE_NUM);
+		List<McsProcessInfo> cacheInfoList = selectMcsResCluster(orgCode, userId, serviceId, clusterCacheSize, McsConstants.CLUSTER_CACHE_NUM);
 		logger.info("-----已获取开通redis集群所需资源主机["+cacheInfoList.size() +"]台。");
 		
 		/** 循环处理redis-server节点。 **/
@@ -285,6 +281,7 @@ public class McsManageImpl implements IMcsSv {
 	 */
 	private String openReplicationMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgCode = paraMap.get(McsConstants.ORG_CODE);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -292,8 +289,7 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
-		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize * 2, 2);
+		McsResourcePool mcsResourcePool = selectMcsResSingle(orgCode, cacheSize * 2, 2);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer sshPort = mcsResourcePool.getSshPort();
 		Integer masterPort = mcsResourcePool.getCachePort();
@@ -352,6 +348,7 @@ public class McsManageImpl implements IMcsSv {
 	
 	private String openSentinelMcs(Map<String, String> paraMap) throws PaasException {
 		String userId = paraMap.get(McsConstants.USER_ID);
+		String orgCode = paraMap.get(McsConstants.ORG_CODE);
 		String serviceId = paraMap.get(McsConstants.SERVICE_ID);
 		String serviceName = paraMap.get(McsConstants.SERVICE_NAME);
 		String capacity = paraMap.get(McsConstants.CAPACITY);
@@ -359,8 +356,7 @@ public class McsManageImpl implements IMcsSv {
 		String basePath = AgentUtil.getAgentFilePath(AidUtil.getAid());
 		
 		/** 1.获取mcs资源. **/
-		int orgId = orgnizeUserHelper.getOrgnizeInfo(userId).getOrgId();
-		McsResourcePool mcsResourcePool = selectMcsResSingle(orgId, cacheSize * 2, 3);
+		McsResourcePool mcsResourcePool = selectMcsResSingle(orgCode, cacheSize * 2, 3);
 		String hostIp = mcsResourcePool.getCacheHostIp();
 		Integer sshPort = mcsResourcePool.getSshPort();
 		Integer sentinelPort = mcsResourcePool.getCachePort();
@@ -895,7 +891,7 @@ public class McsManageImpl implements IMcsSv {
 	 * @return List<McsProcessInfo>
 	 * @throws PaasException
 	 */
-	private List<McsProcessInfo> selectMcsResCluster(int orgId, String userId, String serviceId, 
+	private List<McsProcessInfo> selectMcsResCluster(String orgCode, String userId, String serviceId, 
 			int cacheSize, int redisInsNum) throws PaasException {
 		List<McsProcessInfo> returnList = new ArrayList<McsProcessInfo>();
 
@@ -904,7 +900,7 @@ public class McsManageImpl implements IMcsSv {
 		 * 如果资源主机数量少于redisInsNum，可能在一个资源主机上启动多个实例。
 		 * 注：由于没有提前判断资源主机的可用内存，故每次获取＋2个资源。
 		 */
-		List<McsResourcePool> resourceList = getBestResource(orgId, redisInsNum + 2);
+		List<McsResourcePool> resourceList = getBestResource(orgCode, redisInsNum + 2);
 		for(int i=0; i < redisInsNum/2; i++){
 			/** 筛选并指定资源 **/
 			McsResourcePool pool = getResourceInfo(resourceList, cacheSize*2, i);
@@ -988,9 +984,9 @@ public class McsManageImpl implements IMcsSv {
 	 * @return McsResourcePool
 	 * @throws PaasException
 	 */
-	private McsResourcePool selectMcsResSingle(int orgId, int cacheSize, int portOffset) throws PaasException {
+	private McsResourcePool selectMcsResSingle(String orgCode, int cacheSize, int portOffset) throws PaasException {
 		/** 注:由于没有提前判断资源主机的可用内存，故每次获取＋2个资源. **/
-		List<McsResourcePool> resp = getBestResource(orgId, 3);
+		List<McsResourcePool> resp = getBestResource(orgCode, 3);
 		McsResourcePool mcsResourcePool = resp.get(0);
 		
 		/** 如果该主机端口已经用完，从mcs_user_cache_instance选择该主机最小的已经失效的端口号  **/
@@ -1158,10 +1154,10 @@ public class McsManageImpl implements IMcsSv {
 	/**
 	 * 获得最空闲的Mcs资源
 	 */
-	private List<McsResourcePool> getBestResource(int orgId, int num) {
+	private List<McsResourcePool> getBestResource(String orgCode, int num) {
 		McsResourcePoolMapper mapper = ServiceUtil.getMapper(McsResourcePoolMapper.class);
 		McsResourcePoolCriteria condition = new McsResourcePoolCriteria();
-		condition.createCriteria().andOrgIdEqualTo(orgId);
+		condition.createCriteria().andOrgCodeEqualTo(orgCode);
 		condition.createCriteria().andStatusEqualTo(McsConstants.VALIDATE_STATUS);
 		condition.setLimitStart(0);
 		condition.setLimitEnd(num);

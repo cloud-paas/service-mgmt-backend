@@ -11,12 +11,11 @@ public interface IMdsUserTopicCustomMapper {
 //	@Select("SELECT MDS_CLUSTER_ID as clusterId,COUNT(USER_ID) AS userNum FROM"
 //			+ " MDS_USER_TOPIC WHERE STATE=1 GROUP BY MDS_CLUSTER_ID")
 	@Select("SELECT a.MDS_CLUSTER_ID AS clusterId, COUNT(a.USER_ID) AS userNum" +
-			"  FROM MDS_USER_TOPIC a, mds_resource_pool b, orgnize_user_info c " +
+			"  FROM MDS_USER_TOPIC a, mds_resource_pool b " +
 			" WHERE a.STATE = 1 and b.cluster_state = 1 " +
-			"   AND c.org_id = b.org_id " + 
+			"   AND b.org_code = #{orgCode} " + 
 			"   AND b.cluster_id = a.MDS_CLUSTER_ID " +
-			"   AND c.user_id = #{userId} " +
 			" GROUP BY a.MDS_CLUSTER_ID")
-	List<MdsKafkaLoad> getClusterLoad(String userId);
+	List<MdsKafkaLoad> getClusterLoad(String orgCode);
 
 }

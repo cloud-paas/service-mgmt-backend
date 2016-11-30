@@ -13,7 +13,7 @@ public class CcsResourcePool {
 
     private String superAuthPassword;
 
-    private Integer orgId;
+    private String orgCode;
 
     public Integer getId() {
         return id;
@@ -63,11 +63,11 @@ public class CcsResourcePool {
         this.superAuthPassword = superAuthPassword == null ? null : superAuthPassword.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 }

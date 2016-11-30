@@ -17,7 +17,7 @@
         </RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="WARN">
+		<Root level="debug">
 			<AppenderRef ref="RollingFile" />
 		</Root>
 		<logger name="com.ai.paas.ipaas.idps" level="trace" additivity="false">

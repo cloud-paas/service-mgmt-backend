@@ -37,6 +37,7 @@ public class SesManagerImpl implements ISearchEngineServiceManager {
 
 		Gson gson = new Gson();
 
+		LOGGER.info("createApply :"+createApply);
 		SesSrvApply sesApplyParam = gson.fromJson(createApply,
 				SesSrvApply.class);
 		SesAndWebPoolSrvApplyResult result = new SesAndWebPoolSrvApplyResult();
@@ -46,7 +47,7 @@ public class SesManagerImpl implements ISearchEngineServiceManager {
 		result.setApplyType(sesApplyParam.getApplyType());
 		
 		try {
-			LOGGER.info("create ses service begin..........");
+			LOGGER.info("create ses service begin.........."+sesApplyParam.getOrgCode());
 			sesSrv.createSesService(sesApplyParam);
 			String sesAdress = sesSrv.getSesServiceAdress(sesApplyParam);
 			result.setResultCode(SesConstants.SUCCESS_CODE);

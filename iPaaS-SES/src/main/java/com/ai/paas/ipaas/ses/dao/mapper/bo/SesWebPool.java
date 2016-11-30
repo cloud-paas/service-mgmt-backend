@@ -7,9 +7,7 @@ public class SesWebPool {
 
     private Integer status;
 
-    private String tenantId;
-
-    private Integer orgId;
+    private String orgCode;
 
     public Integer getId() {
         return id;
@@ -35,19 +33,11 @@ public class SesWebPool {
         this.status = status;
     }
 
-    public String getTenantId() {
-        return tenantId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId == null ? null : tenantId.trim();
-    }
-
-    public Integer getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 }

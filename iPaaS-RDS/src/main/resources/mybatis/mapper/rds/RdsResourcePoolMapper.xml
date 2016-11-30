@@ -19,10 +19,10 @@
     <result column="cpu" property="cpu" jdbcType="VARCHAR" />
     <result column="net_bandwidth" property="netBandwidth" jdbcType="INTEGER" />
     <result column="used_net_bandwidth" property="usedNetBandwidth" jdbcType="INTEGER" />
-    <result column="org_id" property="orgId" jdbcType="INTEGER" />
-    <result column="ssh_port" property="sshPort" jdbcType="INTEGER" />
     <result column="instancecreatetime" property="instancecreatetime" jdbcType="TIMESTAMP" />
     <result column="instancelastupdatetime" property="instancelastupdatetime" jdbcType="TIMESTAMP" />
+    <result column="org_code" property="orgCode" jdbcType="VARCHAR" />
+    <result column="ssh_port" property="sshPort" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -85,7 +85,7 @@
   <sql id="Base_Column_List" >
     resourceid, hostip, maxport, minport, currentport, cycle, sshpassword, sshuser, status, 
     totalmemory, usedmemory, volumn_path, tot_int_storage, used_int_storage, cpu, net_bandwidth, 
-    used_net_bandwidth, org_id, ssh_port, instancecreatetime, instancelastupdatetime
+    used_net_bandwidth, instancecreatetime, instancelastupdatetime, org_code, ssh_port
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.paas.ipaas.rds.dao.mapper.bo.RdsResourcePoolCriteria" >
     select
@@ -126,16 +126,16 @@
       sshpassword, sshuser, status, 
       totalmemory, usedmemory, volumn_path, 
       tot_int_storage, used_int_storage, cpu, 
-      net_bandwidth, used_net_bandwidth, org_id, 
-      ssh_port, instancecreatetime, instancelastupdatetime
+      net_bandwidth, used_net_bandwidth, instancecreatetime, 
+      instancelastupdatetime, org_code, ssh_port
       )
     values (#{resourceid,jdbcType=INTEGER}, #{hostip,jdbcType=VARCHAR}, #{maxport,jdbcType=INTEGER}, 
       #{minport,jdbcType=INTEGER}, #{currentport,jdbcType=INTEGER}, #{cycle,jdbcType=INTEGER}, 
       #{sshpassword,jdbcType=VARCHAR}, #{sshuser,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{totalmemory,jdbcType=INTEGER}, #{usedmemory,jdbcType=INTEGER}, #{volumnPath,jdbcType=VARCHAR}, 
       #{totIntStorage,jdbcType=INTEGER}, #{usedIntStorage,jdbcType=INTEGER}, #{cpu,jdbcType=VARCHAR}, 
-      #{netBandwidth,jdbcType=INTEGER}, #{usedNetBandwidth,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, 
-      #{sshPort,jdbcType=INTEGER}, #{instancecreatetime,jdbcType=TIMESTAMP}, #{instancelastupdatetime,jdbcType=TIMESTAMP}
+      #{netBandwidth,jdbcType=INTEGER}, #{usedNetBandwidth,jdbcType=INTEGER}, #{instancecreatetime,jdbcType=TIMESTAMP}, 
+      #{instancelastupdatetime,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}, #{sshPort,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.paas.ipaas.rds.dao.mapper.bo.RdsResourcePool" >
@@ -192,17 +192,17 @@
       <if test="usedNetBandwidth != null" >
         used_net_bandwidth,
       </if>
-      <if test="orgId != null" >
-        org_id,
-      </if>
-      <if test="sshPort != null" >
-        ssh_port,
-      </if>
       <if test="instancecreatetime != null" >
         instancecreatetime,
       </if>
       <if test="instancelastupdatetime != null" >
         instancelastupdatetime,
+      </if>
+      <if test="orgCode != null" >
+        org_code,
+      </if>
+      <if test="sshPort != null" >
+        ssh_port,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -257,17 +257,17 @@
       <if test="usedNetBandwidth != null" >
         #{usedNetBandwidth,jdbcType=INTEGER},
       </if>
-      <if test="orgId != null" >
-        #{orgId,jdbcType=INTEGER},
-      </if>
-      <if test="sshPort != null" >
-        #{sshPort,jdbcType=INTEGER},
-      </if>
       <if test="instancecreatetime != null" >
         #{instancecreatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="instancelastupdatetime != null" >
         #{instancelastupdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sshPort != null" >
+        #{sshPort,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -331,17 +331,17 @@
       <if test="record.usedNetBandwidth != null" >
         used_net_bandwidth = #{record.usedNetBandwidth,jdbcType=INTEGER},
       </if>
-      <if test="record.orgId != null" >
-        org_id = #{record.orgId,jdbcType=INTEGER},
-      </if>
-      <if test="record.sshPort != null" >
-        ssh_port = #{record.sshPort,jdbcType=INTEGER},
-      </if>
       <if test="record.instancecreatetime != null" >
         instancecreatetime = #{record.instancecreatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.instancelastupdatetime != null" >
         instancelastupdatetime = #{record.instancelastupdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orgCode != null" >
+        org_code = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sshPort != null" >
+        ssh_port = #{record.sshPort,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -367,10 +367,10 @@
       cpu = #{record.cpu,jdbcType=VARCHAR},
       net_bandwidth = #{record.netBandwidth,jdbcType=INTEGER},
       used_net_bandwidth = #{record.usedNetBandwidth,jdbcType=INTEGER},
-      org_id = #{record.orgId,jdbcType=INTEGER},
-      ssh_port = #{record.sshPort,jdbcType=INTEGER},
       instancecreatetime = #{record.instancecreatetime,jdbcType=TIMESTAMP},
-      instancelastupdatetime = #{record.instancelastupdatetime,jdbcType=TIMESTAMP}
+      instancelastupdatetime = #{record.instancelastupdatetime,jdbcType=TIMESTAMP},
+      org_code = #{record.orgCode,jdbcType=VARCHAR},
+      ssh_port = #{record.sshPort,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -426,17 +426,17 @@
       <if test="usedNetBandwidth != null" >
         used_net_bandwidth = #{usedNetBandwidth,jdbcType=INTEGER},
       </if>
-      <if test="orgId != null" >
-        org_id = #{orgId,jdbcType=INTEGER},
-      </if>
-      <if test="sshPort != null" >
-        ssh_port = #{sshPort,jdbcType=INTEGER},
-      </if>
       <if test="instancecreatetime != null" >
         instancecreatetime = #{instancecreatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="instancelastupdatetime != null" >
         instancelastupdatetime = #{instancelastupdatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgCode != null" >
+        org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sshPort != null" >
+        ssh_port = #{sshPort,jdbcType=INTEGER},
       </if>
     </set>
     where resourceid = #{resourceid,jdbcType=INTEGER}
@@ -459,10 +459,10 @@
       cpu = #{cpu,jdbcType=VARCHAR},
       net_bandwidth = #{netBandwidth,jdbcType=INTEGER},
       used_net_bandwidth = #{usedNetBandwidth,jdbcType=INTEGER},
-      org_id = #{orgId,jdbcType=INTEGER},
-      ssh_port = #{sshPort,jdbcType=INTEGER},
       instancecreatetime = #{instancecreatetime,jdbcType=TIMESTAMP},
-      instancelastupdatetime = #{instancelastupdatetime,jdbcType=TIMESTAMP}
+      instancelastupdatetime = #{instancelastupdatetime,jdbcType=TIMESTAMP},
+      org_code = #{orgCode,jdbcType=VARCHAR},
+      ssh_port = #{sshPort,jdbcType=INTEGER}
     where resourceid = #{resourceid,jdbcType=INTEGER}
   </update>
 </mapper>

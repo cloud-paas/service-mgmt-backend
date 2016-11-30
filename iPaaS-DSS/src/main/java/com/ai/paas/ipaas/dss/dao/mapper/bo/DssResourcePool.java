@@ -13,7 +13,7 @@ public class DssResourcePool {
 
     private Integer leftSize;
 
-    private Integer orgId;
+    private String orgCode;
 
     public Integer getHostId() {
         return hostId;
@@ -63,11 +63,11 @@ public class DssResourcePool {
         this.leftSize = leftSize;
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getOrgCode() {
+        return orgCode;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 }

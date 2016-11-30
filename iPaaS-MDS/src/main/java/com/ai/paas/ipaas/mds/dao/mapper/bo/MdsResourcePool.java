@@ -17,7 +17,9 @@ public class MdsResourcePool {
 
     private String zkAuthPasswd;
 
-    private Integer orgId;
+    private String hostUserName;
+
+    private String orgCode;
 
     public Integer getClusterId() {
         return clusterId;
@@ -83,11 +85,19 @@ public class MdsResourcePool {
         this.zkAuthPasswd = zkAuthPasswd == null ? null : zkAuthPasswd.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getHostUserName() {
+        return hostUserName;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setHostUserName(String hostUserName) {
+        this.hostUserName = hostUserName == null ? null : hostUserName.trim();
+    }
+
+    public String getOrgCode() {
+        return orgCode;
+    }
+
+    public void setOrgCode(String orgCode) {
+        this.orgCode = orgCode == null ? null : orgCode.trim();
     }
 }

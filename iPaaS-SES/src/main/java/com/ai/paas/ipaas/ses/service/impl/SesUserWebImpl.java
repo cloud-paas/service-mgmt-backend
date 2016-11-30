@@ -24,13 +24,13 @@ import com.ai.paas.ipaas.ses.service.interfaces.ISesUserWeb;
 public class SesUserWebImpl implements ISesUserWeb {
 
 	@Override
-	public SesWebPool getAvlWeb(int orgId, String userId, String serviceId) {
+	public SesWebPool getAvlWeb(String orgCode, String userId, String serviceId) {
 		SesWebPoolMapper sesWebPoolMapper = ServiceUtil.getMapper(SesWebPoolMapper.class);
 		SesWebPoolCriteria criteria = new SesWebPoolCriteria();
 		criteria.createCriteria()
 				.andStatusEqualTo(SesConstants.VALIDATE_STATUS)
-				.andOrgIdEqualTo(orgId)
-				.andTenantIdEqualTo(AidUtil.getAid());
+				.andOrgCodeEqualTo(orgCode)
+				.andOrgCodeEqualTo(AidUtil.getAid());
 		List<SesWebPool> list = sesWebPoolMapper.selectByExample(criteria);
 		if (null == list || list.size() == 0)
 			return null;

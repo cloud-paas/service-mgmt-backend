@@ -6,14 +6,12 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ai.paas.ipaas.PaaSConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.PaasRuntimeException;
 import com.ai.paas.ipaas.ServiceUtil;
-import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
 import com.ai.paas.ipaas.mds.MDSConstant;
 import com.ai.paas.ipaas.mds.dao.interfaces.IMdsUserTopicCustomMapper;
 import com.ai.paas.ipaas.mds.dao.interfaces.MdsResourcePoolMapper;
@@ -35,9 +33,6 @@ import com.ai.paas.ipaas.util.UUIDTool;
 public class MsgSrvManagerHelper implements IMsgSrvManagerHelper {
 	private static transient final Logger logger = LoggerFactory
 			.getLogger(MsgSrvManagerHelper.class);
-
-	@Autowired
-	protected IOrgnizeUserHelper orgnizeUserHelper;
 	
 	@Override
 	public MdsUserService prepareUserServiceData(MsgSrvApply msgSrvApply) {
@@ -78,14 +73,14 @@ public class MsgSrvManagerHelper implements IMsgSrvManagerHelper {
 			// 如果没有使用过cluster，则找一个用户最少的cluster出来,如果有多个cluster，则选择第一个
 			// 准备发送和消费的配置信息
 			/** added orgId column in 2016-10 **/
-			int orgId = orgnizeUserHelper.getOrgnizeInfo(msgSrvApply.getUserId()).getOrgId();
+			logger.info("msgSrvApply.getOrgCode() is :"+ msgSrvApply.getOrgCode());
 			
 			List<MdsKafkaLoad> clusterLoads = ServiceUtil.getMapper(
-					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getUserId());
+					IMdsUserTopicCustomMapper.class).getClusterLoad(msgSrvApply.getOrgCode());
 			
 			MdsResourcePoolCriteria clusterExample = new MdsResourcePoolCriteria();
 			clusterExample.createCriteria().andClusterStateEqualTo(
-					MDSConstant.KAFKA_CLUSTER_STATE_ENABLE).andOrgIdEqualTo(orgId);
+					MDSConstant.KAFKA_CLUSTER_STATE_ENABLE).andOrgCodeEqualTo(msgSrvApply.getOrgCode());
 			List<MdsResourcePool> clusters = ServiceUtil.getMapper(
 					MdsResourcePoolMapper.class)
 					.selectByExample(clusterExample);

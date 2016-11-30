@@ -19,7 +19,7 @@ public class IdpsBalanceResourcePool {
 
     private String sshPassword;
 
-    private Integer orgId;
+    private String orgCode;
 
     private Integer sshPort;
 
@@ -95,14 +95,6 @@ public class IdpsBalanceResourcePool {
         this.sshPassword = sshPassword == null ? null : sshPassword.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
-    }
-
     public Integer getSshPort() {
         return sshPort;
     }
@@ -110,4 +102,12 @@ public class IdpsBalanceResourcePool {
     public void setSshPort(Integer sshPort) {
         this.sshPort = sshPort;
     }
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
 }

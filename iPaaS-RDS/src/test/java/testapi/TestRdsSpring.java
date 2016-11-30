@@ -133,8 +133,8 @@ public class TestRdsSpring {
 				"1",// cpu属于可分配资源 不对应cpuInfo，这里代表需要cpu数量
 				5, // netBandwidth
 				"on", // sqlAudit （on，off）
-				"semisynchronous" // syncStrategy（分为半同步semisynchronous，异步asynchronous）
-				);
+				"semisynchronous", // syncStrategy（分为半同步semisynchronous，异步asynchronous）
+				"slp-dev");
 		String request = g.toJson(creatObject);
 		System.out.println(request);
 		String result;

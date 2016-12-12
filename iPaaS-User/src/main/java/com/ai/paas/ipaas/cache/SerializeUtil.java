@@ -12,7 +12,6 @@ public class SerializeUtil {
         ObjectOutputStream oos = null;
         ByteArrayOutputStream baos = null;
         try {
-            // ���л�
             baos = new ByteArrayOutputStream();
             oos = new ObjectOutputStream(baos);
             oos.writeObject(object);
@@ -29,7 +28,6 @@ public class SerializeUtil {
             return null;
         ByteArrayInputStream bais = null;
         try {
-            // �����л�
             bais = new ByteArrayInputStream(bytes);
             ObjectInputStream ois = new ObjectInputStream(bais);
             return ois.readObject();

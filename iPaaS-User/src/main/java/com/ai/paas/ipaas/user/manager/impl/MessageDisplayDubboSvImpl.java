@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.user.dubbo.impl;
+package com.ai.paas.ipaas.user.manager.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

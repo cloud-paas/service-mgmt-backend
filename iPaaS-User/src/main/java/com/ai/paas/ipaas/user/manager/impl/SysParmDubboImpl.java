@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.user.dubbo.impl;
+package com.ai.paas.ipaas.user.manager.impl;
 
 import java.util.List;
 

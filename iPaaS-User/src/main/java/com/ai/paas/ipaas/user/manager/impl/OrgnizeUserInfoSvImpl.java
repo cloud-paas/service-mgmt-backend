@@ -2,8 +2,6 @@ package com.ai.paas.ipaas.user.manager.impl;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,6 @@ import com.alibaba.dubbo.config.annotation.Service;
 
 @Service
 public class OrgnizeUserInfoSvImpl implements IOrgnizeUserInfoSv{
-	
-	private final Log logger = LogFactory.getLog(getClass());
 	
 	@Autowired
     private SqlSessionTemplate template;

@@ -5,11 +5,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ai.paas.ipaas.user.dubbo.interfaces.ISchemeConfirmDubboSv;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.ISchemeConfirmDubboSv;
 import com.ai.paas.ipaas.user.service.ISchemeConfirmSv;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.user.vo.ResponseVo;
 import com.alibaba.dubbo.config.annotation.Service;
+
 /**
  * 方案确认
  * @author renfeng

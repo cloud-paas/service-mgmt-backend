@@ -1,12 +1,11 @@
 package com.ai.paas.ipaas.user.service.dao;
 
-import com.ai.paas.ipaas.user.dto.UserCenter;
-import com.ai.paas.ipaas.user.dto.UserCenterCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.UserVo;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.ai.paas.ipaas.user.dto.UserCenter;
+import com.ai.paas.ipaas.user.dto.UserCenterCriteria;
 
 public interface UserCenterMapper {
     int countByExample(UserCenterCriteria example);

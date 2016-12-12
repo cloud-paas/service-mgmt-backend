@@ -13,16 +13,16 @@ import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.ResponseMessage;
 import com.ai.paas.ipaas.user.dto.UserCenter;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IUser;
-import com.ai.paas.ipaas.user.dubbo.vo.RegisterResult;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
-import com.ai.paas.ipaas.user.dubbo.vo.UserVo;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IUser;
 import com.ai.paas.ipaas.user.service.IUserProdInstSv;
 import com.ai.paas.ipaas.user.service.IUserSv;
 import com.ai.paas.ipaas.util.JSonUtil;
+import com.ai.paas.ipaas.vo.user.RegisterResult;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
+import com.ai.paas.ipaas.vo.user.UserVo;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 public class UserImpl implements IUser {
 	private final Log logger = LogFactory.getLog(getClass());

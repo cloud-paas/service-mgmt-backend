@@ -4,10 +4,9 @@ import java.util.Map;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.UserCenter;
-import com.ai.paas.ipaas.user.dubbo.vo.RegisterResult;
-import com.ai.paas.ipaas.user.dubbo.vo.UserVo;
 import com.ai.paas.ipaas.user.exception.BusinessException;
-
+import com.ai.paas.ipaas.vo.user.RegisterResult;
+import com.ai.paas.ipaas.vo.user.UserVo;
 
 public interface IUserSv {
 	public UserCenter  getUserInfo(String userId) ;//获取用户信息

@@ -12,13 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IProdProductDubboSv;
-import com.ai.paas.ipaas.user.dubbo.vo.ProdProductVo;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageResponse;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IProdProductDubboSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
+import com.ai.paas.ipaas.vo.user.ProdProductVo;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageRequest;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageResponse;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 public class ProdProductDubboSvImpl implements IProdProductDubboSv {
 	

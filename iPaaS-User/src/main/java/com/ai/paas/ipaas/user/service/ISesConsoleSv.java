@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
 public interface ISesConsoleSv {
 	public String startService(UserProdInstVo vo)throws PaasException, IOException, URISyntaxException ;

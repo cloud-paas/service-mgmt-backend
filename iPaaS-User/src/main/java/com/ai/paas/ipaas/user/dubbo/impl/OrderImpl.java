@@ -7,26 +7,25 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IOrder;
-import com.ai.paas.ipaas.user.dubbo.vo.CheckOrdersRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.CheckOrdersResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailVo;
-import com.ai.paas.ipaas.user.dubbo.vo.PageEntity;
-import com.ai.paas.ipaas.user.dubbo.vo.PageResult;
-import com.ai.paas.ipaas.user.dubbo.vo.PlanConfirmVo;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectOrderRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectOrderResponse;
 import com.ai.paas.ipaas.user.service.IPlanConfirmSv;
 import com.ai.paas.ipaas.util.JSonUtil;
+import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
+import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
+import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
+import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
+import com.ai.paas.ipaas.vo.user.OrderDetailVo;
+import com.ai.paas.ipaas.vo.user.PageEntity;
+import com.ai.paas.ipaas.vo.user.PageResult;
+import com.ai.paas.ipaas.vo.user.PlanConfirmVo;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.SelectOrderRequest;
+import com.ai.paas.ipaas.vo.user.SelectOrderResponse;
 import com.alibaba.dubbo.config.annotation.Service;
 
 @Service

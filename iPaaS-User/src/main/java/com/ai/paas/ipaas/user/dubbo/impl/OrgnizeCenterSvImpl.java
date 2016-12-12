@@ -1,23 +1,21 @@
 package com.ai.paas.ipaas.user.dubbo.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.dubbo.config.annotation.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dao.interfaces.OrgnizeCenterMapper;
 import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeCenter;
 import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeCenterCriteria;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IOrgnizeCenterSv;
-import com.ai.paas.ipaas.user.dubbo.vo.OrgnizeCenterVo;
-import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrgnizeCenterSv;
+import com.ai.paas.ipaas.vo.user.OrgnizeCenterVo;
+import com.alibaba.dubbo.config.annotation.Service;
 
 @Service
 public class OrgnizeCenterSvImpl implements IOrgnizeCenterSv{

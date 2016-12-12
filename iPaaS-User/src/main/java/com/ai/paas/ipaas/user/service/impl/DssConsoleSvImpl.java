@@ -26,9 +26,6 @@ import com.ai.paas.ipaas.user.dto.UserMessage;
 import com.ai.paas.ipaas.user.dto.UserMgrOperate;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.DocumentVo;
-import com.ai.paas.ipaas.user.dubbo.vo.ProdMenuVo;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
 import com.ai.paas.ipaas.user.service.IDssConsoleSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.ISysParamSv;
@@ -42,8 +39,12 @@ import com.ai.paas.ipaas.user.utils.HttpRequestUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.DocumentVo;
+import com.ai.paas.ipaas.vo.user.ProdMenuVo;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 import com.google.gson.Gson;
+
 @Service
 @Transactional 
 public class DssConsoleSvImpl implements IDssConsoleSv {

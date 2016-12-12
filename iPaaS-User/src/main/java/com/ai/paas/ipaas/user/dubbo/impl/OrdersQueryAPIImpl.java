@@ -1,16 +1,13 @@
 package com.ai.paas.ipaas.user.dubbo.impl;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.SQLException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ai.paas.ipaas.user.dubbo.interfaces.IOrdersQueryAPI;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrdersQueryAPI;
 import com.ai.paas.ipaas.user.service.IOrdersQuerySv;
-import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.vo.OrdersForm;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.alibaba.dubbo.config.annotation.Service;

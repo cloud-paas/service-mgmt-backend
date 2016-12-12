@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.user.dubbo.interfaces.ISysParamDubbo;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParamVo;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParmRequest;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.ISysParamDubbo;
 import com.ai.paas.ipaas.user.service.ISysParamSv;
+import com.ai.paas.ipaas.vo.user.SysParamVo;
+import com.ai.paas.ipaas.vo.user.SysParmRequest;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 public class SysParmDubboImpl implements ISysParamDubbo {
 	

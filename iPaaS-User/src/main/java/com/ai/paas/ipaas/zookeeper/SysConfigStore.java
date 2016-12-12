@@ -12,24 +12,24 @@ import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
-import net.sf.json.JSONArray;
-
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
+import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ai.paas.ipaas.PaaSConstant;
 import com.ai.paas.ipaas.ccs.constants.AddMode;
 import com.ai.paas.ipaas.ccs.constants.BundleKeyConstant;
-import com.ai.paas.ipaas.ccs.constants.ConfigException;
 import com.ai.paas.ipaas.ccs.zookeeper.ZKClient;
 import com.ai.paas.ipaas.util.ResourceUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.google.gson.Gson;
+
+import net.sf.json.JSONArray;
 
 public class SysConfigStore {
 	private static transient final Logger logger = 

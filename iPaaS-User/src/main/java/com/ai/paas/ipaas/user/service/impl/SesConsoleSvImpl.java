@@ -16,7 +16,6 @@ import com.ai.paas.ipaas.user.dto.RestfullReq;
 import com.ai.paas.ipaas.user.dto.RestfullReturn;
 import com.ai.paas.ipaas.user.dto.UserMgrOperate;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.ISesConsoleSv;
 import com.ai.paas.ipaas.user.service.IUserMgrOperateSv;
@@ -25,6 +24,7 @@ import com.ai.paas.ipaas.user.utils.DateUtil;
 import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
  
 @Service

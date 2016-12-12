@@ -10,14 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IRdsConsoleDubboSv;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IRdsConsoleDubboSv;
 import com.ai.paas.ipaas.user.service.IRdsConsoleSv;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageRequest;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageResponse;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 @Transactional
 public class RdsConsoleDubboSvImpl implements IRdsConsoleDubboSv {

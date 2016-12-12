@@ -16,9 +16,9 @@ import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
 import com.ai.paas.ipaas.user.service.IUserProdInstSv;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
 @Service
 @Transactional

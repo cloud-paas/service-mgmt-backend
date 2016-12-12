@@ -8,9 +8,9 @@ import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.MdsGetSubscribeRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsSearchRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsSubscribeRestfullRes;
-import com.ai.paas.ipaas.user.dubbo.vo.MdsSearchMessageVo;
-import com.ai.paas.ipaas.user.dubbo.vo.MdsUserSubscribeVo;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.vo.user.MdsSearchMessageVo;
+import com.ai.paas.ipaas.vo.user.MdsUserSubscribeVo;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
 public interface IMdsConsoleSv {
 

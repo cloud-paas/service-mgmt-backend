@@ -16,17 +16,17 @@ import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.MdsGetSubscribeRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsSearchRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsSubscribeRestfullRes;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IMdsConsoleDubboSv;
-import com.ai.paas.ipaas.user.dubbo.vo.MdsSearchMessageVo;
-import com.ai.paas.ipaas.user.dubbo.vo.MdsUserSubscribeVo;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseSubPathList;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectWithNoPageResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IMdsConsoleDubboSv;
 import com.ai.paas.ipaas.user.service.IMdsConsoleSv;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.MdsSearchMessageVo;
+import com.ai.paas.ipaas.vo.user.MdsUserSubscribeVo;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.ResponseSubPathList;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageRequest;
+import com.ai.paas.ipaas.vo.user.SelectWithNoPageResponse;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.alibaba.dubbo.config.annotation.Service;
 
 @Service

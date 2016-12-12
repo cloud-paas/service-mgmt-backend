@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
-import com.ai.paas.ipaas.user.dubbo.interfaces.MessageDisplayDubboSv;
-import com.ai.paas.ipaas.user.dubbo.vo.PageResult;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.UserMessageRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.UserMessageResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.UserMessageVo;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.MessageDisplayDubboSv;
 import com.ai.paas.ipaas.user.service.MessageDisplaySv;
+import com.ai.paas.ipaas.vo.user.PageResult;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.UserMessageRequest;
+import com.ai.paas.ipaas.vo.user.UserMessageResponse;
+import com.ai.paas.ipaas.vo.user.UserMessageVo;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 public class MessageDisplayDubboSvImpl implements MessageDisplayDubboSv{
 	private final Log logger = LogFactory.getLog(getClass());

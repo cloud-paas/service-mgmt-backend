@@ -1,23 +1,20 @@
 package com.ai.paas.ipaas.user.dubbo.impl;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import com.alibaba.dubbo.config.annotation.Service;
-
-import java.util.List;
-
+import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dao.interfaces.OrgnizeUserInfoMapper;
 import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoCriteria;
 import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoKey;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IOrgnizeUserInfoSv;
-import com.ai.paas.ipaas.user.dubbo.vo.OrgnizeUserInfoVo;
-import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.ServiceUtil;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrgnizeUserInfoSv;
+import com.ai.paas.ipaas.vo.user.OrgnizeUserInfoVo;
+import com.alibaba.dubbo.config.annotation.Service;
 
 @Service
 public class OrgnizeUserInfoSvImpl implements IOrgnizeUserInfoSv{

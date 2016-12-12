@@ -20,8 +20,6 @@ import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.IRdsConsoleSv;
 import com.ai.paas.ipaas.user.service.IUserProdInstSv;
@@ -29,8 +27,11 @@ import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
 import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 import com.google.gson.Gson;
+
 @Service
 @Transactional 
 public class RdsConsoleSvImpl implements IRdsConsoleSv {

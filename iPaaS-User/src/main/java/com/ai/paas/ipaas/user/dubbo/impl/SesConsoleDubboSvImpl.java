@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.user.dubbo.interfaces.ISesConsoleDubboSv;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.ISesConsoleDubboSv;
 import com.ai.paas.ipaas.user.service.ISesConsoleSv;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.alibaba.dubbo.config.annotation.Service;
+
 @Service
 public class SesConsoleDubboSvImpl implements ISesConsoleDubboSv{
 

@@ -22,55 +22,41 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
-import com.ai.paas.ipaas.user.constants.ExceptionConstants;
-import com.ai.paas.ipaas.user.dto.OrderAttribute;
 import com.ai.paas.ipaas.user.dto.OrderDetail;
 import com.ai.paas.ipaas.user.dto.OrderDetailCriteria;
-import com.ai.paas.ipaas.user.dto.OrderWo;
-import com.ai.paas.ipaas.user.dto.OrderWoCriteria;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.UserCenter;
 import com.ai.paas.ipaas.user.dto.UserMessage;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
-import com.ai.paas.ipaas.user.dto.WfTickets;
-import com.ai.paas.ipaas.user.dto.WfTicketsCriteria;
-import com.ai.paas.ipaas.user.dubbo.interfaces.IOrgnizeUserInfoSv;
-import com.ai.paas.ipaas.user.dubbo.vo.CheckOrdersRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.EmailDetail;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailResponse;
-import com.ai.paas.ipaas.user.dubbo.vo.OrderDetailVo;
-import com.ai.paas.ipaas.user.dubbo.vo.PageEntity;
-import com.ai.paas.ipaas.user.dubbo.vo.PageResult;
-import com.ai.paas.ipaas.user.dubbo.vo.SelectOrderRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParamVo;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParmRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.VariablesVo;
-import com.ai.paas.ipaas.user.dubbo.vo.WorkflowRequest;
-import com.ai.paas.ipaas.user.exception.BusinessException;
+import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrgnizeUserInfoSv;
 import com.ai.paas.ipaas.user.service.IOrderSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.ISysParamSv;
-import com.ai.paas.ipaas.user.service.dao.OrderAttributeMapper;
 import com.ai.paas.ipaas.user.service.dao.OrderDetailMapper;
-import com.ai.paas.ipaas.user.service.dao.OrderWoMapper;
 import com.ai.paas.ipaas.user.service.dao.ProdProductMapper;
 import com.ai.paas.ipaas.user.service.dao.UserCenterMapper;
 import com.ai.paas.ipaas.user.service.dao.UserMessageMapper;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
-import com.ai.paas.ipaas.user.service.dao.WfTicketsMapper;
 import com.ai.paas.ipaas.user.utils.DateUtil;
 import com.ai.paas.ipaas.user.utils.EmailTemplUtil;
 import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.utils.HttpRequestUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.user.utils.PageUtils;
-import com.ai.paas.ipaas.user.utils.WorkflowClientUtils;
 import com.ai.paas.ipaas.user.utils.gson.GsonUtil;
-import com.ai.paas.ipaas.user.vo.OrderDataVo;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.util.UUIDTool;
+import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
+import com.ai.paas.ipaas.vo.user.EmailDetail;
+import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
+import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
+import com.ai.paas.ipaas.vo.user.OrderDetailVo;
+import com.ai.paas.ipaas.vo.user.PageEntity;
+import com.ai.paas.ipaas.vo.user.PageResult;
+import com.ai.paas.ipaas.vo.user.SelectOrderRequest;
+import com.ai.paas.ipaas.vo.user.SysParamVo;
+import com.ai.paas.ipaas.vo.user.SysParmRequest;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 
 @Service
@@ -910,125 +896,125 @@ public class OrderSvImpl implements IOrderSv {
            throw new PaasException("组织并获取邮件信息失败");
 		}
 	}
-
-	@Override
-	public Object updateIaasOrderProdparam(OrderDataVo orderDataVo)throws Exception {
-		logger.info(" input OrderDetailSvImpl class saveIaasOrder function ...");
-		OrderDetailMapper orderDetailMapper =  template.getMapper(OrderDetailMapper.class);
-		OrderWoMapper orderWoMapper = template.getMapper(OrderWoMapper.class);
-		
-		OrderWo orderWo = new OrderWo();
-		OrderDetail orderDetail = new OrderDetail();
-		BeanUtils.copyProperties(orderDataVo, orderDetail);
-		
-		OrderWoCriteria orderWoCriteria = new OrderWoCriteria();
-		orderWoCriteria.createCriteria().andOrderDetailIdEqualTo(orderDetail.getOrderDetailId())
-		.andWoStatusEqualTo("0");//待处理
-		List<OrderWo> orderWoList = orderWoMapper.selectByExample(orderWoCriteria);
-		OrderDetail orderDetail2 = orderDetailMapper.selectByPrimaryKey(orderDetail.getOrderDetailId());
-		
-		orderWo.setWoStatus("1");
-		orderWo.setWoResult("8");//申请修改完成
-		
-		orderDetail.setOrderStatus(Constants.Order.IaasOrderStatus.WAIT_OA_AUDIT);// 待用户修改订单10 改为5
-		orderDetail.setSbutractFlag(Constants.Order.SbutractFlag.NOT_REDUCED);
-		int i = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
-		
-		OrderAttributeMapper orderAttributeMapper =  template.getMapper(OrderAttributeMapper.class);
-		OrderAttribute orderAttribute = new OrderAttribute();
-		BeanUtils.copyProperties(orderDataVo, orderAttribute);
-		orderAttribute.setOrderDetailId(orderDetail.getOrderDetailId());
-		orderAttribute.setApplyType("2");//资源申请方式    1， 新建    2变更
-		int j = orderAttributeMapper.updateByPrimaryKeySelective(orderAttribute);
-		orderWoMapper.updateByExampleSelective(orderWo, orderWoCriteria);
-		
-		WorkflowRequest workflowRequest = new WorkflowRequest();
-		workflowRequest.setProcessInstanceId(orderDetail2.getWfInstId());
-		workflowRequest.setTaskId(orderWoList.get(0).getWfTaskId());		
-		String ntAccount = orderDetail2.getApplicantEmail().split("@")[0];
-		List<VariablesVo> variables  = new ArrayList<VariablesVo>();
-		VariablesVo  wariablesVo = new VariablesVo();
-		wariablesVo.setApplyId(String.valueOf(orderDetail.getOrderDetailId()));
-		wariablesVo.setUserId(orderDetail2.getUserId());
-		wariablesVo.setNtAccount(ntAccount);
-		wariablesVo.setWoResult("8");
-		if("Y".equals(orderAttribute.getIsProject())){
-			wariablesVo.setCostCenterCode(orderAttribute.getCostCenterCode());
-		}
-		workflowRequest.setVariables(variables);
-		variables.add(wariablesVo);
-		workflowRequest.setVariables(variables);
-		logger.info("======申请修改完成调工作流参数=============="+JsonUtils.toJsonStr(workflowRequest));
-		WorkflowClientUtils.taskComplete(workflowRequest);
-		
-		if(i>0 && j>0){
-			return orderDetail.getOrderDetailId();
-		}else{
-			return "000000";
-		}
-	}
+//
+//	@Override
+//	public Object updateIaasOrderProdparam(OrderDataVo orderDataVo)throws Exception {
+//		logger.info(" input OrderDetailSvImpl class saveIaasOrder function ...");
+//		OrderDetailMapper orderDetailMapper =  template.getMapper(OrderDetailMapper.class);
+//		OrderWoMapper orderWoMapper = template.getMapper(OrderWoMapper.class);
+//		
+//		OrderWo orderWo = new OrderWo();
+//		OrderDetail orderDetail = new OrderDetail();
+//		BeanUtils.copyProperties(orderDataVo, orderDetail);
+//		
+//		OrderWoCriteria orderWoCriteria = new OrderWoCriteria();
+//		orderWoCriteria.createCriteria().andOrderDetailIdEqualTo(orderDetail.getOrderDetailId())
+//		.andWoStatusEqualTo("0");//待处理
+//		List<OrderWo> orderWoList = orderWoMapper.selectByExample(orderWoCriteria);
+//		OrderDetail orderDetail2 = orderDetailMapper.selectByPrimaryKey(orderDetail.getOrderDetailId());
+//		
+//		orderWo.setWoStatus("1");
+//		orderWo.setWoResult("8");//申请修改完成
+//		
+//		orderDetail.setOrderStatus(Constants.Order.IaasOrderStatus.WAIT_OA_AUDIT);// 待用户修改订单10 改为5
+//		orderDetail.setSbutractFlag(Constants.Order.SbutractFlag.NOT_REDUCED);
+//		int i = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+//		
+//		OrderAttributeMapper orderAttributeMapper =  template.getMapper(OrderAttributeMapper.class);
+//		OrderAttribute orderAttribute = new OrderAttribute();
+//		BeanUtils.copyProperties(orderDataVo, orderAttribute);
+//		orderAttribute.setOrderDetailId(orderDetail.getOrderDetailId());
+//		orderAttribute.setApplyType("2");//资源申请方式    1， 新建    2变更
+//		int j = orderAttributeMapper.updateByPrimaryKeySelective(orderAttribute);
+//		orderWoMapper.updateByExampleSelective(orderWo, orderWoCriteria);
+//		
+//		WorkflowRequest workflowRequest = new WorkflowRequest();
+//		workflowRequest.setProcessInstanceId(orderDetail2.getWfInstId());
+//		workflowRequest.setTaskId(orderWoList.get(0).getWfTaskId());		
+//		String ntAccount = orderDetail2.getApplicantEmail().split("@")[0];
+//		List<VariablesVo> variables  = new ArrayList<VariablesVo>();
+//		VariablesVo  wariablesVo = new VariablesVo();
+//		wariablesVo.setApplyId(String.valueOf(orderDetail.getOrderDetailId()));
+//		wariablesVo.setUserId(orderDetail2.getUserId());
+//		wariablesVo.setNtAccount(ntAccount);
+//		wariablesVo.setWoResult("8");
+//		if("Y".equals(orderAttribute.getIsProject())){
+//			wariablesVo.setCostCenterCode(orderAttribute.getCostCenterCode());
+//		}
+//		workflowRequest.setVariables(variables);
+//		variables.add(wariablesVo);
+//		workflowRequest.setVariables(variables);
+//		logger.info("======申请修改完成调工作流参数=============="+JsonUtils.toJsonStr(workflowRequest));
+//		WorkflowClientUtils.taskComplete(workflowRequest);
+//		
+//		if(i>0 && j>0){
+//			return orderDetail.getOrderDetailId();
+//		}else{
+//			return "000000";
+//		}
+//	}
 	
-	@Override
-	public Object saveIaasOrder(OrderDataVo orderDataVo) throws Exception {
-		logger.info(" input OrderDetailSvImpl class saveIaasOrder function ...");
-		OrderDetailMapper orderDetailMapper =  template.getMapper(OrderDetailMapper.class);
-		OrderDetail orderDetail = new OrderDetail();
-		BeanUtils.copyProperties(orderDataVo, orderDetail);
-		orderDetail.setOrderStatus(Constants.Order.IaasOrderStatus.WAIT_OA_AUDIT);
-		orderDetail.setOpenStatus("1");//开通状态 --待开通
-		orderDetail.setOrderCheckStatus("1");//审核状态--待审核
-		orderDetail.setOrderAppDate(DateUtil.getSysDate());		
-		orderDetail.setSbutractFlag(Constants.Order.SbutractFlag.NOT_REDUCED);
-		
-		String prodId = orderDetail.getProdId();
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-		
-		orderDetail.setProdType(prodProduct.getProdType());
-		orderDetail.setProdByname(prodProduct.getProdEnSimp());
-		
-		orderDetailMapper.insert(orderDetail);		
-				
-		OrderAttributeMapper orderAttributeMapper =  template.getMapper(OrderAttributeMapper.class);
-		OrderAttribute orderAttribute = new OrderAttribute();
-		BeanUtils.copyProperties(orderDataVo, orderAttribute);
-		orderAttribute.setOrderDetailId(orderDetail.getOrderDetailId());
-		orderAttributeMapper.insert(orderAttribute);
-		
-		WfTicketsMapper wfTicketsMapper =  template.getMapper(WfTicketsMapper.class);
-		WfTicketsCriteria wfTicketsCriteria = new WfTicketsCriteria();
-		WfTicketsCriteria.Criteria criteria = wfTicketsCriteria.createCriteria();
-		criteria.andTicketTypeEqualTo(Constants.WfTickets.TicketType.IAAS_VM);
-		criteria.andTicketTypeEqualTo(Constants.WfTickets.VaildFlag.Yes);
-		List<WfTickets> wftList = wfTicketsMapper.selectByExample(wfTicketsCriteria);
-		if(wftList==null || 0==wftList.size()){
-			throw new BusinessException(ExceptionConstants.Response.NO_RESULT, "没有工作流关系配置");
-		}
-		WfTickets wfTickets = wftList.get(0);
-		
-		WorkflowRequest workflowRequest = new WorkflowRequest();
-		workflowRequest.setProcessDefinitionId(wfTickets.getWfId());
-		workflowRequest.setBusinessKey(String.valueOf(orderDetail.getOrderDetailId()));
-		
-		String ntAccount = orderDetail.getApplicantEmail().split("@")[0];		
-		
-		List<VariablesVo> variables  = new ArrayList<VariablesVo>();
-		VariablesVo  wariablesVo = new VariablesVo();
-		wariablesVo.setApplyId(String.valueOf(orderDetail.getOrderDetailId()));
-		wariablesVo.setUserId(orderDetail.getUserId());
-		wariablesVo.setNtAccount(ntAccount);
-		if("Y".equals(orderAttribute.getIsProject())){
-			wariablesVo.setCostCenterCode(orderAttribute.getCostCenterCode());
-		}
-		workflowRequest.setVariables(variables);
-		variables.add(wariablesVo);
-		workflowRequest.setVariables(variables);
-		
-		WorkflowClientUtils.processStart(workflowRequest);
-		
-		logger.info(" output OrderDetailSvImpl class saveIaasOrder function ...");
-		return orderDetail.getOrderDetailId();
-	}
+//	@Override
+//	public Object saveIaasOrder(OrderDataVo orderDataVo) throws Exception {
+//		logger.info(" input OrderDetailSvImpl class saveIaasOrder function ...");
+//		OrderDetailMapper orderDetailMapper =  template.getMapper(OrderDetailMapper.class);
+//		OrderDetail orderDetail = new OrderDetail();
+//		BeanUtils.copyProperties(orderDataVo, orderDetail);
+//		orderDetail.setOrderStatus(Constants.Order.IaasOrderStatus.WAIT_OA_AUDIT);
+//		orderDetail.setOpenStatus("1");//开通状态 --待开通
+//		orderDetail.setOrderCheckStatus("1");//审核状态--待审核
+//		orderDetail.setOrderAppDate(DateUtil.getSysDate());		
+//		orderDetail.setSbutractFlag(Constants.Order.SbutractFlag.NOT_REDUCED);
+//		
+//		String prodId = orderDetail.getProdId();
+//		short priKey = Short.parseShort(prodId);
+//		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
+//		
+//		orderDetail.setProdType(prodProduct.getProdType());
+//		orderDetail.setProdByname(prodProduct.getProdEnSimp());
+//		
+//		orderDetailMapper.insert(orderDetail);		
+//				
+//		OrderAttributeMapper orderAttributeMapper =  template.getMapper(OrderAttributeMapper.class);
+//		OrderAttribute orderAttribute = new OrderAttribute();
+//		BeanUtils.copyProperties(orderDataVo, orderAttribute);
+//		orderAttribute.setOrderDetailId(orderDetail.getOrderDetailId());
+//		orderAttributeMapper.insert(orderAttribute);
+//		
+//		WfTicketsMapper wfTicketsMapper =  template.getMapper(WfTicketsMapper.class);
+//		WfTicketsCriteria wfTicketsCriteria = new WfTicketsCriteria();
+//		WfTicketsCriteria.Criteria criteria = wfTicketsCriteria.createCriteria();
+//		criteria.andTicketTypeEqualTo(Constants.WfTickets.TicketType.IAAS_VM);
+//		criteria.andTicketTypeEqualTo(Constants.WfTickets.VaildFlag.Yes);
+//		List<WfTickets> wftList = wfTicketsMapper.selectByExample(wfTicketsCriteria);
+//		if(wftList==null || 0==wftList.size()){
+//			throw new BusinessException(ExceptionConstants.Response.NO_RESULT, "没有工作流关系配置");
+//		}
+//		WfTickets wfTickets = wftList.get(0);
+//		
+//		WorkflowRequest workflowRequest = new WorkflowRequest();
+//		workflowRequest.setProcessDefinitionId(wfTickets.getWfId());
+//		workflowRequest.setBusinessKey(String.valueOf(orderDetail.getOrderDetailId()));
+//		
+//		String ntAccount = orderDetail.getApplicantEmail().split("@")[0];		
+//		
+//		List<VariablesVo> variables  = new ArrayList<VariablesVo>();
+//		VariablesVo  wariablesVo = new VariablesVo();
+//		wariablesVo.setApplyId(String.valueOf(orderDetail.getOrderDetailId()));
+//		wariablesVo.setUserId(orderDetail.getUserId());
+//		wariablesVo.setNtAccount(ntAccount);
+//		if("Y".equals(orderAttribute.getIsProject())){
+//			wariablesVo.setCostCenterCode(orderAttribute.getCostCenterCode());
+//		}
+//		workflowRequest.setVariables(variables);
+//		variables.add(wariablesVo);
+//		workflowRequest.setVariables(variables);
+//		
+//		WorkflowClientUtils.processStart(workflowRequest);
+//		
+//		logger.info(" output OrderDetailSvImpl class saveIaasOrder function ...");
+//		return orderDetail.getOrderDetailId();
+//	}
 
 //	@Override
 //	public Object saveIaasIntegratedScheme(Map paramMap) throws Exception{

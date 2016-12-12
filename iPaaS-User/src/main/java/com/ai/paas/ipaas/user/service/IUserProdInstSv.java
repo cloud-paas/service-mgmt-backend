@@ -5,9 +5,7 @@ import java.util.Map;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
-import com.ai.paas.ipaas.user.dubbo.vo.DocumentVo;
-import com.ai.paas.ipaas.user.dubbo.vo.ProdMenuVo;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
 public interface IUserProdInstSv {
 	public List<UserProdInstVo> selectUserProdInsts(Map<String,String>  map)  throws PaasException;	

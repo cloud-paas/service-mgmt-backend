@@ -13,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.user.dto.UserMessage;
 import com.ai.paas.ipaas.user.dto.UserMessageCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.PageEntity;
-import com.ai.paas.ipaas.user.dubbo.vo.PageResult;
-import com.ai.paas.ipaas.user.dubbo.vo.UserMessageRequest;
-import com.ai.paas.ipaas.user.dubbo.vo.UserMessageVo;
 import com.ai.paas.ipaas.user.service.MessageDisplaySv;
 import com.ai.paas.ipaas.user.service.dao.UserMessageMapper;
 import com.ai.paas.ipaas.user.utils.PageUtils;
+import com.ai.paas.ipaas.vo.user.PageEntity;
+import com.ai.paas.ipaas.vo.user.PageResult;
+import com.ai.paas.ipaas.vo.user.UserMessageRequest;
+import com.ai.paas.ipaas.vo.user.UserMessageVo;
+
 @Service
 @Transactional 
 public class MessageDisplaySvImpl  implements MessageDisplaySv{

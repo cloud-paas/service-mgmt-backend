@@ -12,10 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.SysConfig;
 import com.ai.paas.ipaas.user.dto.SysConfigCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParamVo;
-import com.ai.paas.ipaas.user.dubbo.vo.SysParmRequest;
 import com.ai.paas.ipaas.user.service.ISysParamSv;
 import com.ai.paas.ipaas.user.service.dao.SysConfigMapper;
+import com.ai.paas.ipaas.vo.user.SysParamVo;
+import com.ai.paas.ipaas.vo.user.SysParmRequest;
+
 @Service
 @Transactional 
 public class SysParmSvImpl implements ISysParamSv {

@@ -18,9 +18,9 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import com.ai.paas.ipaas.user.dubbo.vo.WorkflowResponse;
 import com.ai.paas.ipaas.user.exception.BusinessException;
 import com.ai.paas.ipaas.user.utils.oamd5.OaMd5Util;
+import com.ai.paas.ipaas.vo.user.WorkflowResponse;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 
 public class HttpClientUtil {

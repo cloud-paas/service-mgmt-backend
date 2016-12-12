@@ -24,8 +24,6 @@ import com.ai.paas.ipaas.user.dto.RestfullReturn;
 import com.ai.paas.ipaas.user.dto.UserMgrOperate;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
-import com.ai.paas.ipaas.user.dubbo.vo.ResponseHeader;
-import com.ai.paas.ipaas.user.dubbo.vo.UserProdInstVo;
 import com.ai.paas.ipaas.user.service.IMcsConsoleSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.ISysParamSv;
@@ -36,6 +34,8 @@ import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
+import com.ai.paas.ipaas.vo.user.ResponseHeader;
+import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 
 @Service

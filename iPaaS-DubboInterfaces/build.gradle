@@ -21,6 +21,7 @@ publishing {
             }
         }
     }
+    
     repositories {
         maven {
             if(moduleVersion.endsWith('-SNAPSHOT')) {

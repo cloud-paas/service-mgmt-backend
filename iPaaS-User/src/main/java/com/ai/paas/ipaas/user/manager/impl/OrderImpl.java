@@ -1,9 +1,5 @@
 package com.ai.paas.ipaas.user.manager.impl;
 
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +9,13 @@ import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
-import com.ai.paas.ipaas.user.service.IPlanConfirmSv;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
 import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
-import com.ai.paas.ipaas.vo.user.PageEntity;
 import com.ai.paas.ipaas.vo.user.PageResult;
-import com.ai.paas.ipaas.vo.user.PlanConfirmVo;
 import com.ai.paas.ipaas.vo.user.ResponseHeader;
 import com.ai.paas.ipaas.vo.user.SelectOrderRequest;
 import com.ai.paas.ipaas.vo.user.SelectOrderResponse;
@@ -35,8 +28,8 @@ public class OrderImpl implements IOrder{
 	@Autowired
 	private IOrderSv orderSv;
 	
-	@Autowired
-	private IPlanConfirmSv planConfirmSv;
+//	@Autowired
+//	private IPlanConfirmSv planConfirmSv;
 
 	@Override
 	public OrderDetailResponse saveOrderDetail(OrderDetailRequest request)  {	
@@ -141,21 +134,21 @@ public class OrderImpl implements IOrder{
 		return JSonUtil.toJSon(response);
 	}
 
-	@Override
-	public String selectConfirmList(String params) {
-		Map<String, Object> confirmResult=new HashMap<String, Object>();
-		logger.info("params:"+params);
-		PageEntity pageEntity=JSonUtil.fromJSon(params, PageEntity.class);
-		PageResult<PlanConfirmVo> result=new PageResult<PlanConfirmVo>();
-		try {
-			result=planConfirmSv.selectPlanConfirm(pageEntity);
-			confirmResult.put("pageResult", result);
-			confirmResult.put("resultCode", Constants.OPERATE_CODE_SUCCESS);
-		} catch (SQLException e) {
-			confirmResult.put("resultCode", Constants.OPERATE_CODE_FAIL);
-			confirmResult.put("resultMsg", e.getMessage());
-			e.printStackTrace();
-		}
-		return JSonUtil.toJSon(confirmResult);
-	}
+//	@Override
+//	public String selectConfirmList(String params) {
+//		Map<String, Object> confirmResult=new HashMap<String, Object>();
+//		logger.info("params:"+params);
+//		PageEntity pageEntity=JSonUtil.fromJSon(params, PageEntity.class);
+//		PageResult<PlanConfirmVo> result=new PageResult<PlanConfirmVo>();
+//		try {
+//			result=planConfirmSv.selectPlanConfirm(pageEntity);
+//			confirmResult.put("pageResult", result);
+//			confirmResult.put("resultCode", Constants.OPERATE_CODE_SUCCESS);
+//		} catch (SQLException e) {
+//			confirmResult.put("resultCode", Constants.OPERATE_CODE_FAIL);
+//			confirmResult.put("resultMsg", e.getMessage());
+//			e.printStackTrace();
+//		}
+//		return JSonUtil.toJSon(confirmResult);
+//	}
 }

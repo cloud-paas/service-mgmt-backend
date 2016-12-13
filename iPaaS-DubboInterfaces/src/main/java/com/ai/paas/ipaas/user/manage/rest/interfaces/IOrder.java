@@ -46,7 +46,7 @@ public interface IOrder {
 	@POST
 	public String applyOrders(String params);
 	
-	@Path("/selectConfirmList")
-	@POST
-	public String selectConfirmList(String params);
+//	@Path("/selectConfirmList")
+//	@POST
+//	public String selectConfirmList(String params);
 }

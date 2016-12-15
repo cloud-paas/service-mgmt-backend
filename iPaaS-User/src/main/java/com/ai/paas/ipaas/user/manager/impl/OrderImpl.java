@@ -11,7 +11,6 @@ import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
-import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
@@ -103,24 +102,6 @@ public class OrderImpl implements IOrder{
 	}
 
 	@Override
-	public CheckOrdersResponse checkIaasOrders(CheckOrdersRequest request) {
-		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("checkIaasOrders start");	
-		try{
-			orderSv.checkIaasOrders(request);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
-			logger.info("checkIaasOrders success");	
-		}catch(PaasException e){
-			logger.error(e.getMessage(),e);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL);		
-			responseHeader.setResultMessage(e.getMessage());
-		}		
-		CheckOrdersResponse response = new CheckOrdersResponse();
-		response.setResponseHeader(responseHeader);		
-		return response;
-	}
-
-	@Override
 	public String verifyOrders(String params) {
 		CheckOrdersRequest request = JSonUtil.fromJSon(params, CheckOrdersRequest.class);
 		OrderDetailResponse response = checkOrders(request);
@@ -134,21 +115,4 @@ public class OrderImpl implements IOrder{
 		return JSonUtil.toJSon(response);
 	}
 
-//	@Override
-//	public String selectConfirmList(String params) {
-//		Map<String, Object> confirmResult=new HashMap<String, Object>();
-//		logger.info("params:"+params);
-//		PageEntity pageEntity=JSonUtil.fromJSon(params, PageEntity.class);
-//		PageResult<PlanConfirmVo> result=new PageResult<PlanConfirmVo>();
-//		try {
-//			result=planConfirmSv.selectPlanConfirm(pageEntity);
-//			confirmResult.put("pageResult", result);
-//			confirmResult.put("resultCode", Constants.OPERATE_CODE_SUCCESS);
-//		} catch (SQLException e) {
-//			confirmResult.put("resultCode", Constants.OPERATE_CODE_FAIL);
-//			confirmResult.put("resultMsg", e.getMessage());
-//			e.printStackTrace();
-//		}
-//		return JSonUtil.toJSon(confirmResult);
-//	}
 }

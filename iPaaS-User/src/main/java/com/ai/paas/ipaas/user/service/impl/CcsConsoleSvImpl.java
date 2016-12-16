@@ -11,35 +11,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.ccs.service.IConfigCenterServiceManageSv;
+import com.ai.paas.ipaas.ccs.service.dto.ConfigServiceInfo;
+import com.ai.paas.ipaas.ccs.service.dto.CreateServiceInfo;
 import com.ai.paas.ipaas.user.constants.Constants;
-import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.RestfullReq;
 import com.ai.paas.ipaas.user.dto.RestfullReturn;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
 import com.ai.paas.ipaas.user.service.ICcsConsoleSv;
-import com.ai.paas.ipaas.user.service.IProdProductSv;
-import com.ai.paas.ipaas.user.service.ISysParamSv;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
-import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.vo.user.UserProdInstVo;
-import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
-
+import com.google.gson.Gson;
 
 @Service
 @Transactional 
 public class CcsConsoleSvImpl implements ICcsConsoleSv {
-	
 	@Autowired
 	private SqlSessionTemplate template;
 	
 	@Autowired
-	private ISysParamSv iSysParamSv;
-	
-	@Autowired
-	private IProdProductSv iProdProductSv;	
+    private IConfigCenterServiceManageSv configCenterSv;
 	
 	@Override
 	public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo)
@@ -80,22 +74,20 @@ public class CcsConsoleSvImpl implements ICcsConsoleSv {
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);		
+//		short priKey = Short.parseShort(prodId);
+//		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);		
 		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE")+ prodProduct.getProdCancleRestfull(); // 获取注销restful
-		String address=SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdCancleRestfull();
-
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
 		restfullReq.setApplyType("cancel");
 		String param = JSonUtil.toJSon(restfullReq);
 		
-		String result = HttpClientUtil.send(address, param);
+        ConfigServiceInfo configServiceInfo = new ConfigServiceInfo();
+        CreateServiceInfo createServiceInfo = new Gson().fromJson(param, CreateServiceInfo.class);
+        
+        configServiceInfo = configCenterSv.deleteService(createServiceInfo);
+		String result = new Gson().toJson(configServiceInfo);
 		if (StringUtil.isBlank(result)) {
 			throw new PaasException("服务异常");
 		}

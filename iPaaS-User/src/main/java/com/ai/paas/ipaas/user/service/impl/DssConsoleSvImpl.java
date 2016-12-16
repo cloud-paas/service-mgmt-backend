@@ -32,7 +32,6 @@ import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
 import com.ai.paas.ipaas.user.service.IDssConsoleSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
-import com.ai.paas.ipaas.user.service.ISysParamSv;
 import com.ai.paas.ipaas.user.service.IUserMgrOperateSv;
 import com.ai.paas.ipaas.user.service.IUserProdInstSv;
 import com.ai.paas.ipaas.user.service.dao.UserMessageMapper;
@@ -59,8 +58,6 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 	private IProdProductSv iProdProductSv;	
 	@Autowired
 	private IUserMgrOperateSv iUserMgrOperateSv;	
-	@Autowired
-	private ISysParamSv iSysParamSv;
 	
 	@Autowired
 	private IUserProdInstSv iUserProdInstSv;

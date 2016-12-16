@@ -18,6 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.dss.manage.impl.DSSHelper;
+import com.ai.paas.ipaas.dss.manage.param.DSSResult;
+import com.ai.paas.ipaas.dss.manage.param.StatusParam;
+import com.ai.paas.ipaas.dss.service.IDSSSv;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.RestfullReq;
@@ -61,6 +65,9 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 	@Autowired
 	private IUserProdInstSv iUserProdInstSv;
 	
+	@Autowired
+	private IDSSSv dssSv;
+	
 	@Override
 	public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo)
 			throws PaasException {
@@ -102,31 +109,36 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		}
 		short priKey = Short.parseShort(prodId);
 		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-
-	
-		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") +prodProduct.getProdUsedAmountRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdUsedAmountRestfull();
-
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的已使用量查询地址为空");
-		}
 			
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(userProdInstVo.getUserId());
 		restfullReq.setServiceId(userProdInstVo.getUserServIpaasId());
 		restfullReq.setApplyType( "getStatus");
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		// 初始化结果
+		DSSResult dssResult = null;
+		// 格式化入参
+		StatusParam statusObj = DSSHelper.getStatusParam(param);
+		try {
+			dssResult = dssSv.getStatusDSS(statusObj);
+		} catch (Exception e) {
+			dssResult = DSSHelper.getResult(statusObj, e.getMessage());
+			logger.error("", e);
 		}
+		
+		String result = DSSHelper.getDSSResult(dssResult);
+		logger.info("返回 dssSv.getStatusDSS() 结果："+result);
+		
+		if (StringUtil.isBlank(result)) {
+			throw new PaasException("dssSv服务异常");
+		}
+		
 		RestfullReturn restfullReturn = JSonUtil.fromJSon(result, RestfullReturn.class);
 		String resultCode = restfullReturn.getResultCode();
 		if (PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL.equals(resultCode)) {
-			throw new PaasException("调用restful失败");
+			throw new PaasException("调用 dssSv.getStatusDSS() 失败");
 		}
 		String usedSize = restfullReturn.getUsedSize();
 		BigInteger  size = BigInteger.valueOf(Long.parseLong(usedSize));
@@ -140,8 +152,6 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		}
 		
 		userProdInstVo.setProdName(prodProduct.getProdName());
-		
-
 	}
 	
 	public void getSingleFileSize(UserProdInstVo userProdInstVo)

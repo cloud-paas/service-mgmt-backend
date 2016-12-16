@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
+import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.SelectOrderRequest;
@@ -41,4 +42,7 @@ public interface IOrder {
 	@POST
 	public String applyOrders(String params);
 	
+	@Path("/checkIaasOrders")
+	@POST
+	public abstract CheckOrdersResponse checkIaasOrders(CheckOrdersRequest paramCheckOrdersRequest);
 }

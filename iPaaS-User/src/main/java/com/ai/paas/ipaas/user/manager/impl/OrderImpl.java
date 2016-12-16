@@ -11,6 +11,7 @@ import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
+import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
@@ -115,4 +116,22 @@ public class OrderImpl implements IOrder{
 		return JSonUtil.toJSon(response);
 	}
 
+	@Override
+	public CheckOrdersResponse checkIaasOrders(CheckOrdersRequest request) {
+		ResponseHeader responseHeader = new ResponseHeader();
+		logger.info("checkIaasOrders start");	
+		try{
+			orderSv.checkIaasOrders(request);
+			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
+			logger.info("checkIaasOrders success");	
+		}catch(PaasException e){
+			logger.error(e.getMessage(),e);
+			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL);		
+			responseHeader.setResultMessage(e.getMessage());
+		}		
+		CheckOrdersResponse response = new CheckOrdersResponse();
+		response.setResponseHeader(responseHeader);		
+		return response;
+	}
+	
 }

@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.dss.manage.impl.DSSHelper;
+import com.ai.paas.ipaas.dss.manage.param.CancelDSSParam;
+import com.ai.paas.ipaas.dss.manage.param.CleanDSSParam;
 import com.ai.paas.ipaas.dss.manage.param.DSSResult;
+import com.ai.paas.ipaas.dss.manage.param.RecordParam;
 import com.ai.paas.ipaas.dss.manage.param.StatusParam;
 import com.ai.paas.ipaas.dss.service.IDSSSv;
 import com.ai.paas.ipaas.user.constants.Constants;
@@ -174,7 +177,6 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		
 		userProdInstVo.setSingleFileSize(singleFileSize);
 		userProdInstVo.setServiceName(serviceName);
-
 	}
 
 	@Override
@@ -189,26 +191,29 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
 		
-//		String address =  CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdCancleRestfull(); // 获取注销restful
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdCancleRestfull();
-
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
 		restfullReq.setApplyType("cancel");
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		// 初始化结果
+		DSSResult dssResult = null;
+		// 格式化入参
+		CancelDSSParam cancelObj = DSSHelper.getCancelDSSParam(param);
+		// 创建DSS并初始化出参
+		try {
+			dssResult = dssSv.cancelDSS(cancelObj);
+		} catch (Exception e) {
+			// 构建错误信息
+			dssResult = DSSHelper.getResult(cancelObj, e.getMessage());
 		}
+		
+		// 返回处理结果
+		String result = DSSHelper.getDSSResult(dssResult);
+				
 		RestfullReturn restfullReturn = JSonUtil.fromJSon(result, RestfullReturn.class);
 		String resultCode = restfullReturn.getResultCode();
 		// 修改用户产品实例
@@ -278,13 +283,12 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		short priKey = Short.parseShort(prodId);
 		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
 		
-		
-//		String address = CacheUtils.getValueByKey("IPAAS-UAC.SERVICE") +prodProduct.getProdMdypwdRestfull();
 		String address = SystemConfigHandler.configMap.get("IPAAS-UAC.SERVICE.IP_PORT_SERVICE")+prodProduct.getProdMdypwdRestfull();
 
 		if (StringUtil.isBlank(address)) {
 			throw new PaasException("产品的的服务地址为空");
 		}	
+		
 		String param = "userId="+vo.getUserId()+"&serviceId="+userProdInst.getUserServIpaasId()
 	            +"&newPwd="+vo.getNewPwd()+"&oldPwd="+vo.getOldPwd();	
 		logger.info("调用服务接口url："+address);
@@ -321,27 +325,27 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-		
-	
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdFullclearRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdFullclearRestfull();
 
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
 		restfullReq.setApplyType("cleanAll");
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result  = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		// 初始化结果
+		DSSResult dssResult = null;
+		// 格式化入参
+		CleanDSSParam cleanObj = DSSHelper.getCleanDSSParam(param);
+		// 创建DSS并初始化出参
+		try {
+			dssResult = dssSv.cleanDSS(cleanObj);
+		} catch (Exception e) {
+			dssResult = DSSHelper.getResult(cleanObj, e.getMessage());
 		}
+		// 返回处理结果
+		String result = DSSHelper.getDSSResult(dssResult);
+				
 		RestfullReturn restfullReturn = JSonUtil.fromJSon(result, RestfullReturn.class);
 		String resultCode = restfullReturn.getResultCode();
 		// 写用户管理操作
@@ -364,28 +368,28 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
 		
-		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdSeltedkeyRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdSeltedkeyRestfull();
-
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
 		restfullReq.setApplyType("getRecord");
 		restfullReq.setKey(vo.getKey());
 		String param = JSonUtil.toJSon(restfullReq);	
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		// 初始化结果
+		DSSResult dssResult = null;
+		// 格式化入参
+		RecordParam recordObj = DSSHelper.getRecordParam(param);
+		// 创建DSS并初始化出参
+		try {
+			dssResult = dssSv.getRecordDSS(recordObj);
+		} catch (Exception e) {
+			dssResult = DSSHelper.getResult(recordObj, e.getMessage());
 		}
+		// 返回处理结果
+		String result = DSSHelper.getDSSResult(dssResult);
+				
 		DocumentVo documentVo = new Gson().fromJson(result, DocumentVo.class);
 		String resultCode = documentVo.getResultCode();
 		if(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL.equals(resultCode)){
@@ -408,27 +412,28 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdKeyclearRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdKeyclearRestfull();
 
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}		
 		RestfullReq restfullReq = new RestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
 		restfullReq.setApplyType("cleanOne");
 		restfullReq.setKey(vo.getKey());
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result  = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		// 初始化结果
+		DSSResult dssResult = null;
+		// 格式化入参
+		CleanDSSParam cleanObj = DSSHelper.getCleanDSSParam(param);
+		// 创建DSS并初始化出参
+		try {
+			dssResult = dssSv.cleanOneDSS(cleanObj);
+		} catch (Exception e) {
+			dssResult = DSSHelper.getResult(cleanObj, e.getMessage());
 		}
+		// 返回处理结果
+		String result = DSSHelper.getDSSResult(dssResult);
+				
 		RestfullReturn restfullReturn = JSonUtil.fromJSon(result, RestfullReturn.class);
 		String resultCode = restfullReturn.getResultCode();
 		if(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL.equals(resultCode)){
@@ -532,7 +537,6 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 	
 	public void getConsoleUrl(ProdMenuVo prodMenuVo)
 			throws PaasException {					
-//		String consoleUrl = CacheUtils.getOptionByKey("IPAAS-WEB.CONSOLE_URL",prodMenuVo.getProdId());
 		String consoleUrl = SystemConfigHandler.configMap.get("IPAAS-WEB.CONSOLE_URL."+prodMenuVo.getProdId());
 
 		prodMenuVo.setConsoleUrl(consoleUrl);
@@ -542,7 +546,6 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 	public String modifyConfiguration(String params) throws NumberFormatException, PaasException, IOException, URISyntaxException {
 		ProdProduct prodProduct=iProdProductSv.selectProductByPrimaryKey(Short.parseShort(Constants.ProdProduct.ProdId.DSS));
 		
-//		String address=CacheUtils.getValueByKey("PASS.SERVICE")+prodProduct.getProdBindRestful();//修改DSS配置
 		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdBindRestful();
 
 		if(StringUtil.isBlank(address)){

@@ -26,7 +26,6 @@ import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
 import com.ai.paas.ipaas.user.service.IMcsConsoleSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
-import com.ai.paas.ipaas.user.service.ISysParamSv;
 import com.ai.paas.ipaas.user.service.IUserMgrOperateSv;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
 import com.ai.paas.ipaas.user.utils.DateUtil;
@@ -49,9 +48,6 @@ public class McsConsoleSvImpl implements IMcsConsoleSv {
 
     @Autowired
     private IProdProductSv iProdProductSv;
-
-    @Autowired
-    private ISysParamSv iSysParamSv;
 
     @Autowired
     private IUserMgrOperateSv iUserMgrOperateSv;

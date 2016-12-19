@@ -1,7 +1,5 @@
 package com.ai.paas.ipaas.user.service.impl;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.idps.service.IIdpsSv;
+import com.ai.paas.ipaas.idps.service.util.IdpsParamUtil;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
@@ -24,24 +24,28 @@ import com.ai.paas.ipaas.user.service.IIdpsConsoleSv;
 import com.ai.paas.ipaas.user.service.IProdProductSv;
 import com.ai.paas.ipaas.user.service.IUserProdInstSv;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
-import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.vo.user.ResponseHeader;
 import com.ai.paas.ipaas.vo.user.UserProdInstVo;
-import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 import com.google.gson.Gson;
 
 @Service
 @Transactional 
 public class IdpsConsoleSvImpl implements IIdpsConsoleSv {
 	private final Log logger = LogFactory.getLog(IdpsConsoleSvImpl.class);
+	
 	@Autowired
 	private SqlSessionTemplate template;
+	
 	@Autowired
 	private IProdProductSv iProdProductSv;	
+	
 	@Autowired
 	private IUserProdInstSv iUserProdInstSv;
+	
+	@Autowired
+	private IIdpsSv iIdpsSv;
 	
 	@Override
 	public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo)
@@ -93,74 +97,44 @@ public class IdpsConsoleSvImpl implements IIdpsConsoleSv {
 				userProdInstVoist.add(userProdInstVo);
 			}
 		}
+			
 		return userProdInstVoist;
 	}
 
 	public ResponseHeader stopIdpsContainer(String paraprodBackPara)  throws PaasException{
 		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("调用停止idps容器服务接口");			
-		String prodId = "16";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-//		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdStopRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdStopRestfull();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("调用停止idps容器服务接口");
-		}	
-		String param = paraprodBackPara;//this.createServOpenParam(orderDetail); //调用统一方法	
-		
-		String result ="";
-		logger.info("调用停止idps容器服务接口url："+address);
-		logger.info("调用停止idps容器服务接口入参："+param);
-
 		try {
-			result =HttpClientUtil.sendPostRequest(address, param);
+			logger.info("调用停止idps容器服务接口入参："+paraprodBackPara);
+			String result = iIdpsSv.stop(paraprodBackPara);
+			paraprodBackPara = paraprodBackPara.replaceAll("[{]", "{\"").replaceAll("[:]", "\":\"").replaceAll("[,]", "\",\"").replaceAll("[}]", "\"}");
+			result = IdpsParamUtil.getReturn(paraprodBackPara, result, "stop successfully!");
 			logger.info("调用停止idps容器服务接口结果："+result);
 			
 			JSONObject json = new JSONObject();
-			json=JsonUtils.parse(result);
+			json = JsonUtils.parse(result);
 			responseHeader.setResultCode(json.getString("resultCode"));
-		} catch (IOException e) {
-			String errorMessage = e.getMessage();
-			logger.error(errorMessage,e);
-			throw new PaasException("停止idps容器服务异常");
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage,e);
 			throw new PaasException("停止idps容器服务异常");
 		}
+		
 		return responseHeader;
 	}
 
 	public ResponseHeader startIdpsContainer(String paraprodBackPara)   throws PaasException{
 		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("调用启动idps容器服务接口");			
-		String prodId = "16";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdStartRestfull();
-//		String address = "http://localhost:10888/services/idps/manage/start";
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("调用启动idps容器服务接口");
-		}	
-		String param = paraprodBackPara;//this.createServOpenParam(orderDetail); //调用统一方法	
-		
-		String result ="";
-		logger.info("调用启动idps容器服务接口url："+address);
-		logger.info("调用启动idps容器服务接口入参："+param);
-
 		try {
-			result =HttpClientUtil.sendPostRequest(address, param);
+			logger.info("调用启动idps容器服务接口入参："+paraprodBackPara);
+			String result = iIdpsSv.start(paraprodBackPara);
+			paraprodBackPara = paraprodBackPara.replaceAll("[{]", "{\"").replaceAll("[:]", "\":\"").replaceAll("[,]", "\",\"").replaceAll("[}]", "\"}");
+			result = IdpsParamUtil.getReturn(paraprodBackPara, result, "start successfully!");
 			logger.info("调用启动idps容器服务接口结果："+result);
 			
 			JSONObject json = new JSONObject();
-			json=JsonUtils.parse(result);
+			json = JsonUtils.parse(result);
 			responseHeader.setResultCode(json.getString("resultCode"));
-		} catch (IOException e) {
-			String errorMessage = e.getMessage();
-			logger.error(errorMessage,e);
-			throw new PaasException("启动idps容器服务异常");
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage,e);
 			throw new PaasException("启动idps容器服务异常");
@@ -172,38 +146,17 @@ public class IdpsConsoleSvImpl implements IIdpsConsoleSv {
 	
 	public ResponseHeader cleanIdpsContainer(String paraprodBackPara,String destroy)  throws PaasException{
 		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("调用删除idps容器服务接口");			
-		String prodId = "16";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-//		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdFullclearRestfull();
-		String address = null;
-		if("yes".equals(destroy)){
-			address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdKeyclearRestfull();
-		}else {
-			address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdFullclearRestfull();
-		}
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("调用删除idps容器服务接口");
-		}	
-		String param = paraprodBackPara;//this.createServOpenParam(orderDetail); //调用统一方法	
-		
-		String result ="";
-		logger.info("调用删除idps容器服务接口url："+address);
-		logger.info("调用删除idps容器服务接口入参："+param);
-
 		try {
-			result =HttpClientUtil.sendPostRequest(address, param);
+			logger.info("调用删除idps容器服务接口入参："+paraprodBackPara + "|" + destroy);
+			String result = iIdpsSv.clean(paraprodBackPara, destroy);
+			paraprodBackPara = paraprodBackPara.replaceAll("[{]", "{\"").replaceAll("[:]", "\":\"").replaceAll("[,]", "\",\"").replaceAll("[}]", "\"}");
+			result = IdpsParamUtil.getReturn(paraprodBackPara, result, "clean successfully!");
 			logger.info("调用删除idps容器服务接口结果："+result);
 			
 			JSONObject json = new JSONObject();
-			json=JsonUtils.parse(result);
+			json = JsonUtils.parse(result);
 			responseHeader.setResultCode(json.getString("resultCode"));
-		} catch (IOException e) {
-			String errorMessage = e.getMessage();
-			logger.error(errorMessage,e);
-			throw new PaasException("删除idps容器服务异常");
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage,e);
 			throw new PaasException("删除idps容器服务异常");
@@ -214,33 +167,17 @@ public class IdpsConsoleSvImpl implements IIdpsConsoleSv {
 	
 	public ResponseHeader upgradelIdpsContainer(String paraprodBackPara)  throws PaasException{
 		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("调用升级idps容器服务接口");			
-		String prodId = "16";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-//		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdSubscribeRestful();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") +prodProduct.getProdSubscribeRestful();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("调用升级idps容器服务接口");
-		}	
-		String param = paraprodBackPara;//this.createServOpenParam(orderDetail); //调用统一方法	
-		
-		String result ="";
-		logger.info("调用升级idps容器服务接口url："+address);
-		logger.info("调用升级idps容器服务接口入参："+param);
-
 		try {
-			result =HttpClientUtil.sendPostRequest(address, param);
+			logger.info("调用升级idps容器服务接口入参："+paraprodBackPara);
+			String result = iIdpsSv.open(paraprodBackPara, "yes");
+			paraprodBackPara = paraprodBackPara.replaceAll("[{]", "{\"").replaceAll("[:]", "\":\"").replaceAll("[,]", "\",\"").replaceAll("[}]", "\"}");
+			result = IdpsParamUtil.getReturn(paraprodBackPara, result, "upgrade successfully!");
 			logger.info("调用升级idps容器服务接口结果："+result);
 			
 			JSONObject json = new JSONObject();
-			json=JsonUtils.parse(result);
+			json = JsonUtils.parse(result);
 			responseHeader.setResultCode(json.getString("resultCode"));
-		} catch (IOException e) {
-			String errorMessage = e.getMessage();
-			logger.error(errorMessage,e);
-			throw new PaasException("升级idps容器服务异常");
-		} catch (URISyntaxException e) {
+		} catch (Exception e) {
 			String errorMessage = e.getMessage();
 			logger.error(errorMessage,e);
 			throw new PaasException("升级idps容器服务异常");

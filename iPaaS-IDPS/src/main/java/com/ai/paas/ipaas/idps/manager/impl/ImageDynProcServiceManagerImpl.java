@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.idps.manage.rest.interfaces.ImageDynProcServiceManager;
+import com.ai.paas.ipaas.idps.service.IIdpsSv;
 import com.ai.paas.ipaas.idps.service.constant.IdpsConstants;
-import com.ai.paas.ipaas.idps.service.interfaces.IIdpsSv;
 import com.ai.paas.ipaas.idps.service.util.IdpsParamUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 

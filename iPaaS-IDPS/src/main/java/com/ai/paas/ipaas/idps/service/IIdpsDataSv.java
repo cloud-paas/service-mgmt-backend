@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.idps.service.interfaces;
+package com.ai.paas.ipaas.idps.service;
 
 import com.ai.paas.ipaas.PaasException;
 

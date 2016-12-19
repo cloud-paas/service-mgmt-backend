@@ -22,6 +22,7 @@ import com.ai.paas.ipaas.dss.manage.impl.DSSHelper;
 import com.ai.paas.ipaas.dss.manage.param.CancelDSSParam;
 import com.ai.paas.ipaas.dss.manage.param.CleanDSSParam;
 import com.ai.paas.ipaas.dss.manage.param.DSSResult;
+import com.ai.paas.ipaas.dss.manage.param.ModifyParam;
 import com.ai.paas.ipaas.dss.manage.param.RecordParam;
 import com.ai.paas.ipaas.dss.manage.param.StatusParam;
 import com.ai.paas.ipaas.dss.service.IDSSSv;
@@ -40,7 +41,6 @@ import com.ai.paas.ipaas.user.service.IUserProdInstSv;
 import com.ai.paas.ipaas.user.service.dao.UserMessageMapper;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
 import com.ai.paas.ipaas.user.utils.DateUtil;
-import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.user.utils.HttpRequestUtil;
 import com.ai.paas.ipaas.user.utils.JsonUtils;
 import com.ai.paas.ipaas.util.JSonUtil;
@@ -544,29 +544,30 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 
 	@Override
 	public String modifyConfiguration(String params) throws NumberFormatException, PaasException, IOException, URISyntaxException {
-		ProdProduct prodProduct=iProdProductSv.selectProductByPrimaryKey(Short.parseShort(Constants.ProdProduct.ProdId.DSS));
-		
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdBindRestful();
-
-		if(StringUtil.isBlank(address)){
-			throw new PaasException("产品的的服务地址为空");
-		}
-		JSONObject object=new JSONObject(params);
+		JSONObject object = new JSONObject(params);
 		object.put("applyType", "modify");
 		Long userServId=Long.parseLong(object.getString("userServId"));
 		if(userServId==null||userServId==0){
 			throw new PaasException("用户服务标识为空");
 		}
 		object.remove("userServId");
-		String data=object.toString();
-		
+		String data = object.toString();
 		logger.info("DSS修改配置入参:"+data);
-		logger.info("DSS修改配置接口url:"+address);
-		String result=HttpClientUtil.sendPostRequest(address, data);
+		
+		DSSResult dssResult = null;
+		ModifyParam recordObj = DSSHelper.getModifyParamm(data);
+		try {
+			dssResult = dssSv.modifyDSS(recordObj);
+		} catch (Exception e) {
+			dssResult = DSSHelper.getResult(recordObj, e.getMessage());
+		}
+		
+		String result = DSSHelper.getDSSResult(dssResult);
 		if(StringUtil.isBlank(result)){
 			throw new PaasException("DSS修改配置信息异常");
 		}
-		JSONObject resultinfo=new JSONObject(result);
+		
+		JSONObject resultinfo = new JSONObject(result);
 		if(resultinfo.getString("resultCode").equals(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL)){
 			throw new PaasException(resultinfo.getString("resultMsg"));
 		}else{
@@ -588,13 +589,7 @@ public class DssConsoleSvImpl implements IDssConsoleSv {
 			this.makeUserMgrOperate(userProdInst, resultinfo.getString("resultCode"), userMgrOperate);
 			this.saveUserMgrOperate(userMgrOperate);
 		}
-		
-		
-		
-		
+
 		return result;
 	}
-	
-	 
-
 }

@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.mcs.dao.mapper.bo.McsUserCacheInstance;
+import com.ai.paas.ipaas.mcs.service.IMcsDataSv;
 import com.ai.paas.ipaas.mcs.service.constant.McsConstants;
-import com.ai.paas.ipaas.mcs.service.interfaces.IMcsDataSv;
 import com.ai.paas.ipaas.mcs.service.util.McsParamUtil;
 import com.ai.paas.ipaas.util.Assert;
 import com.google.gson.Gson;

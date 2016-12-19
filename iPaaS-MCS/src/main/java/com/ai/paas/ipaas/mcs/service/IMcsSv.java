@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.mcs.service.interfaces;
+package com.ai.paas.ipaas.mcs.service;
 
 import com.ai.paas.ipaas.PaasException;
 

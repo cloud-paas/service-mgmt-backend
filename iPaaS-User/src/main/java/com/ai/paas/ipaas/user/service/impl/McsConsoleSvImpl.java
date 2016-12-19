@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.mcs.service.IMcsSv;
+import com.ai.paas.ipaas.mcs.service.constant.McsConstants;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.RestfullReturn;
@@ -52,6 +54,9 @@ public class McsConsoleSvImpl implements IMcsConsoleSv {
     @Autowired
     private IUserMgrOperateSv iUserMgrOperateSv;
 
+    @Autowired
+    private IMcsSv iMcsSv;
+    
     public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo) throws PaasException {
         UserProdInstCriteria userProdInstCriteria = new UserProdInstCriteria();
         UserProdInstCriteria.Criteria criteria = userProdInstCriteria.createCriteria();
@@ -96,13 +101,6 @@ public class McsConsoleSvImpl implements IMcsConsoleSv {
         userProdInstVo.setCapacity(vo.getCapacity());
     }
 
-    /**
-     * @description 对MCS的操作
-     * @param vo
-     * @return
-     * @throws Exception
-     * @author caiyt
-     */
     public ResponseHeader operatMcsServer(UserProdInstVo vo) throws Exception {
         Long userServId = vo.getUserServId();
         if (userServId == null) {
@@ -112,28 +110,47 @@ public class McsConsoleSvImpl implements IMcsConsoleSv {
         UserProdInst userProdInst = userProdInstMapper.selectByPrimaryKey(userServId);
        
         String applyType = vo.getApplyType();
-//        String address = CacheUtils.getValueByKey("PASS.SERVICE") + applyType;
-        String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + applyType;
-        if (StringUtil.isBlank(address)) {
-            throw new PaasException("产品的已使用量查询地址为空");
-        }
+        
         if (applyType.endsWith("cancel")) {
             vo.setApplyType("remove");
         } else {
             vo.setApplyType(applyType.substring(applyType.lastIndexOf("/") + 1));
         }
+        
         String param = JSonUtil.toJSon(vo).replaceAll("userServIpaasId", "serviceId");
-        logger.info("调用服务接口url：" + address);
-        logger.info("调用服务接口入参：" + param);
-        String result = HttpClientUtil.send(address, param);
+        logger.info("++++ operatMcsServer() ,调用服务接口入参：" + param);
+        logger.info("++++ operatMcsServer() ,调用服务的处理方法：" + applyType);
+        
+        String result = "";
+        switch(applyType) {
+		case McsConstants.APPLY_TYPE_START:
+			result = iMcsSv.startMcs(param);
+			break;
+		case McsConstants.APPLY_TYPE_STOP:
+			result = iMcsSv.stopMcs(param);
+			break;
+		case McsConstants.APPLY_TYPE_RESTART:
+			result = iMcsSv.restartMcs(param);
+			break;
+		case McsConstants.APPLY_TYPE_R:
+			result = iMcsSv.cancelMcs(param);
+			break;
+		case McsConstants.APPLY_TYPE_CLEAN:
+			result = iMcsSv.cancelMcs(param);
+			break;
+		}
+        
+        logger.info("++++ operatMcsServer() ,调用服务的" + applyType + "方法的result：" + result);
         if (StringUtil.isBlank(result)) {
             throw new PaasException("服务异常");
         }
+        
         JSONObject createJson = JsonUtils.parse(result);
         ResponseHeader header = new ResponseHeader();
         header.setResultCode(createJson.getString("resultCode"));
         if (createJson.has("resultMsg"))
             header.setResultMessage(createJson.getString("resultMsg"));
+        
         // 写用户管理操作
         UserMgrOperate userMgrOperate = new UserMgrOperate();
         String userOperaAction = this.getUserOperaAction(applyType);
@@ -261,12 +278,11 @@ public class McsConsoleSvImpl implements IMcsConsoleSv {
         short priKey = Short.parseShort(prodId);
         ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);     
       
-//        String address = CacheUtils.getValueByKey("IPAAS-UAC.SERVICE") + prodProduct.getProdMdypwdRestfull();
 		String address = SystemConfigHandler.configMap.get("IPAAS-UAC.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdMdypwdRestfull();
-
         if (StringUtil.isBlank(address)) {
             throw new PaasException("产品的的服务地址为空");
         }
+        
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userId", vo.getUserId());
         paramMap.put("serviceId", userProdInst.getUserServIpaasId());

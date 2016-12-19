@@ -8,13 +8,9 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.paas.ipaas.rpc.api.manage.ISrvManager;
 
-
 /**
  * 缓存服务：MCS (Memory Cache Service)<br/>
  * 服务管理接口
- * 
- * @author cym
- *
  */
 @Path("/mcs/manage")
 @Consumes({ MediaType.APPLICATION_JSON })

@@ -56,15 +56,13 @@ public class McsConsoleDubboSvImpl implements IMcsConsoleDubboSv {
     }
 
     /**
-     * @description 清空MCS实例所有数据
+     * @description MCS控制台操作
      * @param vo
-     * @return
      * @throws Exception
      * @author caiyt
      */
     public ResponseHeader operatMcsServer(UserProdInstVo vo) throws Exception {
-        ResponseHeader header = iMcsConsoleSv.operatMcsServer(vo);
-        return header;
+    	return iMcsConsoleSv.operatMcsServer(vo);
     }
 
     public SelectWithNoPageResponse<UserProdInstVo> selectMcsById(

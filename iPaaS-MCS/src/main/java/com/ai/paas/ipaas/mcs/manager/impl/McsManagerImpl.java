@@ -5,9 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.mcs.manage.rest.interfaces.IMemoryCacheServiceManager;
+import com.ai.paas.ipaas.mcs.service.IMcsDataSv;
+import com.ai.paas.ipaas.mcs.service.IMcsSv;
 import com.ai.paas.ipaas.mcs.service.constant.McsConstants;
-import com.ai.paas.ipaas.mcs.service.interfaces.IMcsDataSv;
-import com.ai.paas.ipaas.mcs.service.interfaces.IMcsSv;
 import com.ai.paas.ipaas.mcs.service.util.McsParamUtil;
 import com.alibaba.dubbo.config.annotation.Service;
 

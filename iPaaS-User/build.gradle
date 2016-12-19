@@ -2,6 +2,7 @@ dependencies {
     compile project(":iPaaS-DubboInterfaces")
     compile project(":iPaaS-CCS")
     compile project(":iPaaS-DSS")
+    compile project(":iPaaS-MCS")
     
     compile "org.springframework:spring-context:4.1.6.RELEASE"
 	compile "org.springframework:spring-context-support:4.1.6.RELEASE"

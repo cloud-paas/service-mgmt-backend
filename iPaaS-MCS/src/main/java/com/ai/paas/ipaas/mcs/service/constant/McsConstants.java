@@ -58,6 +58,7 @@ public class McsConstants {
   public static final String APPLY_TYPE_R = "remove";
   public static final String APPLY_TYPE_START = "start";
   public static final String APPLY_TYPE_STOP = "stop";
+  public static final String APPLY_TYPE_CLEAN = "clean";
   public static final String APPLY_TYPE_RESTART = "restart";
   public static final String FUNCTION_PRE = "/mcs/manage/";
 

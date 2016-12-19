@@ -28,14 +28,7 @@ public interface IMcsConsoleDubboSv {
     public SelectWithNoPageResponse<UserProdInstVo> selectUserProdInsts(
             SelectWithNoPageRequest<UserProdInstVo> request);
 
-    /**
-     * @description 清空MCS实例所有数据
-     * @param vo
-     * @return
-     * @throws Exception
-     * @author caiyt
-     */
-    @Path("/cleanMCS")
+    @Path("/operatMCS")
     @POST
     public ResponseHeader operatMcsServer(UserProdInstVo vo) throws Exception;
 

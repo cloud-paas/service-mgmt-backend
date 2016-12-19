@@ -1,18 +1,15 @@
 package testapi;
 
 
-import java.sql.Timestamp;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.rds.dao.mapper.bo.RdsIncBase;
-import com.ai.paas.ipaas.rds.service.impl.MyException;
 import com.ai.paas.ipaas.rds.service.impl.RDSInstanceManager;
-import com.ai.paas.ipaas.rds.service.transfer.vo.CancelRDS;
 import com.ai.paas.ipaas.rds.service.transfer.vo.CreateRDS;
 import com.ai.paas.ipaas.rds.service.transfer.vo.CreateRDSResult;
 import com.google.gson.Gson;
@@ -144,7 +141,7 @@ public class TestRdsSpring {
 			System.out.println(result);
 			CreateRDSResult ssss = g.fromJson(result, CreateRDSResult.class);
 			System.out.println("$$$$$$$$$$$$$$$$$$$$result$$$$$$$$$$$$$$$$$$$");
-		} catch (MyException e) {
+		} catch (PaasException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

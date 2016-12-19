@@ -1,12 +1,11 @@
 package com.ai.paas.ipaas.rds.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.rds.manage.rest.interfaces.IRDSInstanceManager;
+import com.ai.paas.ipaas.rds.service.IRdsSv;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.google.gson.JsonSyntaxException;
 
 /**
  * 传输对象命名规则就是对应方法名
@@ -19,18 +18,16 @@ import com.google.gson.JsonSyntaxException;
  */
 @Service
 public class RDSInstanceManagerDubbo implements IRDSInstanceManager {
-	
-	private static transient final Logger LOG = LoggerFactory.getLogger(RDSInstanceManagerDubbo.class);
 
 	@Autowired
-	private RDSInstanceManager rdsIncMG;
+	private IRdsSv rdsIncMG;
 	
 	@Override
 	public String create(String createApply) {
 		try {
 			return rdsIncMG.create(createApply);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
@@ -38,8 +35,8 @@ public class RDSInstanceManagerDubbo implements IRDSInstanceManager {
 	public String createslobm(String create) {
 		try {
 			return rdsIncMG.createslobm(create);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
@@ -47,22 +44,26 @@ public class RDSInstanceManagerDubbo implements IRDSInstanceManager {
 	public String cancel(String cancelApply) {
 		try {
 			return rdsIncMG.cancel(cancelApply);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
 	@Override
 	public String getFuncList() {
-		return rdsIncMG.getFuncList();
+		try {
+			return rdsIncMG.getFuncList();
+		} catch (PaasException e) {
+			return e.getErrDetail();
+		}
 	}
 
 	@Override
 	public String start(String startApply) {
 		try {
 			return rdsIncMG.start(startApply);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
@@ -70,8 +71,8 @@ public class RDSInstanceManagerDubbo implements IRDSInstanceManager {
 	public String stop(String stopApply) {
 		try {
 			return rdsIncMG.stop(stopApply);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
@@ -79,49 +80,26 @@ public class RDSInstanceManagerDubbo implements IRDSInstanceManager {
 	public String restart(String restartApply) {
 		try {
 			return rdsIncMG.restart(restartApply);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
 
 	@Override
-	public String getinstanceinfo(String getinstanceinfo) {
-		return rdsIncMG.getinstanceinfo(getinstanceinfo);
+	public String getInstanceInfo(String getinstanceinfo) {
+		try {
+			return rdsIncMG.getInstanceInfo(getinstanceinfo);
+		} catch (PaasException e) {
+			return e.getErrDetail();
+		}
 	}
-
 
 	@Override
 	public String modify(String modify) {
 		try {
 			return rdsIncMG.modify(modify);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
+		} catch (PaasException e) {
+			return e.getErrDetail();
 		}
 	}
-
-	/**
-	 * @deprecated
-	 */
-	@Override
-	public String switchmaster(String switchmaster) {
-		try {
-			return rdsIncMG.switchmaster(switchmaster);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
-		}
-	}
-
-	/**
-	 * @deprecated
-	 */
-	@Override
-	public String changecontainerconfig(String changecontainerconfig) {
-		try {
-			return rdsIncMG.changecontainerconfig(changecontainerconfig);
-		} catch (MyException e) {
-			return e.JSONErrorInfo;
-		}
-	}
-
-
 }

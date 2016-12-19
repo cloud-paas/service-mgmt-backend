@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ai.paas.ipaas.ses.service.interfaces.ISesManage;
+import com.ai.paas.ipaas.ses.service.ISesManage;
 import com.ai.paas.ipaas.ses.service.vo.SesSrvApply;
 
 @RunWith(SpringJUnit4ClassRunner.class)

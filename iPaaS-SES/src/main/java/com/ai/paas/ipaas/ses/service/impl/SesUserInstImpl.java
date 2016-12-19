@@ -12,8 +12,8 @@ import com.ai.paas.ipaas.ServiceUtil;
 import com.ai.paas.ipaas.ses.dao.interfaces.SesUserInstanceMapper;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstance;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria;
+import com.ai.paas.ipaas.ses.service.ISesUserInst;
 import com.ai.paas.ipaas.ses.service.constant.SesConstants;
-import com.ai.paas.ipaas.ses.service.interfaces.ISesUserInst;
 
 @Service
 @Transactional(rollbackFor = Exception.class)

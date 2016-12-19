@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.ses.service.interfaces;
+package com.ai.paas.ipaas.ses.service;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserMapping;

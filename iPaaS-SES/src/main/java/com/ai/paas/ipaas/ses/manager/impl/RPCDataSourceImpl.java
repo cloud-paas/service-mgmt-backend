@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.ses.manage.rest.interfaces.IRPCDataSource;
-import com.ai.paas.ipaas.ses.service.interfaces.IDataSource;
+import com.ai.paas.ipaas.ses.service.IDataSource;
 import com.ai.paas.ipaas.vo.ses.RPCDataSource;
 import com.ai.paas.ipaas.vo.ses.SesDataSourceInfo;
 import com.ai.paas.ipaas.vo.ses.SesIndexSqlInfo;

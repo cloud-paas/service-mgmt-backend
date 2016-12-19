@@ -16,8 +16,8 @@ import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserWeb;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserWebCriteria;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesWebPool;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesWebPoolCriteria;
+import com.ai.paas.ipaas.ses.service.ISesUserWeb;
 import com.ai.paas.ipaas.ses.service.constant.SesConstants;
-import com.ai.paas.ipaas.ses.service.interfaces.ISesUserWeb;
 
 @Service
 @Transactional(rollbackFor = Exception.class)

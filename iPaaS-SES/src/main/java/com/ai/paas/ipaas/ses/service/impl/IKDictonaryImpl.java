@@ -22,7 +22,7 @@ import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserIndexWordCriteria;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserInstanceCriteria;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserStopWord;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserStopWordCriteria;
-import com.ai.paas.ipaas.ses.service.interfaces.IIKDictonary;
+import com.ai.paas.ipaas.ses.service.IIKDictonary;
 import com.ai.paas.ipaas.util.StringUtil;
 
 @Service

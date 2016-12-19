@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.ses.service.interfaces;
+package com.ai.paas.ipaas.ses.service;
 
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserWeb;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesWebPool;

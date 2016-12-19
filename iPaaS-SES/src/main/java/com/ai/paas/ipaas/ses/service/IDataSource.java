@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.ses.service.interfaces;
+package com.ai.paas.ipaas.ses.service;
 
 import java.util.List;
 import java.util.Map;

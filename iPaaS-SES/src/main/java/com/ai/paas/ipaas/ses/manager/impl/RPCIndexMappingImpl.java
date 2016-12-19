@@ -6,7 +6,7 @@ import com.ai.dubbo.ext.vo.BaseResponse;
 import com.ai.paas.ipaas.PaaSConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ses.manage.rest.interfaces.IRPCIndexMapping;
-import com.ai.paas.ipaas.ses.service.interfaces.IIndexMapping;
+import com.ai.paas.ipaas.ses.service.IIndexMapping;
 import com.ai.paas.ipaas.util.CloneTool;
 import com.ai.paas.ipaas.vo.ses.SesUserMapping;
 import com.alibaba.dubbo.config.annotation.Service;

@@ -16,8 +16,8 @@ import com.ai.paas.ipaas.ccs.service.dto.CCSComponentOperationParam;
 import com.ai.paas.ipaas.ses.dao.interfaces.SesUserMappingMapper;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserMapping;
 import com.ai.paas.ipaas.ses.dao.mapper.bo.SesUserMappingCriteria;
+import com.ai.paas.ipaas.ses.service.IIndexMapping;
 import com.ai.paas.ipaas.ses.service.constant.SesConstants;
-import com.ai.paas.ipaas.ses.service.interfaces.IIndexMapping;
 import com.google.gson.JsonObject;
 
 @Service

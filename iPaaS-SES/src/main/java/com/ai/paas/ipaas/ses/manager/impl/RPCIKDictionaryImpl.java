@@ -9,8 +9,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.ses.manage.rest.interfaces.IRPCIKDictionary;
+import com.ai.paas.ipaas.ses.service.IIKDictonary;
 import com.ai.paas.ipaas.ses.service.constant.SesConstants;
-import com.ai.paas.ipaas.ses.service.interfaces.IIKDictonary;
 import com.ai.paas.ipaas.ses.service.vo.SesSrvApplyResult;
 import com.ai.paas.ipaas.util.CloneTool;
 import com.ai.paas.ipaas.util.StringUtil;

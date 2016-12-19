@@ -15,16 +15,12 @@ import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 public interface IMdsConsoleSv {
 
 	public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo)  throws PaasException;
-
-	
 	
 	public List<UserProdInstVo> selectMdsById(UserProdInstVo selectRequestVo) throws PaasException;
 	
 	public List<String> getListSubPath(UserProdInstVo selectRequestVo) throws PaasException;
 	
 	public String cancleUserProdInst(UserProdInstVo vo) throws PaasException;
-
-
 
 	public MdsSearchRestfullRes searchMessage(MdsSearchMessageVo vo)  throws PaasException;
 	

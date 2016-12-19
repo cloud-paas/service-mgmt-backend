@@ -1,7 +1,5 @@
 package com.ai.paas.ipaas.user.service.impl;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
+import com.ai.paas.ipaas.mds.dao.mapper.bo.MdsUserSubscribe;
+import com.ai.paas.ipaas.mds.manage.service.IMsgSrvManager;
+import com.ai.paas.ipaas.mds.manage.util.MDSResultWrapper;
+import com.ai.paas.ipaas.mds.manage.vo.MsgSrvApply;
+import com.ai.paas.ipaas.mds.manage.vo.MsgSrvUsageApplyResult;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.dto.MdsGetSubscribeRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsRestfullReq;
@@ -25,19 +28,15 @@ import com.ai.paas.ipaas.user.dto.MdsSearchRestfullReq;
 import com.ai.paas.ipaas.user.dto.MdsSearchRestfullRes;
 import com.ai.paas.ipaas.user.dto.MdsSubscribeRestfullReq;
 import com.ai.paas.ipaas.user.dto.MdsSubscribeRestfullRes;
-import com.ai.paas.ipaas.user.dto.ProdProduct;
 import com.ai.paas.ipaas.user.dto.RestfullReq;
 import com.ai.paas.ipaas.user.dto.RestfullReturn;
 import com.ai.paas.ipaas.user.dto.UserMgrOperate;
 import com.ai.paas.ipaas.user.dto.UserProdInst;
 import com.ai.paas.ipaas.user.dto.UserProdInstCriteria;
 import com.ai.paas.ipaas.user.service.IMdsConsoleSv;
-import com.ai.paas.ipaas.user.service.IProdProductSv;
-import com.ai.paas.ipaas.user.service.ISysParamSv;
 import com.ai.paas.ipaas.user.service.IUserMgrOperateSv;
 import com.ai.paas.ipaas.user.service.dao.UserProdInstMapper;
 import com.ai.paas.ipaas.user.utils.DateUtil;
-import com.ai.paas.ipaas.user.utils.HttpClientUtil;
 import com.ai.paas.ipaas.util.JSonUtil;
 import com.ai.paas.ipaas.util.StringUtil;
 import com.ai.paas.ipaas.vo.user.MdsSearchMessageVo;
@@ -45,7 +44,6 @@ import com.ai.paas.ipaas.vo.user.MdsUserPageVo;
 import com.ai.paas.ipaas.vo.user.MdsUserSubscribeVo;
 import com.ai.paas.ipaas.vo.user.ResponseSubPathList;
 import com.ai.paas.ipaas.vo.user.UserProdInstVo;
-import com.ai.paas.ipaas.zookeeper.SystemConfigHandler;
 import com.google.gson.Gson;
 
 @Service
@@ -55,23 +53,21 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 	private final Log logger = LogFactory.getLog(MdsConsoleSvImpl.class);
 	@Autowired
 	private SqlSessionTemplate template;
-	@Autowired
-	private IProdProductSv iProdProductSv;	
-	@Autowired
-	private ISysParamSv iSysParamSv;
+	
 	@Autowired
 	private IUserMgrOperateSv iUserMgrOperateSv;	
 
+	@Autowired
+	private IMsgSrvManager msgSrvManager;
+	
 	@Override
 	public List<UserProdInstVo> selectUserProdInsts(UserProdInstVo vo)
 			throws PaasException {
-		// TODO Auto-generated method stub
 		UserProdInstCriteria userProdInstCriteria = new UserProdInstCriteria();
 		UserProdInstCriteria.Criteria criteria = userProdInstCriteria.createCriteria();
 		criteria.andUserIdEqualTo(vo.getUserId());
 		criteria.andUserServiceIdEqualTo(vo.getUserServiceId());
 		criteria.andUserServRunStateNotEqualTo(Constants.UserProdInst.UserServRunState.CANCEL);
-		
 		
 		UserProdInstCriteria.Criteria criteria2 = userProdInstCriteria.createCriteria();		
 		criteria2.andUserIdEqualTo(vo.getUserId());
@@ -109,7 +105,6 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 		userProdInstVo.setCapacity(vo.getCapacity());
 	}
 	
-	
 	@Override
 	public List<UserProdInstVo> selectMdsById(UserProdInstVo selectRequestVo)
 			throws PaasException {
@@ -126,7 +121,6 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 				BeanUtils.copyProperties(userProdInsts.get(i), userProdInstVo);
 				userProdInstVo.getUserServParam();
 				userProdInstVo.setUserServParamMap(selectRequestVo.getUserServParamMap());
-//				userProdInstVo.setSubscribeName(selectRequestVo.getSubscribeName());
 				getAmountUsed(userProdInstVo);
 				
 				userProdInstVoist.add(userProdInstVo);
@@ -152,20 +146,9 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 				BeanUtils.copyProperties(userProdInsts.get(i), userProdInstVo);
 				userProdInstVo.getUserServParam();
 				userProdInstVo.setUserServParamMap(selectRequestVo.getUserServParamMap());
-//				userProdInstVo.setSubscribeName(selectRequestVo.getSubscribeName());
 			}
 		}
-		String prodId = userProdInstVo.getUserServiceId();
-		if (StringUtil.isBlank(prodId)) {
-			throw new PaasException("用户产品实例产品编码为空");
-		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-//		String address = "http://localhost:20885/services" + prodProduct.getProdGetboundtableinfoRestful();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdGetboundtableinfoRestful();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("查询消息队列下的所有子节点地址为空");
-		}
+		
 		MdsRestfullReq restfullReq = new MdsRestfullReq();
 		restfullReq.setUserId(userProdInstVo.getUserId());
 		restfullReq.setServiceId(userProdInstVo.getUserServIpaasId());
@@ -179,60 +162,67 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 		map = new Gson().fromJson(str, map.getClass());
 		restfullReq.setTopicEnName(map.get("topicEnName"));
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用查询消息队列下的所有子节点服务接口url："+address);
+		
 		logger.info("调用查询消息队列下的所有子节点服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("查询消息队列下的所有子节点--服务异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(param, MsgSrvApply.class);
+		try {
+			List<String> listSubPaths = msgSrvManager.getListSubPath(apply);
+			result = MDSResultWrapper.wraplistSubPathfulResult(
+					PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Message getListSubPath apply success!", apply, listSubPaths);
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wraplistSubPathfulResult(
+					PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Message getListSubPath apply failed!" + e.getMessage(), apply,null);
 		}
+		
 		ResponseSubPathList listSubPath = new Gson().fromJson(result, ResponseSubPathList.class);
 		if(listSubPath !=null && !"".equals(listSubPath)){
 			userProdInstVoist = listSubPath.getListSubPath();
 		}
+		
 		return userProdInstVoist;
 	}
 	
-	
-	
-	public void getAmountUsed(UserProdInstVo userProdInstVo)
-			throws PaasException {
+	public void getAmountUsed(UserProdInstVo userProdInstVo) throws PaasException {
 		logger.info("查询已使用量");
-		String prodId = userProdInstVo.getUserServiceId();
-		if (StringUtil.isBlank(prodId)) {
-			throw new PaasException("用户产品实例产品编码为空");
-		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-
-//		String address = "http://localhost:20885/services" + prodProduct.getProdUsedAmountRestfull();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdUsedAmountRestfull();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的已使用量查询地址为空");
-		}
-			
 		MdsRestfullReq restfullReq = new MdsRestfullReq();
 		restfullReq.setUserId(userProdInstVo.getUserId());
 		restfullReq.setServiceId(userProdInstVo.getUserServIpaasId());
 		restfullReq.setApplyType( "topicUsage");
+		
 		Map<String , String> maps = new HashMap<String,String>();
 		maps = userProdInstVo.getUserServParamMap();
 		String subscribeName = maps.get("subscribeName");
 		restfullReq.setSubscribeName(subscribeName);
+		
 		Map<String , String> map = new HashMap<String,String>();
 		String str = userProdInstVo.getUserServParam();
 		map = new Gson().fromJson(str, map.getClass());
 		restfullReq.setTopicEnName(map.get("topicEnName"));
+		
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(param, MsgSrvApply.class);
+		try {
+			List<MsgSrvUsageApplyResult> usages = msgSrvManager.getTopicUsage(apply);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Message topic usage apply success!", apply, usages);
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Message topic usage apply failed!" + e.getMessage(), apply);
 		}
+		
 		MdsUserPageVo pageVo = new Gson().fromJson(result, MdsUserPageVo.class);
 		userProdInstVo.setMdsUserPageVo(pageVo);
-		
-
 	}
 	
 	
@@ -244,46 +234,46 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 		if (null == userProdInst) {
 			throw new PaasException("用户产品实例不存在");
 		}
-		String prodId = userProdInst.getUserServiceId();
-		if (StringUtil.isBlank(prodId)) {
-			throw new PaasException("用户产品实例产品编码为空");
-		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
 		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdCancleRestfull(); // 获取注销restful
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdCancleRestfull();
-		
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
 		MdsRestfullReq req = new MdsRestfullReq();
 		RestfullReq restfullReq = new RestfullReq();
 		req.setUserId(vo.getUserId());
 		req.setServiceId(userProdInst.getUserServIpaasId());
-		
 		req.setApplyType("cancel");
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(param, MsgSrvApply.class);
+		try {
+			msgSrvManager.cancelMessageService(apply);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Message cancel service apply success!", apply);
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Message cancel service apply failed!" + e.getMessage(), apply);
 		}
+		
 		RestfullReturn restfullReturn = JSonUtil.fromJSon(result, RestfullReturn.class);
 		String resultCode = restfullReturn.getResultCode();
+		
 		// 修改用户产品实例
 		if(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS.equals(resultCode)){
 			userProdInst.setUserServRunState(Constants.UserProdInst.UserServRunState.CANCEL);
 			userProdInstMapper.updateByPrimaryKey(userProdInst);
-		}		
+		}
+		
 		// 写用户管理操作
 		UserMgrOperate userMgrOperate = new UserMgrOperate();
 		userMgrOperate.setUserOperateAction(Constants.UserMgrOperate.UserOperateAction.CANCLE);
 		this.makeUserMgrOperate(userProdInst, resultCode, userMgrOperate);
 		this.saveUserMgrOperate(userMgrOperate);
+		
         return resultCode;
 	}
+	
 	public void makeUserMgrOperate(UserProdInst userProdInst,String resultCode,UserMgrOperate userMgrOperate){
 		userMgrOperate.setUserId(userProdInst.getUserId());
 		userMgrOperate.setUserProdType(userProdInst.getUserServType());
@@ -306,7 +296,6 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 
 	@Override
 	public MdsSearchRestfullRes searchMessage(MdsSearchMessageVo vo) throws PaasException{
-		// TODO Auto-generated method stub
 		long userServId = vo.getUserServId();
 		UserProdInstMapper userProdInstMapper = template.getMapper(UserProdInstMapper.class);
 		UserProdInst userProdInst = userProdInstMapper.selectByPrimaryKey(userServId);
@@ -317,16 +306,7 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 		if (StringUtil.isBlank(prodId)) {
 			throw new PaasException("用户产品实例产品编码为空");
 		}
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
 		
-		
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdKeyclearRestfull(); // 获取注销restful
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdKeyclearRestfull();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
-		MdsRestfullReq req = new MdsRestfullReq();
 		MdsSearchRestfullReq restfullReq = new MdsSearchRestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setServiceId(userProdInst.getUserServIpaasId());
@@ -335,126 +315,138 @@ public class MdsConsoleSvImpl implements IMdsConsoleSv{
 		restfullReq.setTopicEnName(vo.getTopicEnName());
 		restfullReq.setApplyType("getMessage");
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
-		}
-		MdsSearchRestfullRes restfullReturn = JSonUtil.fromJSon(result, MdsSearchRestfullRes.class);
 		
-        return restfullReturn;
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(param, MsgSrvApply.class);
+		try {
+			String message = msgSrvManager.getTopicMessage(apply);
+			if (null == message) {
+				result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+						"Get topic message apply failed!", apply);
+			} else {
+				result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+						"Get topic message apply success!", apply, message);
+			}
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Get topic message apply failed!" + e.getMessage(), apply);
+		}
+
+        return JSonUtil.fromJSon(result, MdsSearchRestfullRes.class);
 	}
 	
 	@Override
 	public MdsSubscribeRestfullRes createSubscribe(MdsUserSubscribeVo vo)  throws PaasException{
-		String prodId = "3";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-
-//		String address = "http://localhost:20885/services" + prodProduct.getProdSubscribeRestful();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdSubscribeRestful();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("订阅服务的地址为空");
-		}
 		//组织逻辑参数(UserServId 要对应上)
 		MdsSubscribeRestfullReq restfullReq = new MdsSubscribeRestfullReq();
 		restfullReq.setUserId(vo.getUserId());
 		restfullReq.setTopicEnName(vo.getTopicEnName());
 		restfullReq.setSubscribeName(vo.getSubscribeName());
 		restfullReq.setUserServIpaasId(vo.getUserServIpaasId());
-		
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("调用mds订阅服务接口url："+address);
 		logger.info("调用mds订阅服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("服务异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MdsUserSubscribe apply = gson.fromJson(param, MdsUserSubscribe.class);
+		try {
+			msgSrvManager.createSubscribe(apply);
+			result = MDSResultWrapper.wrapSubRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Message create subscribe apply success!", null);
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wrapSubRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Message create subscribe apply failed!" + e.getMessage(), apply);
 		}
-		MdsSubscribeRestfullRes restfullReturn = JSonUtil.fromJSon(result, MdsSubscribeRestfullRes.class);
-        return restfullReturn;
+		
+        return JSonUtil.fromJSon(result, MdsSubscribeRestfullRes.class);
 	}
 	
 	@Override
 	public MdsGetSubscribeRestfullRes getSubscribe(MdsUserSubscribeVo vo)  throws PaasException{
-		String prodId = "3";
-		short priKey = Short.parseShort(prodId);
-		ProdProduct prodProduct = iProdProductSv.selectProductByPrimaryKey(priKey);
-
-//		String address = "http://localhost:20885/services" + prodProduct.getProdGetsubscribeRestful();
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdGetsubscribeRestful();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("查询之前是否订阅，订阅服务的地址为空");
-		}
-		//组织逻辑参数(UserServId 要对应上)
 		MdsSubscribeRestfullReq restfullReq = new MdsSubscribeRestfullReq();
 		restfullReq.setTopicEnName(vo.getTopicEnName());
 		restfullReq.setSubscribeName(vo.getSubscribeName());
-		
 		String param = JSonUtil.toJSon(restfullReq);
-		logger.info("查询之前是否订阅，调用mds订阅服务接口url："+address);
 		logger.info("查询之前是否订阅，调用mds订阅服务接口入参："+param);
-		String result = HttpClientUtil.send(address, param);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("查询之前是否订阅，服务异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MdsUserSubscribe apply = gson.fromJson(param, MdsUserSubscribe.class);
+		try {
+			String isExis = "no";
+			List<MdsUserSubscribe> subs = msgSrvManager.getSubscribe(apply);
+			if(!subs.isEmpty()){
+				isExis = "yes";
+			}
+			result = MDSResultWrapper.wrapSubRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Message subscribe usage apply success!", null, isExis);
+		} catch (Exception e) {
+			logger.error("Message getListSubPath apply error!", e);
+			result = MDSResultWrapper.wrapSubRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+							"Message subscribe usage apply failed!"+ e.getMessage(), apply);
 		}
-		MdsGetSubscribeRestfullRes restfullReturn = JSonUtil.fromJSon(result, MdsGetSubscribeRestfullRes.class);
-        return restfullReturn;
+		
+        return JSonUtil.fromJSon(result, MdsGetSubscribeRestfullRes.class);
 	}
 	
-	
-
 	@Override
-	public String resendMessage(String params) throws NumberFormatException, PaasException, IOException, URISyntaxException {
-		ProdProduct prodProduct=iProdProductSv.selectProductByPrimaryKey(Short.parseShort(Constants.ProdProduct.ProdId.MDS));
-		
-		JSONObject object=new JSONObject(params);
+	public String resendMessage(String params) throws PaasException {
+		JSONObject object = new JSONObject(params);
 		object.put("applyType", "send");
-//		String address=CacheUtils.getValueByKey("PASS.SERVICE")+prodProduct.getProdFiltertableRestful(); //重发消息；
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdFiltertableRestful();
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+object.toString());
-		String result=HttpClientUtil.sendPostRequest(address, object.toString());
-		logger.info("调用服务接口出参："+result);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("MDS重发信息异常");
+		
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(object.toString(), MsgSrvApply.class);
+		try {
+			msgSrvManager.sendMessage(apply);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Send topic message apply success!", apply, "");
+			
+		} catch (Exception e) {
+			logger.error("MessageServiceManager send topic message error!", e);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Send topic message apply failed!" + e.getMessage(), apply);
 		}
-		JSONObject resultinfo=new JSONObject(result);
+		
+		JSONObject resultinfo = new JSONObject(result);
 		if(resultinfo.get("resultCode").equals(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL)){
 			throw new PaasException(resultinfo.getString("resultMsg"));
 		}
-		return result;
 		
-		 
+		return result;
 	}
 
 	@Override
-	public String skipMessage(String params) throws NumberFormatException, PaasException, IOException, URISyntaxException {
-		ProdProduct prodProduct=iProdProductSv.selectProductByPrimaryKey(Short.parseShort(Constants.ProdProduct.ProdId.MDS));
-		
+	public String skipMessage(String params) throws PaasException {
 		JSONObject object=new JSONObject(params);
 		object.put("applyType", "adjust");
 		String data=object.toString();
-//		String address = CacheUtils.getValueByKey("PASS.SERVICE") + prodProduct.getProdUnbindRestful();//跳过消息;  
-		String address = SystemConfigHandler.configMap.get("PASS.SERVICE.IP_PORT_SERVICE") + prodProduct.getProdUnbindRestful();
-
-		if (StringUtil.isBlank(address)) {
-			throw new PaasException("产品的的服务地址为空");
-		}
-		logger.info("调用服务接口url："+address);
 		logger.info("调用服务接口入参："+data);
-		String result=HttpClientUtil.sendPostRequest(address,data);
-		logger.info("调用服务接口出参："+result);
-		if (StringUtil.isBlank(result)) {
-			throw new PaasException("MDS跳过信息异常");
-		} 
+		
+		String result = "";
+		Gson gson = new Gson();
+		MsgSrvApply apply = gson.fromJson(object.toString(), MsgSrvApply.class);
+		try {
+			msgSrvManager.adjustTopicOffset(apply);
+			result = MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS,
+					"Get topic message apply success!", apply);
+			
+		} catch (Exception e) {
+			logger.error("Adjust topic offset apply error!", e);
+			MDSResultWrapper.wrapRestfulResult(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL,
+					"Adjust topic offset apply failed!", null);
+		}
+		
 		JSONObject resultinfo=new JSONObject(result);
 		if(resultinfo.get("resultCode").equals(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL)){
 			throw new PaasException(resultinfo.getString("resultMsg"));
 		}
+		
 		return result;
 	}
 	

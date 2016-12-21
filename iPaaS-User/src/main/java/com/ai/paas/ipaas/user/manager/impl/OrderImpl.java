@@ -4,14 +4,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
 import com.ai.paas.ipaas.util.JSonUtil;
-import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
-import com.ai.paas.ipaas.vo.user.CheckOrdersResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
@@ -28,9 +25,6 @@ public class OrderImpl implements IOrder{
 	@Autowired
 	private IOrderSv orderSv;
 	
-//	@Autowired
-//	private IPlanConfirmSv planConfirmSv;
-
 	@Override
 	public OrderDetailResponse saveOrderDetail(OrderDetailRequest request)  {	
 		OrderDetailResponse response = new OrderDetailResponse();
@@ -85,53 +79,10 @@ public class OrderImpl implements IOrder{
 	}
 
 	@Override
-	public OrderDetailResponse checkOrders(CheckOrdersRequest request) {
-		OrderDetailResponse response = new OrderDetailResponse();
-		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("checkOrders start");	
-		try{
-			response = orderSv.checkOrders(request);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
-			logger.info("checkOrders success");	
-		}catch(PaasException e){
-			logger.error(e.getMessage(),e);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL);		
-			responseHeader.setResultMessage(e.getMessage());
-		}		
-		response.setResponseHeader(responseHeader);		
-		return response;
-	}
-
-	@Override
-	public String verifyOrders(String params) {
-		CheckOrdersRequest request = JSonUtil.fromJSon(params, CheckOrdersRequest.class);
-		OrderDetailResponse response = checkOrders(request);
-		return JSonUtil.toJSon(response);
-	}
-
-	@Override
 	public String applyOrders(String params) {
 		OrderDetailRequest request=JSonUtil.fromJSon(params, OrderDetailRequest.class);
 		OrderDetailResponse response=saveOrderDetail(request);
 		return JSonUtil.toJSon(response);
-	}
-
-	@Override
-	public CheckOrdersResponse checkIaasOrders(CheckOrdersRequest request) {
-		ResponseHeader responseHeader = new ResponseHeader();
-		logger.info("checkIaasOrders start");	
-		try{
-			orderSv.checkIaasOrders(request);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
-			logger.info("checkIaasOrders success");	
-		}catch(PaasException e){
-			logger.error(e.getMessage(),e);
-			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL);		
-			responseHeader.setResultMessage(e.getMessage());
-		}		
-		CheckOrdersResponse response = new CheckOrdersResponse();
-		response.setResponseHeader(responseHeader);		
-		return response;
 	}
 	
 }

@@ -30,19 +30,8 @@ public interface IOrder {
 	@POST
 	public SelectOrderResponse selectOrderList(SelectOrderRequest request) throws PaasException;
 
-	@Path("/checkOrders")
-	@POST
-	public OrderDetailResponse  checkOrders(CheckOrdersRequest request) ;
-	
-	@Path("/verifyOrders")
-	@POST
-	public String verifyOrders(String params);
-	
 	@Path("/applyOrders")
 	@POST
 	public String applyOrders(String params);
 	
-	@Path("/checkIaasOrders")
-	@POST
-	public abstract CheckOrdersResponse checkIaasOrders(CheckOrdersRequest paramCheckOrdersRequest);
 }

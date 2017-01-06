@@ -11,7 +11,6 @@ import com.ai.paas.ipaas.vo.user.SelectWithNoPageRequest;
 import com.ai.paas.ipaas.vo.user.SelectWithNoPageResponse;
 import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
-
 @Path("/iccs/console")
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
@@ -19,8 +18,6 @@ public interface ICcsConsoleDubboSv {
 
 	/**
 	 * 根据用户查询已经开通的服务
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectServices")
 	@POST
@@ -28,8 +25,6 @@ public interface ICcsConsoleDubboSv {
 	
 	/**
 	 * 根据用户查询已经开通的服务
-	 * @param request
-	 * @return
 	 */
 	@Path("/cancelServices")
 	@POST

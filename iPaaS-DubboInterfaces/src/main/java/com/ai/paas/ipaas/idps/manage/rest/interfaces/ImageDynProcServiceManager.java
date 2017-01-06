@@ -8,13 +8,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.paas.ipaas.rpc.api.manage.ISrvManager;
 
-
 /**
- * 图片动态处理服务：IDPS (Image dynamic Proccessing Service )<br/>
+ * 图片动态处理服务：IDPS (Image dynamic Proccessing Service )
  * 服务管理接口
  * 
  * @author liwx3
- *
  */
 @Path("/idps/manage")
 @Consumes({ MediaType.APPLICATION_JSON })

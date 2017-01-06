@@ -8,10 +8,6 @@ import javax.ws.rs.core.MediaType;
 
 /** 
  * 物理资源
- * @author  作者 “WTF” E-mail: 1031248990@qq.com
- * @date 创建时间：2016年7月12日 上午11:25:38 
- * @version 
- * @since  
  */
 @Path("/rds/resource")
 @Consumes({MediaType.APPLICATION_JSON})
@@ -32,6 +28,7 @@ public interface IRDSResourcePool {
 	@Path("/addimage")
 	@POST
 	public String addImage(String getParam);
+	
 	@Path("/deleteimage")
 	@POST
 	public String deleteImage(String getParam);

@@ -8,9 +8,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.ai.paas.ipaas.rpc.api.manage.ISrvManager;
 
-
 /**
- * 存储中心： DSS（Document store service）<br/>
+ * 存储中心： DSS（Document store service）
  * 服务管理接口
  * 
  * @author chenym6

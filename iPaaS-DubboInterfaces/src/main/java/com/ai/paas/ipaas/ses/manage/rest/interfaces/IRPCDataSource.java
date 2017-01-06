@@ -50,11 +50,6 @@ public interface IRPCDataSource {
 	@POST
 	public void saveDataSource(RPCDataSource rpcDataSource);
 
-	/**
-	 * @param userId
-	 * @param srvID
-	 * @return
-	 */
 	@Path("getDBUserPK")
 	@POST
 	public String getDataSourceUserPK(@FormParam("userId") String userId,

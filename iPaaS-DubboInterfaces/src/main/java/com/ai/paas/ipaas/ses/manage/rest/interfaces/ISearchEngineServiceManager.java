@@ -7,10 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 /**
- * 缓存服务：SES (Search Engine Service)<br/>
+ * 缓存服务：SES (Search Engine Service)
  * 服务管理接口
- * 
- *
  */
 @Path("/ses/manage")
 @Consumes({ MediaType.APPLICATION_JSON })

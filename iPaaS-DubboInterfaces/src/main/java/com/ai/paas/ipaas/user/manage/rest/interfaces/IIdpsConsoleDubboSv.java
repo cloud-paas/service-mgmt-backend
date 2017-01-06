@@ -17,8 +17,6 @@ import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 public interface IIdpsConsoleDubboSv {
 	/**
 	 * 查询用户订购的IDPS产品列表
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectUserProdInsts")
 	@POST
@@ -26,8 +24,6 @@ public interface IIdpsConsoleDubboSv {
 	
 	/**
 	 * 停用容器
-	 * @param request
-	 * @return
 	 */
 	@Path("/stopIdpsContainer")
 	@POST
@@ -35,8 +31,6 @@ public interface IIdpsConsoleDubboSv {
 	
 	/**
 	 * 启用容器
-	 * @param request
-	 * @return
 	 */
 	@Path("/startIdpsContainer")
 	@POST
@@ -44,8 +38,6 @@ public interface IIdpsConsoleDubboSv {
 	
 	/**
 	 * 升级容器
-	 * @param request
-	 * @return
 	 */
 	@Path("/upgradeContainer")
 	@POST
@@ -53,8 +45,6 @@ public interface IIdpsConsoleDubboSv {
 	
 	/**
 	 * 销毁容器
-	 * @param request
-	 * @return
 	 */
 	@Path("/destroyContainer")
 	@POST

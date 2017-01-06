@@ -16,34 +16,38 @@ import com.ai.paas.ipaas.vo.user.UserVo;
 public interface IUser {
 	@Path("/getUserInfo")
 	@POST
-	public UserVo getUserInfo(String userId) throws PaasException;//根据用户名获取用户Id等信息
+	public UserVo getUserInfo(String userId) throws PaasException; //根据用户名获取用户Id等信息
+	
 	@Path("/getUserInfoByEmail")
 	@POST
-	public UserVo getUserInfoByEmail(String email) throws PaasException;//根据用户名获取用户Id等信息
+	public UserVo getUserInfoByEmail(String email) throws PaasException; //根据用户名获取用户Id等信息
+	
 	@Path("/registerUser")
 	@POST
-	public RegisterResult registerUser(UserVo user) throws PaasException;//注册
+	public RegisterResult registerUser(UserVo user) throws PaasException; //注册
+	
 	@Path("/uniqueEmail")
 	@POST
-	public boolean uniqueEmail(String email) throws PaasException;// email是否存在
+	public boolean uniqueEmail(String email) throws PaasException; // email是否存在
+	
 	@Path("/uniquePhone")
 	@POST
-	public boolean uniquePhone(String phone) throws PaasException;// phone是否存在
+	public boolean uniquePhone(String phone) throws PaasException; // phone是否存在
+	
 	@Path("/verfiy_email")
 	@POST
-	public int verfiy_email(String email) throws PaasException;// 激活用户
+	public int verfiy_email(String email) throws PaasException; // 激活用户
 	
 	@Path("/updatebyKey")
 	@POST
-	public int updatebyKey(UserVo uv) throws PaasException;// 根据userId账户置换
+	public int updatebyKey(UserVo uv) throws PaasException; // 根据userId账户置换
 	
 	@Path("/updateUserPs")
 	@POST
-	public String updateUserPs(UserVo uv) throws PaasException;// 激活用户
+	public String updateUserPs(UserVo uv) throws PaasException; // 激活用户
+	
 	/**
 	 * 根据用户名获取用户Id等信息
-	 * @param json串
-	 * @return 用户信息json串 
 	 */
 	@Path("/getUserInfoByUserName")
 	@POST
@@ -51,8 +55,6 @@ public interface IUser {
 	
 	/**
 	 * 根据用户Id，资源类型获取用户订购的资源等信息
-	 * @param json串
-	 * @return 用户信息json串 
 	 */
 	@Path("/getUserProdInstsWithType")
 	@POST

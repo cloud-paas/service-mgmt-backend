@@ -13,15 +13,12 @@ import com.ai.paas.ipaas.vo.user.SelectWithNoPageRequest;
 import com.ai.paas.ipaas.vo.user.SelectWithNoPageResponse;
 import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 
-
 @Path("/dss/console")
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 public interface IDssConsoleDubboSv {
 	/**
 	 * 查询用户订购的DSS产品列表
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectUserProdInsts")
 	@POST
@@ -29,8 +26,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 注销用户订购的DSS产品
-	 * @param vo
-	 * @return
 	 */
 	@Path("/cancleUserProdInst")
 	@POST
@@ -38,8 +33,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 修改服务密码
-	 * @param vo
-	 * @return
 	 */
 	@Path("/mdyServPwd")
 	@POST
@@ -47,8 +40,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 全部清理（格式化）
-	 * @param vo
-	 * @return
 	 */
 	@Path("/cleanAll")
 	@POST
@@ -56,8 +47,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 根据key查询DSS服务下的指定文档
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectDocumentByKey")
 	@POST
@@ -65,8 +54,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 根据key查询DSS服务下的指定文档
-	 * @param request
-	 * @return
 	 */
 	@Path("/clearDocumentByKey")
 	@POST
@@ -74,8 +61,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 *根据id查询DSS实例
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectDssById")
 	@POST
@@ -83,8 +68,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * 查询用户订购的DSS产品列表
-	 * @param request
-	 * @return
 	 */
 	@Path("/queryLeftMenuList")
 	@POST
@@ -92,8 +75,6 @@ public interface IDssConsoleDubboSv {
 	
 	/**
 	 * DSS扩容
-	 * @param params
-	 * @return
 	 */
 	@Path("/modifyConfiguration")
 	@POST

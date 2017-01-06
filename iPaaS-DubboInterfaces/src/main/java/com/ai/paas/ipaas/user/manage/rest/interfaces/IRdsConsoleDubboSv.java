@@ -17,8 +17,6 @@ import com.ai.paas.ipaas.vo.user.UserProdInstVo;
 public interface IRdsConsoleDubboSv {
 	/**
 	 * 查询用户订购的RDS产品列表
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectUserProdInsts")
 	@POST
@@ -26,8 +24,6 @@ public interface IRdsConsoleDubboSv {
 	
 	/**
 	 * 查询用户订购的RDS的产品列表，根据id
-	 * @param request
-	 * @return
 	 */
 	@Path("/selectUserProdInstById")
 	@POST
@@ -35,8 +31,6 @@ public interface IRdsConsoleDubboSv {
 	
 	/**
 	 * 停用RDS
-	 * @param request
-	 * @return
 	 */
 	@Path("/stopRdsContainer")
 	@POST
@@ -44,8 +38,6 @@ public interface IRdsConsoleDubboSv {
 	
 	/**
 	 * 启用RDS
-	 * @param request
-	 * @return
 	 */
 	@Path("/startRdsContainer")
 	@POST
@@ -53,8 +45,6 @@ public interface IRdsConsoleDubboSv {
 	
 	/**
 	 * 销毁RDS
-	 * @param request
-	 * @return
 	 */
 	@Path("/destroyContainer")
 	@POST

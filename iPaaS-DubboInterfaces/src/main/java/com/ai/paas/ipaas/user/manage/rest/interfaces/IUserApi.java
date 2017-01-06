@@ -13,8 +13,6 @@ public interface IUserApi {
 	
 	/**
 	 * 根据nt账号获取亚信OA系统员工信息
-	 * @param param
-	 * @return
 	 */
 	@Path("/getAiEmployeeInfo")
 	@POST

@@ -145,23 +145,6 @@ project("iPaaS-MDS") {
     }
 }
 
-project("iPaaS-RCS") {
-    project.ext {
-        appName = "ipaas-rcs"
-    }
-
-    jar {
-        baseName appName
-        version moduleVersion
-        exclude "*.properties"
-        exclude "*.xml"
-        exclude "mybatis"
-        manifest {
-            attributes 'packageName': appName, 'Built-By': builtBy, 'create-date': new Date().format('yyyy-MM-dd HH:mm:ss')
-        }
-    }
-}
-
 project("iPaaS-SES") {
     project.ext {
         appName = "ipaas-ses"

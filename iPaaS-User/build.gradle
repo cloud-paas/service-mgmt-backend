@@ -7,6 +7,7 @@ dependencies {
     compile project(":iPaaS-SES")
     compile project(":iPaaS-RDS")
     compile project(":iPaaS-IDPS")
+    compile project(":iPaaS-Common")
     
     compile 'org.springframework:spring-context:4.1.6.RELEASE'
 	compile 'org.springframework:spring-context-support:4.1.6.RELEASE'

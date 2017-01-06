@@ -7,9 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ai.paas.ipaas.PaasException;
-import com.ai.paas.ipaas.user.dao.interfaces.OrgnizeUserInfoMapper;
-import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoCriteria;
-import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoKey;
+import com.ai.paas.ipaas.common.dao.interfaces.OrgnizeUserInfoMapper;
+import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfo;
+import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfoCriteria;
 import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrgnizeUserInfoSv;
 import com.ai.paas.ipaas.vo.user.OrgnizeUserInfoVo;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -26,7 +26,7 @@ public class OrgnizeUserInfoSvImpl implements IOrgnizeUserInfoSv{
 		OrgnizeUserInfoMapper mapper = template.getMapper(OrgnizeUserInfoMapper.class);
 		OrgnizeUserInfoCriteria condition = new OrgnizeUserInfoCriteria();
 		condition.createCriteria().andUserIdEqualTo(userId);
-		List<OrgnizeUserInfoKey> beans = mapper.selectByExample(condition);
+		List<OrgnizeUserInfo> beans = mapper.selectByExample(condition);
 		//一个用户只能属于一个组织	
 		if(beans.size()!=1){ 
 			new PaasException("get orgnize user info error!");
@@ -37,10 +37,10 @@ public class OrgnizeUserInfoSvImpl implements IOrgnizeUserInfoSv{
 
 	@Override
 	public void saveOrgnizeUserInfo(OrgnizeUserInfoVo orgnizeuser) throws PaasException {
-		OrgnizeUserInfoKey orguserInfoKey = new OrgnizeUserInfoKey();
-		BeanUtils.copyProperties(orgnizeuser, orguserInfoKey);
+		OrgnizeUserInfo orguserInfo = new OrgnizeUserInfo();
+		BeanUtils.copyProperties(orgnizeuser, orguserInfo);
 		OrgnizeUserInfoMapper mapper = template.getMapper(OrgnizeUserInfoMapper.class);
-		mapper.insert(orguserInfoKey);		
+		mapper.insert(orguserInfo);		
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class OrgnizeUserInfoSvImpl implements IOrgnizeUserInfoSv{
 		OrgnizeUserInfoMapper mapper = template.getMapper(OrgnizeUserInfoMapper.class);
 		OrgnizeUserInfoCriteria condition = new OrgnizeUserInfoCriteria();
 		condition.createCriteria().andOrgIdEqualTo(orgId);
-		List<OrgnizeUserInfoKey> beans = mapper.selectByExample(condition);
+		List<OrgnizeUserInfo> beans = mapper.selectByExample(condition);
 		//一个用户只能属于一个组织	
 		if(beans != null){ 
 			OUcnt =  beans.size();

@@ -8,12 +8,12 @@ dependencies {
     compile project(":iPaaS-RDS")
     compile project(":iPaaS-IDPS")
     
-    compile "org.springframework:spring-context:4.1.6.RELEASE"
-	compile "org.springframework:spring-context-support:4.1.6.RELEASE"
+    compile 'org.springframework:spring-context:4.1.6.RELEASE'
+	compile 'org.springframework:spring-context-support:4.1.6.RELEASE'
 	compile 'org.json:json:20140107'
 	compile 'org.apache.httpcomponents:httpclient:4.4.1'
     compile 'org.apache.velocity:velocity:1.7-SNAPSHOT'
-	
+	compile 'javax.mail:javax.mail:1.4.4'
     compile 'redis.clients:jedis:3.0.0'
     compile 'com.alibaba:fastjson:1.2.6'
     compile 'net.sf.json-lib:json-lib:2.4:jdk15'

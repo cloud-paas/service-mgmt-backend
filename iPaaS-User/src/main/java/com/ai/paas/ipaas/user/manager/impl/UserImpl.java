@@ -121,7 +121,7 @@ public class UserImpl implements IUser {
 		UserVo vo = new UserVo();
 		UserCenter bo = null;
 		try {
-			Map paramMap = JSonUtil.fromJSon(param, Map.class);
+			Map<?, ?> paramMap = JSonUtil.fromJSon(param, Map.class);
 			String userNmae = (String) paramMap.get("userName");
 			bo = userSv.getUserInfoByEmail(userNmae);
 			if (bo != null) {
@@ -140,7 +140,8 @@ public class UserImpl implements IUser {
 		List<UserProdInstVo> resultList = new ArrayList<UserProdInstVo>();
 		ResponseMessage<List<UserProdInstVo>> responseMessage = new ResponseMessage<List<UserProdInstVo>>();
 		try {
-			Map paramMap = JSonUtil.fromJSon(param, Map.class);
+			@SuppressWarnings("unchecked")
+			Map<String, String> paramMap = JSonUtil.fromJSon(param, Map.class);
 			resultList = iUserProdInstSv.selectUserProdInsts(paramMap);
 			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
 		} catch (Exception e) {

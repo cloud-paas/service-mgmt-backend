@@ -7,10 +7,6 @@ package com.ai.paas.ipaas.cache;
 
 import java.io.Serializable;
 
-/**
- * 
- * @author mapl
- */
 public class CodeValueObject implements Serializable {
     private static final long serialVersionUID = 1L;
 

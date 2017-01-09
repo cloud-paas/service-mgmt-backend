@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.ServiceUtil;
-import com.ai.paas.ipaas.common.dao.interfaces.OrgnizeUserInfoMapper;
-import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfo;
-import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfoCriteria;
 import com.ai.paas.ipaas.common.service.IOrgnizeUserHelper;
+import com.ai.paas.ipaas.user.dao.interfaces.OrgnizeUserInfoMapper;
+import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfo;
+import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoCriteria;
 
 @Service
 @Transactional

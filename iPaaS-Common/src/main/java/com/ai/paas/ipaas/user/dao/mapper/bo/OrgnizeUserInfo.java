@@ -1,4 +1,4 @@
-package com.ai.paas.ipaas.common.dao.mapper.bo;
+package com.ai.paas.ipaas.user.dao.mapper.bo;
 
 public class OrgnizeUserInfo {
     private Integer orgId;

@@ -1,9 +1,10 @@
-package com.ai.paas.ipaas.common.dao.interfaces;
+package com.ai.paas.ipaas.user.dao.interfaces;
 
-import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfo;
-import com.ai.paas.ipaas.common.dao.mapper.bo.OrgnizeUserInfoCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfo;
+import com.ai.paas.ipaas.user.dao.mapper.bo.OrgnizeUserInfoCriteria;
 
 public interface OrgnizeUserInfoMapper {
     int countByExample(OrgnizeUserInfoCriteria example);

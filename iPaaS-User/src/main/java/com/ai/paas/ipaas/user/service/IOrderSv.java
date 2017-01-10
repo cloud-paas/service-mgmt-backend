@@ -2,6 +2,7 @@ package com.ai.paas.ipaas.user.service;
 
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.dto.OrderDetail;
+import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
@@ -16,4 +17,6 @@ public interface IOrderSv {
 	public PageResult<OrderDetailVo>  selectOrderList(SelectOrderRequest request) throws PaasException;
 
 	public OrderDetail selectByPrimaryKey(long orderDetailId) throws Exception;
+	
+	public OrderDetailResponse checkOrders(CheckOrdersRequest request) throws PaasException;
 }

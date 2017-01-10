@@ -34,4 +34,7 @@ public interface IOrder {
 	@POST
 	public String applyOrders(String params);
 	
+	@Path("/checkOrders")
+	@POST
+	public OrderDetailResponse  checkOrders(CheckOrdersRequest request) ;
 }

@@ -4,11 +4,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.ai.paas.ipaas.PaaSMgmtConstant;
 import com.ai.paas.ipaas.PaasException;
 import com.ai.paas.ipaas.user.constants.Constants;
 import com.ai.paas.ipaas.user.manage.rest.interfaces.IOrder;
 import com.ai.paas.ipaas.user.service.IOrderSv;
 import com.ai.paas.ipaas.util.JSonUtil;
+import com.ai.paas.ipaas.vo.user.CheckOrdersRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailRequest;
 import com.ai.paas.ipaas.vo.user.OrderDetailResponse;
 import com.ai.paas.ipaas.vo.user.OrderDetailVo;
@@ -83,6 +85,24 @@ public class OrderImpl implements IOrder{
 		OrderDetailRequest request=JSonUtil.fromJSon(params, OrderDetailRequest.class);
 		OrderDetailResponse response=saveOrderDetail(request);
 		return JSonUtil.toJSon(response);
+	}
+	
+	@Override
+	public OrderDetailResponse checkOrders(CheckOrdersRequest request) {
+		OrderDetailResponse response = new OrderDetailResponse();
+		ResponseHeader responseHeader = new ResponseHeader();
+		logger.info("checkOrders start");	
+		try{
+			response = orderSv.checkOrders(request);
+			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_SUCCESS);
+			logger.info("checkOrders success");	
+		}catch(PaasException e){
+			logger.error(e.getMessage(),e);
+			responseHeader.setResultCode(PaaSMgmtConstant.REST_SERVICE_RESULT_FAIL);		
+			responseHeader.setResultMessage(e.getMessage());
+		}		
+		response.setResponseHeader(responseHeader);		
+		return response;
 	}
 	
 }
